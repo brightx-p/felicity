@@ -1,0 +1,22 @@
+{
+  "name": "felicity-empire-functions",
+  "version": "1.0.0",
+  "description": "Firebase Cloud Functions for WhatsApp OTP",
+  "main": "index.js",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "firebase-admin": "^11.10.1",
+    "firebase-functions": "^4.4.1",
+    "twilio": "^4.19.3"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "private": true
+}

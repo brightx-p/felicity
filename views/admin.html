@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard — Felicity Empire</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" href="assets/img/favicon.ico" />
+    
+    <style>
+        .admin-layout { display: flex; min-height: 100vh; }
+        .admin-sidebar {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(0,0,0,0.05);
+            width: 260px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+        .admin-sidebar::-webkit-scrollbar { width: 4px; }
+        .admin-sidebar::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        .admin-content { flex: 1; padding: 24px; overflow-x: hidden; }
+        .stat-card {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            transition: var(--transition);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            transition: var(--transition);
+            color: var(--dark-plum);
+            cursor: pointer;
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background: rgba(212,20,90,0.08);
+            color: var(--primary);
+        }
+        .sidebar-link i { width: 20px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        
+        @media (max-width: 768px) {
+            .admin-layout { flex-direction: column; }
+            .admin-sidebar { width: 100%; height: auto; position: relative; }
+            .admin-content { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="loader" id="loader"><div class="loader-spinner"></div></div>
+
+    <div class="toast" id="toast">
+        <div class="flex items-center gap-3">
+            <i class="fas fa-check-circle text-[#D4145A]" id="toastIcon"></i>
+            <span id="toastMessage">Success!</span>
+        </div>
+    </div>
+
+    <div class="admin-layout">
+        
+        <!-- Sidebar -->
+        <aside class="admin-sidebar p-4">
+            <div class="flex items-center space-x-2 mb-8 px-4">
+                <img src="assets/img/FELICITY-EMPIRE-logo.png" alt="Felicity Empire" class="h-8 w-auto" onerror="this.style.display='none'" />
+                <span class="text-lg font-bold text-[#4A1942] font-['Playfair_Display']">
+                    FELICITY<span class="text-[#D4145A]">EMPIRE</span>
+                </span>
+            </div>
+            
+            <nav class="space-y-1">
+                <a href="#dashboard" class="sidebar-link active" onclick="showSection('dashboard')">
+                    <i class="fas fa-chart-pie"></i> Dashboard
+                </a>
+                <a href="#products" class="sidebar-link" onclick="showSection('products')">
+                    <i class="fas fa-box"></i> Products
+                </a>
+                <a href="#add-product" class="sidebar-link" onclick="showSection('add-product')">
+                    <i class="fas fa-plus-circle"></i> Add Product
+                </a>
+                <a href="#categories" class="sidebar-link" onclick="showSection('categories')">
+                    <i class="fas fa-tags"></i> Categories
+                </a>
+                <a href="#orders" class="sidebar-link" onclick="showSection('orders')">
+                    <i class="fas fa-shopping-bag"></i> Orders
+                </a>
+                <a href="#members" class="sidebar-link" onclick="showSection('members')">
+                    <i class="fas fa-users"></i> Members
+                </a>
+                <a href="#videos" class="sidebar-link" onclick="showSection('videos')">
+                    <i class="fas fa-video"></i> Videos
+                </a>
+                <a href="#banners" class="sidebar-link" onclick="showSection('banners')">
+                    <i class="fas fa-image"></i> Banners
+                </a>
+                <a href="#settings" class="sidebar-link" onclick="showSection('settings')">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </nav>
+            
+            <div class="mt-8 pt-4 border-t border-[#4A1942]/10 px-4">
+                <button id="logoutBtn" class="sidebar-link w-full text-red-500 hover:bg-red-50">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="admin-content">
+            
+            <!-- Dashboard -->
+            <section id="dashboard-section">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-3xl font-bold text-[#4A1942] font-['Playfair_Display']">Dashboard</h1>
+                        <p class="text-[#4A1942]/60">Welcome back, Admin</p>
+                    </div>
+                    <button class="btn-primary text-sm py-2 px-4" onclick="refreshStats()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8" id="statsGrid">
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-[#4A1942]/60">Products</span>
+                            <i class="fas fa-box text-2xl text-[#D4145A]"></i>
+                        </div>
+                        <p class="text-3xl font-bold text-[#4A1942] mt-2" id="statProducts">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-[#4A1942]/60">Orders</span>
+                            <i class="fas fa-shopping-bag text-2xl text-[#D4145A]"></i>
+                        </div>
+                        <p class="text-3xl font-bold text-[#4A1942] mt-2" id="statOrders">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-[#4A1942]/60">Members</span>
+                            <i class="fas fa-users text-2xl text-[#D4145A]"></i>
+                        </div>
+                        <p class="text-3xl font-bold text-[#4A1942] mt-2" id="statMembers">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-[#4A1942]/60">Revenue</span>
+                            <i class="fas fa-naira-sign text-2xl text-[#D4145A]"></i>
+                        </div>
+                        <p class="text-3xl font-bold text-[#D4145A] mt-2" id="statRevenue">₦0</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="font-semibold text-[#4A1942] mb-4">Recent Orders</h3>
+                    <div id="recentOrders" class="space-y-3">
+                        <p class="text-[#4A1942]/60 text-center py-8">Loading orders...</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Products -->
+            <section id="products-section" class="hidden">
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold text-[#4A1942] font-['Playfair_Display']">Products</h1>
+                    <a href="#add-product" class="btn-primary text-sm py-2 px-4" onclick="showSection('add-product')">
+                        <i class="fas fa-plus"></i> Add Product
+                    </a>
+                </div>
+                <div id="productsList" class="product-grid">
+                    <p class="text-[#4A1942]/60 text-center py-8 col-span-full">Loading products...</p>
+                </div>
+            </section>
+            
+            <!-- Add Product -->
+            <section id="add-product-section" class="hidden">
+                <h1 class="text-3xl font-bold text-[#4A1942] font-['Playfair_Display'] mb-8">
+                    <span id="productFormTitle">Add</span> Product
+                </h1>
+                
+                <form id="productForm" class="card max-w-2xl">
+                    <input type="hidden" id="productId" />
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-[#4A1942] mb-1">Product Name *</label>
+                        <input type="text" id="productName" class="input-field" required />
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-[#4A1942] mb-1">Description *</label>
+                        <textarea id="productDescription" rows="4" class="input-field" required></textarea>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-[#4A1942] mb-1">Price (₦) *</label>
+                            <input type="number" id="productPrice" class="input-field" required />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-[#4A1942] mb-1">Stock *</label>
+                            <input type="number" id="productStock" class="input-field" required />
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-[#4A1942] mb-1">Category *</label>
+                            <select id="productCategory" class="input-field" required>
+                                <option value="">Select category</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-[#4A1942] mb-1">Tags</label>
+                            <input type="text" id="productTags" placeholder="e.g. luxury, new, sale" class="input-field" />
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-4 mb-4">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="productFeatured" />
+                            <span class="text-sm text-[#4A1942]">Featured Product</span>
+                        </label>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-[#4A1942] mb-1">Product Images</label>
+                        <input type="file" id="productImages" multiple accept="image/*" class="input-field" />
+                        <p class="text-xs text-[#4A1942]/50 mt-1">Upload multiple images (JPEG, PNG, WEBP)</p>
+                    </div>
+                    
+                    <div id="imagePreview" class="flex flex-wrap gap-2 mb-4"></div>
+                    
+                    <div class="flex gap-3">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Save Product
+                        </button>
+                        <button type="reset" class="btn-outline" onclick="resetProductForm()">Cancel</button>
+                    </div>
+                </form>
+            </section>
+            
+            <!-- Categories -->
+            <section id="categories-section" class="hidden">
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold text-[#4A1942] font-['Playfair_Display']">Categories</h1>
+                </div>
+                
+                <div class="card max-w-2xl mb-6">
+                    <h3 class="font-semibold text-[#4A1942] mb-4">Add New Category</h3>
+                    <form id="categoryForm" class="flex gap-3">
+                        <input type="text" id="categoryName" placeholder="Category name" class="input-field flex-1" required />
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </form>
+                </div>
+                
+                <div id="categoriesList" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <p class="text-[#4A1942]/60 text-center py-8 col-span-full">Loading categories...</p>
+                </div>
+            </section>
+            
+            <!-- Orders -->
+            <section id="orders-section" class="hidden">
+                <h1 class="text-3xl font-bold text-[#4A1942] font-['Playfair_Display'] mb-8">Orders</h1>
+                <div id="ordersList" class="space-y-4">
+                    <p class="text-[#4A1942]/60 text-center py-8">Loading orders...</p>
+                </div>
+            </section>
+            
+            <!-- Members -->
+            <section id="members-section" class="hidden">
+                <h1 class="text-3xl font-bold text-[#4A1942] font-['Playfair_Display'] mb-8">Members</h1>
+                <div id="membersList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <p class="text-[#4A1942]/60 text-center py-8 col-span-full">Loading members...</p>
+                </div>
+            </section>
+            
+            <!-- Videos -->
+            <section id="videos-section" class="hidden">
+                <h1 class="text-3xl font-bold text-[#4A1942] font-['Playfair_Display'] mb-8">Promotional Videos</h1>
+                
+                <div class="card max-w-2xl mb-6">
+                    <h3 class="font-semibold text-[#4A1942] mb-4">Upload Video</h3>
+                    <form id="videoForm">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-[#4A1942] mb-1">Video Title *</label>
+                            <input type="text" id="videoTitle" class="input-field" required />
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-[#4A1942] mb-1">Video File *</label>
+                            <input type="file" id="videoFile" accept="video/*" class="input-field" required />
+                            <p class="text-xs text-[#4A1942]/50 mt-1">Supported: MP4, MOV, WEBM (Max 100MB)</p>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-upload"></i> Upload Video
+                        </button>
+                    </form>
+                </div>
+                
+                <div id="videosList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <p class="text-[#4A1942]/60 text-center py-8 col-span-full">No videos uploaded yet.</p>
+                </div>
+            </section>
+            
+            <!-- Banners -->
+            <section id="banners-section" class="hidden">
+                <h1 class="text-3xl font-bold text-[#4A1942] font-['Playfair_Display'] mb-8">Homepage Banners</h1>
+                
+                <div class="card max-w-2xl mb-6">
+                    <h3 class="font-semibold text-[#4A1942] mb-4">Upload Banner</h3>
+                    <form id="bannerForm">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-[#4A1942] mb-1">Banner Image *</label>
+                            <input type="file" id="bannerImage" accept="image/*" class="input-field" required />
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-[#4A1942] mb-1">Banner Link</label>
+                            <input type="url" id="bannerLink" placeholder="https://..." class="input-field" />
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-upload"></i> Upload Banner
+                        </button>
+                    </form>
+                </div>
+                
+                <div id="bannersList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <p class="text-[#4A1942]/60 text-center py-8 col-span-full">No banners uploaded yet.</p>
+                </div>
+            </section>
+            
+            <!-- Settings -->
+            <section id="settings-section" class="hidden">
+                <h1 class="text-3xl font-bold text-[#4A1942] font-['Playfair_Display'] mb-8">Settings</h1>
+                
+                <div class="card max-w-2xl">
+                    <h3 class="font-semibold text-[#4A1942] mb-4">General Settings</h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-[#4A1942] mb-1">Store Name</label>
+                        <input type="text" value="Felicity Empire" class="input-field" />
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-[#4A1942] mb-1">Store Email</label>
+                        <input type="email" value="info@felicityempire.com" class="input-field" />
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-[#4A1942] mb-1">Store Phone</label>
+                        <input type="tel" value="08125913807" class="input-field" />
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-[#4A1942] mb-1">Currency</label>
+                        <input type="text" value="₦" class="input-field" />
+                    </div>
+                    
+                    <button class="btn-primary">
+                        <i class="fas fa-save"></i> Save Settings
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module">
+        import { 
+            auth, db, storage,
+            onAuthStateChanged, signOut,
+            collection, doc, getDoc, getDocs, updateDoc, deleteDoc, addDoc,
+            query, orderBy, limit, serverTimestamp,
+            ref, uploadBytes, getDownloadURL, deleteObject
+        } from './js/firebase-config.js';
+        import { showToast, setLoading } from './js/auth.js';
+
+        // --- Check Admin Access ---
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'auth.html';
+                return;
+            }
+            
+            const adminRef = doc(db, 'admins', user.uid);
+            const adminDoc = await getDoc(adminRef);
+            if (!adminDoc.exists()) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            loadDashboard();
+            loadProducts();
+            loadCategories();
+            loadOrders();
+            loadMembers();
+            loadVideos();
+            loadBanners();
+            loadCategoryOptions();
+        });
+
+        // --- Load Dashboard ---
+        async function loadDashboard() {
+            try {
+                // Products count
+                const productsSnap = await getDocs(collection(db, 'products'));
+                document.getElementById('statProducts').textContent = productsSnap.size;
+                
+                // Orders count
+                const ordersSnap = await getDocs(collection(db, 'orders'));
+                document.getElementById('statOrders').textContent = ordersSnap.size;
+                
+                // Members count
+                const usersSnap = await getDocs(collection(db, 'users'));
+                document.getElementById('statMembers').textContent = usersSnap.size;
+                
+                // Revenue
+                let revenue = 0;
+                ordersSnap.forEach(doc => {
+                    const order = doc.data();
+                    if (order.status === 'delivered' || order.status === 'completed') {
+                        revenue += order.total || 0;
+                    }
+                });
+                document.getElementById('statRevenue').textContent = `₦${revenue.toLocaleString()}`;
+                
+                // Recent orders
+                const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(5));
+                const recentSnap = await getDocs(q);
+                const container = document.getElementById('recentOrders');
+                
+                if (recentSnap.empty) {
+                    container.innerHTML = '<p class="text-[#4A1942]/60 text-center py-4">No orders yet.</p>';
+                } else {
+                    container.innerHTML = recentSnap.docs.map(doc => {
+                        const order = doc.data();
+                        return `
+                            <div class="flex items-center justify-between p-3 bg-[#FFF8F0] rounded-xl">
+                                <div>
+                                    <p class="font-semibold text-[#4A1942]">Order #${doc.id.slice(0, 8)}</p>
+                                    <p class="text-sm text-[#4A1942]/60">${order.items?.length || 0} items</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[#D4145A] font-bold">₦${order.total?.toLocaleString() || 0}</p>
+                                    <span class="badge ${order.status === 'delivered' ? 'badge-green' : order.status === 'processing' ? 'badge-yellow' : 'badge-pink'}">
+                                        ${order.status || 'pending'}
+                                    </span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        // --- Load Products ---
+        async function loadProducts() {
+            try {
+                const snapshot = await getDocs(collection(db, 'products'));
+                const products = [];
+                snapshot.forEach(doc => products.push({ id: doc.id, ...doc.data() }));
+                
+                const container = document.getElementById('productsList');
+                if (products.length === 0) {
+                    container.innerHTML = '<p class="text-[#4A1942]/60 text-center py-8 col-span-full">No products yet. Add your first product!</p>';
+                } else {
+                    container.innerHTML = products.map(product => `
+                        <div class="card">
+                            <img src="${product.images?.[0] || 'https://via.placeholder.com/200'}" 
+                                 alt="${product.name}" 
+                                 class="w-full h-48 object-cover rounded-lg mb-3" 
+                                 loading="lazy" />
+                            <h4 class="font-semibold text-[#4A1942]">${product.name}</h4>
+                            <p class="text-sm text-[#4A1942]/60">${product.category || 'Uncategorized'}</p>
+                            <p class="text-[#D4145A] font-bold">₦${product.price?.toLocaleString() || 0}</p>
+                            <p class="text-sm">Stock: ${product.stock || 0}</p>
+                            <div class="flex gap-2 mt-3">
+                                <button onclick="editProduct('${product.id}')" class="text-sm text-blue-600 hover:underline">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button onclick="deleteProduct('${product.id}')" class="text-sm text-red-600 hover:underline">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
+
+        // --- Load Categories for dropdown ---
+        async function loadCategoryOptions() {
+            try {
+                const snapshot = await getDocs(collection(db, 'categories'));
+                const select = document.getElementById('productCategory');
+                select.innerHTML = '<option value="">Select category</option>';
+                snapshot.forEach(doc => {
+                    const cat = doc.data();
+                    select.innerHTML += `<option value="${cat.name.toLowerCase()}">${cat.name}</option>`;
+                });
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+
+        // --- Product Form ---
+        document.getElementById('productForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            setLoading(submitBtn, true);
+            
+            const productId = document.getElementById('productId').value;
+            const data = {
+                name: document.getElementById('productName').value,
+                description: document.getElementById('productDescription').value,
+                price: parseFloat(document.getElementById('productPrice').value),
+                stock: parseInt(document.getElementById('productStock').value),
+                category: document.getElementById('productCategory').value,
+                tags: document.getElementById('productTags').value.split(',').map(t => t.trim()).filter(t => t),
+                featured: document.getElementById('productFeatured').checked
+            };
+            
+            try {
+                // Upload images
+                const files = document.getElementById('productImages').files;
+                const imageUrls = [];
+                for (const file of files) {
+                    const storageRef = ref(storage, `products/${Date.now()}-${file.name}`);
+                    const snapshot = await uploadBytes(storageRef, file);
+                    const url = await getDownloadURL(snapshot.ref);
+                    imageUrls.push(url);
+                }
+                data.images = imageUrls;
+                
+                if (productId) {
+                    await updateDoc(doc(db, 'products', productId), { ...data, updatedAt: serverTimestamp() });
+                    showToast('Product updated successfully!');
+                } else {
+                    await addDoc(collection(db, 'products'), { ...data, createdAt: serverTimestamp(), updatedAt: serverTimestamp(), views: 0, sales: 0 });
+                    showToast('Product added successfully!');
+                }
+                
+                resetProductForm();
+                loadProducts();
+                loadDashboard();
+            } catch (error) {
+                console.error('Error saving product:', error);
+                showToast('Error saving product.', 'error');
+            }
+            
+            setLoading(submitBtn, false);
+        });
+
+        // --- Edit Product ---
+        window.editProduct = async function(productId) {
+            const docRef = doc(db, 'products', productId);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const product = docSnap.data();
+                document.getElementById('productId').value = productId;
+                document.getElementById('productName').value = product.name || '';
+                document.getElementById('productDescription').value = product.description || '';
+                document.getElementById('productPrice').value = product.price || '';
+                document.getElementById('productStock').value = product.stock || '';
+                document.getElementById('productCategory').value = product.category || '';
+                document.getElementById('productTags').value = (product.tags || []).join(', ');
+                document.getElementById('productFeatured').checked = product.featured || false;
+                document.getElementById('productFormTitle').textContent = 'Edit';
+                showSection('add-product');
+            }
+        };
+
+        // --- Delete Product ---
+        window.deleteProduct = async function(productId) {
+            if (!confirm('Delete this product?')) return;
+            try {
+                await deleteDoc(doc(db, 'products', productId));
+                showToast('Product deleted!');
+                loadProducts();
+                loadDashboard();
+            } catch (error) {
+                showToast('Error deleting product.', 'error');
+            }
+        };
+
+        // --- Reset Product Form ---
+        window.resetProductForm = function() {
+            document.getElementById('productForm').reset();
+            document.getElementById('productId').value = '';
+            document.getElementById('productFormTitle').textContent = 'Add';
+            document.getElementById('imagePreview').innerHTML = '';
+        };
+
+        // --- Load Categories ---
+        async function loadCategories() {
+            try {
+                const snapshot = await getDocs(collection(db, 'categories'));
+                const categories = [];
+                snapshot.forEach(doc => categories.push({ id: doc.id, ...doc.data() }));
+                
+                const container = document.getElementById('categoriesList');
+                if (categories.length === 0) {
+                    container.innerHTML = '<p class="text-[#4A1942]/60 text-center py-8 col-span-full">No categories yet.</p>';
+                } else {
+                    container.innerHTML = categories.map(cat => `
+                        <div class="card text-center">
+                            <i class="fas fa-tag text-2xl text-[#D4145A]"></i>
+                            <h4 class="font-semibold text-[#4A1942] mt-2">${cat.name}</h4>
+                            <button onclick="deleteCategory('${cat.id}')" class="text-sm text-red-600 hover:underline mt-2">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+
+        // --- Add Category ---
+        document.getElementById('categoryForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('categoryName').value.trim();
+            if (!name) return;
+            
+            try {
+                await addDoc(collection(db, 'categories'), { name, createdAt: serverTimestamp() });
+                showToast('Category added!');
+                document.getElementById('categoryName').value = '';
+                loadCategories();
+                loadCategoryOptions();
+            } catch (error) {
+                showToast('Error adding category.', 'error');
+            }
+        });
+
+        // --- Delete Category ---
+        window.deleteCategory = async function(categoryId) {
+            if (!confirm('Delete this category?')) return;
+            try {
+                await deleteDoc(doc(db, 'categories', categoryId));
+                showToast('Category deleted!');
+                loadCategories();
+                loadCategoryOptions();
+            } catch (error) {
+                showToast('Error deleting category.', 'error');
+            }
+        };
+
+        // --- Load Orders ---
+        async function loadOrders() {
+            try {
+                const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
+                const snapshot = await getDocs(q);
+                const orders = [];
+                snapshot.forEach(doc => orders.push({ id: doc.id, ...doc.data() }));
+                
+                const container = document.getElementById('ordersList');
+                if (orders.length === 0) {
+                    container.innerHTML = '<p class="text-[#4A1942]/60 text-center py-8">No orders yet.</p>';
+                } else {
+                    container.innerHTML = orders.map(order => `
+                        <div class="card">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="font-semibold text-[#4A1942]">Order #${order.id.slice(0, 8)}</p>
+                                    <p class="text-sm text-[#4A1942]/60">${order.createdAt?.toDate().toLocaleDateString() || 'N/A'}</p>
+                                    <p class="text-sm">${order.items?.length || 0} items</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[#D4145A] font-bold">₦${order.total?.toLocaleString() || 0}</p>
+                                    <span class="badge ${order.status === 'delivered' ? 'badge-green' : order.status === 'processing' ? 'badge-yellow' : 'badge-pink'}">
+                                        ${order.status || 'pending'}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <select onchange="updateOrderStatus('${order.id}', this.value)" class="input-field text-sm py-1">
+                                    <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>Processing</option>
+                                    <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Shipped</option>
+                                    <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                                    <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading orders:', error);
+            }
+        }
+
+        // --- Update Order Status ---
+        window.updateOrderStatus = async function(orderId, status) {
+            try {
+                await updateDoc(doc(db, 'orders', orderId), { status, updatedAt: serverTimestamp() });
+                showToast(`Order status updated to ${status}`);
+            } catch (error) {
+                showToast('Error updating order.', 'error');
+            }
+        };
+
+        // --- Load Members ---
+        async function loadMembers() {
+            try {
+                const snapshot = await getDocs(collection(db, 'users'));
+                const members = [];
+                snapshot.forEach(doc => members.push({ id: doc.id, ...doc.data() }));
+                
+                const container = document.getElementById('membersList');
+                if (members.length === 0) {
+                    container.innerHTML = '<p class="text-[#4A1942]/60 text-center py-8 col-span-full">No members yet.</p>';
+                } else {
+                    container.innerHTML = members.map(user => `
+                        <div class="card">
+                            <div class="flex items-center gap-3">
+                                <img src="${user.photoURL || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || 'User') + '&background=D4145A&color=fff'}" 
+                                     alt="${user.name}" 
+                                     class="w-12 h-12 rounded-full object-cover" />
+                                <div>
+                                    <h4 class="font-semibold text-[#4A1942]">${user.name || 'Anonymous'}</h4>
+                                    <p class="text-sm text-[#4A1942]/60">${user.email || ''}</p>
+                                    ${user.joinedEmpire ? '<span class="badge badge-pink text-xs">Empire Member</span>' : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading members:', error);
+            }
+        }
+
+        // --- Load Videos ---
+        async function loadVideos() {
+            try {
+                const snapshot = await getDocs(collection(db, 'videos'));
+                const videos = [];
+                snapshot.forEach(doc => videos.push({ id: doc.id, ...doc.data() }));
+                
+                const container = document.getElementById('videosList');
+                if (videos.length === 0) {
+                    container.innerHTML = '<p class="text-[#4A1942]/60 text-center py-8 col-span-full">No videos uploaded yet.</p>';
+                } else {
+                    container.innerHTML = videos.map(video => `
+                        <div class="card">
+                            <video src="${video.url}" class="w-full rounded-lg h-48 object-cover" controls></video>
+                            <h4 class="font-semibold text-[#4A1942] mt-2">${video.title}</h4>
+                            <button onclick="deleteVideo('${video.id}')" class="text-sm text-red-600 hover:underline mt-2">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading videos:', error);
+            }
+        }
+
+        // --- Upload Video ---
+        document.getElementById('videoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            setLoading(submitBtn, true);
+            
+            const title = document.getElementById('videoTitle').value;
+            const file = document.getElementById('videoFile').files[0];
+            
+            if (!file) {
+                showToast('Please select a video file.', 'error');
+                setLoading(submitBtn, false);
+                return;
+            }
+            
+            if (file.size > 100 * 1024 * 1024) {
+                showToast('Video must be under 100MB.', 'error');
+                setLoading(submitBtn, false);
+                return;
+            }
+            
+            try {
+                const storageRef = ref(storage, `videos/${Date.now()}-${file.name}`);
+                const snapshot = await uploadBytes(storageRef, file);
+                const url = await getDownloadURL(snapshot.ref);
+                
+                await addDoc(collection(db, 'videos'), {
+                    title,
+                    url,
+                    fileName: file.name,
+                    fileSize: file.size,
+                    createdAt: serverTimestamp()
+                });
+                
+                showToast('Video uploaded successfully! 🎬');
+                document.getElementById('videoForm').reset();
+                loadVideos();
+            } catch (error) {
+                console.error('Error uploading video:', error);
+                showToast('Error uploading video.', 'error');
+            }
+            
+            setLoading(submitBtn, false);
+        });
+
+        // --- Delete Video ---
+        window.deleteVideo = async function(videoId) {
+            if (!confirm('Delete this video?')) return;
+            try {
+                await deleteDoc(doc(db, 'videos', videoId));
+                showToast('Video deleted!');
+                loadVideos();
+            } catch (error) {
+                showToast('Error deleting video.', 'error');
+            }
+        };
+
+        // --- Load Banners ---
+        async function loadBanners() {
+            try {
+                const snapshot = await getDocs(collection(db, 'banners'));
+                const banners = [];
+                snapshot.forEach(doc => banners.push({ id: doc.id, ...doc.data() }));
+                
+                const container = document.getElementById('bannersList');
+                if (banners.length === 0) {
+                    container.innerHTML = '<p class="text-[#4A1942]/60 text-center py-8 col-span-full">No banners uploaded yet.</p>';
+                } else {
+                    container.innerHTML = banners.map(banner => `
+                        <div class="card">
+                            <img src="${banner.image}" alt="Banner" class="w-full rounded-lg h-40 object-cover" />
+                            <div class="mt-2 flex gap-2">
+                                ${banner.link ? `<a href="${banner.link}" target="_blank" class="text-sm text-blue-600 hover:underline">View Link</a>` : ''}
+                                <button onclick="deleteBanner('${banner.id}')" class="text-sm text-red-600 hover:underline">Delete</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading banners:', error);
+            }
+        }
+
+        // --- Upload Banner ---
+        document.getElementById('bannerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            setLoading(submitBtn, true);
+            
+            const file = document.getElementById('bannerImage').files[0];
+            const link = document.getElementById('bannerLink').value;
+            
+            if (!file) {
+                showToast('Please select an image.', 'error');
+                setLoading(submitBtn, false);
+                return;
+            }
+            
+            try {
+                const storageRef = ref(storage, `banners/${Date.now()}-${file.name}`);
+                const snapshot = await uploadBytes(storageRef, file);
+                const url = await getDownloadURL(snapshot.ref);
+                
+                await addDoc(collection(db, 'banners'), {
+                    image: url,
+                    link: link || '',
+                    createdAt: serverTimestamp()
+                });
+                
+                showToast('Banner uploaded successfully!');
+                document.getElementById('bannerForm').reset();
+                loadBanners();
+            } catch (error) {
+                console.error('Error uploading banner:', error);
+                showToast('Error uploading banner.', 'error');
+            }
+            
+            setLoading(submitBtn, false);
+        });
+
+        // --- Delete Banner ---
+        window.deleteBanner = async function(bannerId) {
+            if (!confirm('Delete this banner?')) return;
+            try {
+                await deleteDoc(doc(db, 'banners', bannerId));
+                showToast('Banner deleted!');
+                loadBanners();
+            } catch (error) {
+                showToast('Error deleting banner.', 'error');
+            }
+        };
+
+        // --- Show Section ---
+        window.showSection = function(section) {
+            document.querySelectorAll('[id$="-section"]').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`${section}-section`);
+            if (target) target.classList.remove('hidden');
+            
+            document.querySelectorAll('.sidebar-link').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll(`.sidebar-link[href="#${section}"]`).forEach(link => link.classList.add('active'));
+        };
+
+        // --- Refresh Stats ---
+        window.refreshStats = function() {
+            loadDashboard();
+            showToast('Stats refreshed!');
+        };
+
+        // --- Logout ---
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                window.location.href = 'auth.html';
+            } catch (error) {
+                showToast('Error logging out.', 'error');
+            }
+        });
+
+        // --- Check URL hash ---
+        if (window.location.hash) {
+            const section = window.location.hash.replace('#', '');
+            showSection(section);
+        }
+
+        console.log('👑 Admin Dashboard — Felicity Empire');
+    </script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gallery — Felicity Empire Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+    <style>
+        .gallery-filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .gallery-filter-chip { padding: 8px 18px; border-radius: 50px; font-size: 0.78rem; font-weight: 500; cursor: pointer; border: 1.5px solid var(--admin-border); background: #fff; transition: var(--admin-transition); }
+        .gallery-filter-chip:hover, .gallery-filter-chip.active { background: var(--admin-rose); color: #fff; border-color: var(--admin-rose); }
+    </style>
+</head>
+<body class="admin-body">
+
+    <button class="admin-mobile-toggle" onclick="adminToggleSidebar()"><i class="fas fa-bars"></i></button>
+    <div class="admin-mobile-overlay" onclick="adminToggleSidebar()"></div>
+
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-brand"><div class="admin-brand-name">FELICITY<span class="admin-brand-accent">EMPIRE</span></div><div class="admin-brand-subtitle">Administration</div></div>
+        <nav class="admin-sidebar-nav">
+            <div class="admin-sidebar-section">Main</div>
+            <a href="index.html" class="admin-sidebar-link"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="products.html" class="admin-sidebar-link"><i class="fas fa-box"></i> Products</a>
+            <a href="orders.html" class="admin-sidebar-link"><i class="fas fa-shopping-bag"></i> Orders</a>
+            <a href="appointments.html" class="admin-sidebar-link"><i class="fas fa-calendar-check"></i> Appointments</a>
+            <a href="customers.html" class="admin-sidebar-link"><i class="fas fa-users"></i> Customers</a>
+            <div class="admin-sidebar-section">Content</div>
+            <a href="categories.html" class="admin-sidebar-link"><i class="fas fa-tags"></i> Categories</a>
+            <a href="gallery.html" class="admin-sidebar-link active"><i class="fas fa-images"></i> Gallery</a>
+            <a href="videos.html" class="admin-sidebar-link"><i class="fas fa-video"></i> Videos</a>
+            <a href="reviews.html" class="admin-sidebar-link"><i class="fas fa-star"></i> Reviews</a>
+            <div class="admin-sidebar-section">Management</div>
+            <a href="analytics.html" class="admin-sidebar-link"><i class="fas fa-chart-bar"></i> Analytics</a>
+            <a href="notifications.html" class="admin-sidebar-link"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="qr-code.html" class="admin-sidebar-link"><i class="fas fa-qrcode"></i> QR Code</a>
+            <a href="settings.html" class="admin-sidebar-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <div class="admin-sidebar-footer">
+            <a href="profile.html"><i class="fas fa-user-circle"></i> Admin Profile</a>
+            <a href="../index.html"><i class="fas fa-external-link-alt"></i> View Website</a>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <div class="admin-topbar">
+            <div class="admin-topbar-left"><h1>Gallery</h1><span class="admin-topbar-breadcrumb">Manage portfolio images</span></div>
+            <div class="admin-topbar-right">
+                <button class="admin-btn admin-btn-primary" onclick="document.getElementById('galleryUploadInput').click()"><i class="fas fa-upload"></i> Upload Images</button>
+                <input type="file" id="galleryUploadInput" accept="image/*" multiple onchange="handleGalleryUpload(event)" style="display:none;" />
+            </div>
+        </div>
+
+        <div class="admin-page-content">
+            <div class="admin-card">
+                <div class="gallery-filter-bar" id="galleryFilters">
+                    <span class="gallery-filter-chip active" data-filter="all" onclick="filterGallery('all', this)">All</span>
+                    <span class="gallery-filter-chip" data-filter="nails" onclick="filterGallery('nails', this)">Nails</span>
+                    <span class="gallery-filter-chip" data-filter="lashes" onclick="filterGallery('lashes', this)">Lashes</span>
+                    <span class="gallery-filter-chip" data-filter="makeup" onclick="filterGallery('makeup', this)">Makeup</span>
+                    <span class="gallery-filter-chip" data-filter="fashion" onclick="filterGallery('fashion', this)">Fashion</span>
+                    <span class="gallery-filter-chip" data-filter="before-after" onclick="filterGallery('before-after', this)">Before & After</span>
+                </div>
+                <div class="admin-image-grid" id="galleryGrid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));"></div>
+                <div class="admin-pagination" id="galleryPagination"></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="admin-toast-container"></div>
+
+    <script src="../assets/js/admin.js"></script>
+    <script>
+        let currentGalleryFilter = 'all';
+        let galleryPage = 1;
+        const itemsPerPage = 12;
+
+        function getGallery() { return adminGetData('gallery'); }
+        function saveGallery(data) { adminSaveData('gallery', data); }
+
+        function renderGallery() {
+            const grid = document.getElementById('galleryGrid');
+            let items = getGallery();
+            
+            if (items.length === 0) {
+                const defaults = [
+                    { id: adminGenerateId(), src: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=400', category: 'nails', title: 'Nail Art' },
+                    { id: adminGenerateId(), src: 'https://images.unsplash.com/photo-1607779097040-26e80aa78e66?w=400&h=400', category: 'nails', title: 'French Tips' },
+                    { id: adminGenerateId(), src: 'https://images.unsplash.com/photo-1583243130284-7d9f9b67f865?w=400&h=400', category: 'lashes', title: 'Lash Set' },
+                    { id: adminGenerateId(), src: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&h=400', category: 'makeup', title: 'Makeup Look' }
+                ];
+                saveGallery(defaults);
+                items = defaults;
+            }
+            
+            if (currentGalleryFilter !== 'all') items = items.filter(i => i.category === currentGalleryFilter);
+            
+            const totalPages = Math.ceil(items.length / itemsPerPage);
+            const start = (galleryPage - 1) * itemsPerPage;
+            const pageItems = items.slice(start, start + itemsPerPage);
+            
+            if (pageItems.length === 0) {
+                grid.innerHTML = `<div class="admin-empty-state" style="grid-column:1/-1;"><i class="fas fa-images"></i><h3>No Images</h3><p>Upload images to your gallery</p></div>`;
+                return;
+            }
+            
+            grid.innerHTML = pageItems.map(item => `
+                <div class="admin-image-item">
+                    <img src="${item.src}" alt="${item.title}" loading="lazy" />
+                    <div class="admin-image-actions">
+                        <button onclick="previewImage('${item.src}')"><i class="fas fa-search-plus"></i></button>
+                        <button class="admin-btn-delete" onclick="deleteGalleryItem('${item.id}')"><i class="fas fa-trash"></i></button>
+                    </div>
+                    <span style="position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,0.6);color:#fff;font-size:0.6rem;padding:3px 8px;border-radius:10px;">${item.category}</span>
+                </div>`).join('');
+            
+            // Pagination
+            const pag = document.getElementById('galleryPagination');
+            if (totalPages > 1) {
+                let html = `<button ${galleryPage <= 1 ? 'disabled' : ''} onclick="galleryPage--;renderGallery();"><i class="fas fa-chevron-left"></i></button>`;
+                for (let i = 1; i <= totalPages; i++) html += `<button class="${i === galleryPage ? 'active' : ''}" onclick="galleryPage=${i};renderGallery();">${i}</button>`;
+                html += `<button ${galleryPage >= totalPages ? 'disabled' : ''} onclick="galleryPage++;renderGallery();"><i class="fas fa-chevron-right"></i></button>`;
+                pag.innerHTML = html;
+            } else { pag.innerHTML = ''; }
+        }
+
+        function filterGallery(filter, el) {
+            currentGalleryFilter = filter;
+            galleryPage = 1;
+            document.querySelectorAll('.gallery-filter-chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            renderGallery();
+        }
+
+        function handleGalleryUpload(event) {
+            const files = Array.from(event.target.files);
+            const category = currentGalleryFilter !== 'all' ? currentGalleryFilter : 'general';
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const items = getGallery();
+                    items.unshift({ id: adminGenerateId(), src: e.target.result, category, title: file.name, uploadedAt: new Date().toISOString() });
+                    saveGallery(items);
+                    renderGallery();
+                    adminToast(`${files.length} image(s) uploaded`);
+                };
+                reader.readAsDataURL(file);
+            });
+            event.target.value = '';
+        }
+
+        function deleteGalleryItem(id) {
+            if (!confirm('Delete this image?')) return;
+            saveGallery(getGallery().filter(i => i.id !== id));
+            adminToast('Image deleted');
+            renderGallery();
+        }
+
+        function previewImage(src) {
+            const win = window.open('', '_blank');
+            win.document.write(`<img src="${src}" style="max-width:100%;max-height:100vh;" />`);
+        }
+
+        renderGallery();
+    </script>
+</body>
+</html>

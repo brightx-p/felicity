@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Videos — Felicity Empire Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+    <style>
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .video-card { background: var(--admin-card); border-radius: var(--admin-radius-lg); overflow: hidden; border: 1px solid var(--admin-border-light); transition: var(--admin-transition); }
+        .video-card:hover { transform: translateY(-4px); box-shadow: var(--admin-shadow-md); }
+        .video-preview { height: 200px; background: #000; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .video-preview video { width: 100%; height: 100%; object-fit: cover; }
+        .video-preview .no-video { color: rgba(255,255,255,0.5); font-size: 2.5rem; }
+        .video-card-body { padding: 18px; }
+        .video-card-body h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
+        .video-card-body p { font-size: 0.75rem; color: var(--admin-text-muted); }
+        .video-card-footer { display: flex; gap: 8px; padding: 0 18px 18px; flex-wrap: wrap; }
+        .video-status { position: absolute; top: 10px; right: 10px; }
+    </style>
+</head>
+<body class="admin-body">
+
+    <button class="admin-mobile-toggle" onclick="adminToggleSidebar()"><i class="fas fa-bars"></i></button>
+    <div class="admin-mobile-overlay" onclick="adminToggleSidebar()"></div>
+
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-brand"><div class="admin-brand-name">FELICITY<span class="admin-brand-accent">EMPIRE</span></div><div class="admin-brand-subtitle">Administration</div></div>
+        <nav class="admin-sidebar-nav">
+            <div class="admin-sidebar-section">Main</div>
+            <a href="index.html" class="admin-sidebar-link"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="products.html" class="admin-sidebar-link"><i class="fas fa-box"></i> Products</a>
+            <a href="orders.html" class="admin-sidebar-link"><i class="fas fa-shopping-bag"></i> Orders</a>
+            <a href="appointments.html" class="admin-sidebar-link"><i class="fas fa-calendar-check"></i> Appointments</a>
+            <a href="customers.html" class="admin-sidebar-link"><i class="fas fa-users"></i> Customers</a>
+            <div class="admin-sidebar-section">Content</div>
+            <a href="categories.html" class="admin-sidebar-link"><i class="fas fa-tags"></i> Categories</a>
+            <a href="gallery.html" class="admin-sidebar-link"><i class="fas fa-images"></i> Gallery</a>
+            <a href="videos.html" class="admin-sidebar-link active"><i class="fas fa-video"></i> Videos</a>
+            <a href="reviews.html" class="admin-sidebar-link"><i class="fas fa-star"></i> Reviews</a>
+            <div class="admin-sidebar-section">Management</div>
+            <a href="analytics.html" class="admin-sidebar-link"><i class="fas fa-chart-bar"></i> Analytics</a>
+            <a href="notifications.html" class="admin-sidebar-link"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="qr-code.html" class="admin-sidebar-link"><i class="fas fa-qrcode"></i> QR Code</a>
+            <a href="settings.html" class="admin-sidebar-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <div class="admin-sidebar-footer">
+            <a href="profile.html"><i class="fas fa-user-circle"></i> Admin Profile</a>
+            <a href="../index.html"><i class="fas fa-external-link-alt"></i> View Website</a>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <div class="admin-topbar">
+            <div class="admin-topbar-left"><h1>Videos</h1><span class="admin-topbar-breadcrumb">Manage promotional videos</span></div>
+            <div class="admin-topbar-right">
+                <button class="admin-btn admin-btn-primary" onclick="openVideoModal()"><i class="fas fa-plus"></i> Upload Video</button>
+            </div>
+        </div>
+
+        <div class="admin-page-content">
+            <div class="video-grid" id="videoGrid"></div>
+        </div>
+    </main>
+
+    <!-- Video Upload Modal -->
+    <div class="admin-modal-overlay" id="videoModal">
+        <div class="admin-modal admin-modal-lg">
+            <div class="admin-modal-header"><h3 id="videoModalTitle">Upload Video</h3><button class="admin-modal-close" onclick="adminCloseModal('videoModal')"><i class="fas fa-times"></i></button></div>
+            <div class="admin-form-group"><label class="admin-form-label">Video Title</label><input type="text" class="admin-form-input" id="videoTitle" placeholder="e.g., Summer Collection Promo" /></div>
+            <div class="admin-form-group">
+                <label class="admin-form-label">Upload Video (MP4, MOV, WebM)</label>
+                <div class="admin-upload-zone" id="videoUploadZone" onclick="document.getElementById('videoFileInput').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h4>Click to Upload Video</h4>
+                    <p>Max 50MB</p>
+                    <input type="file" id="videoFileInput" accept="video/*" onchange="handleVideoFileUpload(event)" style="display:none;" />
+                </div>
+                <div class="admin-upload-progress" id="videoUploadProgress"><div class="admin-upload-progress-bar" id="videoUploadProgressBar"></div></div>
+                <div id="videoPreview" style="margin-top:12px;"></div>
+            </div>
+            <div class="admin-form-row">
+                <div class="admin-form-group"><label class="admin-form-label">Status</label><select class="admin-form-select" id="videoStatus"><option value="enabled">Enabled</option><option value="disabled">Disabled</option></select></div>
+                <div class="admin-form-group"><label class="admin-form-label">Schedule Display</label><input type="date" class="admin-form-input" id="videoSchedule" /></div>
+            </div>
+            <div style="display:flex;gap:12px;margin-top:20px;">
+                <button class="admin-btn admin-btn-primary" onclick="saveVideo()">Save Video</button>
+                <button class="admin-btn admin-btn-outline" onclick="adminCloseModal('videoModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-toast-container"></div>
+
+    <script src="../assets/js/admin.js"></script>
+    <script>
+        let editingVideoId = null;
+        let tempVideoData = null;
+
+        function getVideos() { return adminGetData('videos'); }
+        function saveVideos(data) { adminSaveData('videos', data); }
+
+        function renderVideos() {
+            const grid = document.getElementById('videoGrid');
+            const videos = getVideos();
+            
+            if (videos.length === 0) {
+                grid.innerHTML = `<div class="admin-empty-state" style="grid-column:1/-1;"><i class="fas fa-video"></i><h3>No Videos</h3><p>Upload your first promotional video</p><button class="admin-btn admin-btn-primary" onclick="openVideoModal()"><i class="fas fa-plus"></i> Upload Video</button></div>`;
+                return;
+            }
+            
+            grid.innerHTML = videos.map(v => `
+                <div class="video-card">
+                    <div class="video-preview">
+                        ${v.src ? `<video src="${v.src}" muted></video>` : '<i class="fas fa-video no-video"></i>'}
+                        <div class="video-status">
+                            <span class="admin-badge ${v.status === 'enabled' ? 'admin-badge-success' : 'admin-badge-danger'}">${v.status}</span>
+                        </div>
+                    </div>
+                    <div class="video-card-body">
+                        <h4>${v.title || 'Untitled Video'}</h4>
+                        <p>Uploaded: ${adminFormatDate(v.createdAt)} | ${v.schedule ? 'Scheduled: ' + adminFormatDate(v.schedule) : 'No schedule'}</p>
+                        <p style="font-size:0.7rem;">${(v.size / (1024*1024)).toFixed(1)} MB</p>
+                    </div>
+                    <div class="video-card-footer">
+                        <button class="admin-btn admin-btn-sm ${v.status === 'enabled' ? 'admin-btn-warning' : 'admin-btn-success'}" onclick="toggleVideo('${v.id}')">
+                            ${v.status === 'enabled' ? 'Disable' : 'Enable'}
+                        </button>
+                        <button class="admin-btn admin-btn-outline admin-btn-sm" onclick="editVideo('${v.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="deleteVideo('${v.id}')" style="color:var(--admin-danger);"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>`).join('');
+        }
+
+        function openVideoModal() {
+            editingVideoId = null; tempVideoData = null;
+            document.getElementById('videoModalTitle').textContent = 'Upload Video';
+            document.getElementById('videoTitle').value = '';
+            document.getElementById('videoStatus').value = 'enabled';
+            document.getElementById('videoSchedule').value = '';
+            document.getElementById('videoPreview').innerHTML = '';
+            document.getElementById('videoUploadProgress').classList.remove('active');
+            adminOpenModal('videoModal');
+        }
+
+        function editVideo(id) {
+            const video = getVideos().find(v => v.id === id);
+            if (!video) return;
+            editingVideoId = id; tempVideoData = video;
+            document.getElementById('videoModalTitle').textContent = 'Edit Video';
+            document.getElementById('videoTitle').value = video.title || '';
+            document.getElementById('videoStatus').value = video.status || 'enabled';
+            document.getElementById('videoSchedule').value = video.schedule || '';
+            document.getElementById('videoPreview').innerHTML = video.src ? `<video src="${video.src}" controls style="width:100%;max-height:200px;border-radius:8px;"></video>` : '';
+            adminOpenModal('videoModal');
+        }
+
+        function handleVideoFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 50 * 1024 * 1024) { adminToast('Video must be under 50MB', 'error'); return; }
+            
+            const progress = document.getElementById('videoUploadProgress');
+            const bar = document.getElementById('videoUploadProgressBar');
+            progress.classList.add('active');
+            
+            let width = 0;
+            const interval = setInterval(() => {
+                width += 10;
+                bar.style.width = width + '%';
+                if (width >= 100) {
+                    clearInterval(interval);
+                    progress.classList.remove('active');
+                }
+            }, 100);
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                tempVideoData = { src: e.target.result, size: file.size, type: file.type };
+                document.getElementById('videoPreview').innerHTML = `<video src="${e.target.result}" controls style="width:100%;max-height:200px;border-radius:8px;"></video>`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveVideo() {
+            const title = document.getElementById('videoTitle').value.trim();
+            if (!title) { adminToast('Video title is required', 'error'); return; }
+            if (!tempVideoData && !editingVideoId) { adminToast('Please upload a video', 'error'); return; }
+            
+            const video = {
+                id: editingVideoId || adminGenerateId(),
+                title,
+                src: tempVideoData?.src || (editingVideoId ? getVideos().find(v => v.id === editingVideoId)?.src : ''),
+                size: tempVideoData?.size || 0,
+                type: tempVideoData?.type || 'video/mp4',
+                status: document.getElementById('videoStatus').value,
+                schedule: document.getElementById('videoSchedule').value || null,
+                updatedAt: new Date().toISOString(),
+                createdAt: editingVideoId ? (getVideos().find(v => v.id === editingVideoId)?.createdAt || new Date().toISOString()) : new Date().toISOString()
+            };
+            
+            let videos = getVideos();
+            if (editingVideoId) {
+                videos = videos.map(v => v.id === editingVideoId ? video : v);
+            } else {
+                videos.unshift(video);
+            }
+            saveVideos(videos);
+            adminCloseModal('videoModal');
+            adminToast(editingVideoId ? 'Video updated!' : 'Video uploaded!');
+            renderVideos();
+        }
+
+        function toggleVideo(id) {
+            let videos = getVideos();
+            const idx = videos.findIndex(v => v.id === id);
+            if (idx > -1) {
+                videos[idx].status = videos[idx].status === 'enabled' ? 'disabled' : 'enabled';
+                saveVideos(videos);
+                adminToast('Video status updated');
+                renderVideos();
+            }
+        }
+
+        function deleteVideo(id) {
+            if (!confirm('Delete this video?')) return;
+            saveVideos(getVideos().filter(v => v.id !== id));
+            adminToast('Video deleted');
+            renderVideos();
+        }
+
+        renderVideos();
+    </script>
+</body>
+</html>

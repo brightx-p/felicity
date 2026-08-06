@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notifications — Felicity Empire Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+    <style>
+        .notification-card { background: var(--admin-card); border-radius: var(--admin-radius-lg); padding: 20px 24px; border: 1px solid var(--admin-border-light); margin-bottom: 12px; display: flex; gap: 16px; align-items: flex-start; transition: var(--admin-transition); }
+        .notification-card:hover { box-shadow: var(--admin-shadow-sm); }
+        .notification-card.unread { border-left: 3px solid var(--admin-rose); background: var(--admin-rose-shimmer); }
+        .notification-icon { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
+        .notification-icon.info { background: var(--admin-info-bg); color: var(--admin-info); }
+        .notification-icon.success { background: var(--admin-success-bg); color: var(--admin-success); }
+        .notification-icon.warning { background: var(--admin-warning-bg); color: var(--admin-warning); }
+        .notification-icon.promo { background: var(--admin-rose-glow); color: var(--admin-rose); }
+        .notification-body { flex: 1; }
+        .notification-body h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 4px; }
+        .notification-body p { font-size: 0.8rem; color: var(--admin-text-muted); }
+        .notification-time { font-size: 0.7rem; color: var(--admin-text-light); white-space: nowrap; }
+    </style>
+</head>
+<body class="admin-body">
+
+    <button class="admin-mobile-toggle" onclick="adminToggleSidebar()"><i class="fas fa-bars"></i></button>
+    <div class="admin-mobile-overlay" onclick="adminToggleSidebar()"></div>
+
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-brand"><div class="admin-brand-name">FELICITY<span class="admin-brand-accent">EMPIRE</span></div><div class="admin-brand-subtitle">Administration</div></div>
+        <nav class="admin-sidebar-nav">
+            <div class="admin-sidebar-section">Main</div>
+            <a href="index.html" class="admin-sidebar-link"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="products.html" class="admin-sidebar-link"><i class="fas fa-box"></i> Products</a>
+            <a href="orders.html" class="admin-sidebar-link"><i class="fas fa-shopping-bag"></i> Orders</a>
+            <a href="appointments.html" class="admin-sidebar-link"><i class="fas fa-calendar-check"></i> Appointments</a>
+            <a href="customers.html" class="admin-sidebar-link"><i class="fas fa-users"></i> Customers</a>
+            <div class="admin-sidebar-section">Content</div>
+            <a href="categories.html" class="admin-sidebar-link"><i class="fas fa-tags"></i> Categories</a>
+            <a href="gallery.html" class="admin-sidebar-link"><i class="fas fa-images"></i> Gallery</a>
+            <a href="videos.html" class="admin-sidebar-link"><i class="fas fa-video"></i> Videos</a>
+            <a href="reviews.html" class="admin-sidebar-link"><i class="fas fa-star"></i> Reviews</a>
+            <div class="admin-sidebar-section">Management</div>
+            <a href="analytics.html" class="admin-sidebar-link"><i class="fas fa-chart-bar"></i> Analytics</a>
+            <a href="notifications.html" class="admin-sidebar-link active"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="qr-code.html" class="admin-sidebar-link"><i class="fas fa-qrcode"></i> QR Code</a>
+            <a href="settings.html" class="admin-sidebar-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <div class="admin-sidebar-footer">
+            <a href="profile.html"><i class="fas fa-user-circle"></i> Admin Profile</a>
+            <a href="../index.html"><i class="fas fa-external-link-alt"></i> View Website</a>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <div class="admin-topbar">
+            <div class="admin-topbar-left"><h1>Notifications</h1><span class="admin-topbar-breadcrumb">Send announcements & manage notifications</span></div>
+            <div class="admin-topbar-right">
+                <button class="admin-btn admin-btn-outline btn-sm" onclick="markAllRead()"><i class="fas fa-check-double"></i> Mark All Read</button>
+                <button class="admin-btn admin-btn-primary" onclick="openNotificationModal()"><i class="fas fa-plus"></i> New Announcement</button>
+            </div>
+        </div>
+
+        <div class="admin-page-content">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h3>Recent Notifications</h3>
+                    <span style="font-size:0.8rem;color:var(--admin-text-muted);" id="unreadCount">0 unread</span>
+                </div>
+                <div id="notificationsList"></div>
+                <div class="admin-pagination" id="notifPagination"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- New Notification Modal -->
+    <div class="admin-modal-overlay" id="notificationModal">
+        <div class="admin-modal">
+            <div class="admin-modal-header"><h3>Create Announcement</h3><button class="admin-modal-close" onclick="adminCloseModal('notificationModal')"><i class="fas fa-times"></i></button></div>
+            <div class="admin-form-group"><label class="admin-form-label">Title</label><input type="text" class="admin-form-input" id="notifTitle" placeholder="e.g., New Collection Launch!" /></div>
+            <div class="admin-form-group"><label class="admin-form-label">Message</label><textarea class="admin-form-textarea" id="notifMessage" placeholder="Announcement details..."></textarea></div>
+            <div class="admin-form-row">
+                <div class="admin-form-group"><label class="admin-form-label">Type</label><select class="admin-form-select" id="notifType"><option value="info">General</option><option value="promo">Promotion</option><option value="success">Success</option><option value="warning">Important</option></select></div>
+                <div class="admin-form-group"><label class="admin-form-label">Target</label><select class="admin-form-select" id="notifTarget"><option value="all">All Subscribers</option><option value="customers">Customers Only</option><option value="admin">Admin Only</option></select></div>
+            </div>
+            <div style="display:flex;gap:12px;margin-top:20px;">
+                <button class="admin-btn admin-btn-primary" onclick="sendNotification()"><i class="fas fa-paper-plane"></i> Send Announcement</button>
+                <button class="admin-btn admin-btn-outline" onclick="adminCloseModal('notificationModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-toast-container"></div>
+
+    <script src="../assets/js/admin.js"></script>
+    <script>
+        let notifPage = 1;
+        const notifsPerPage = 10;
+
+        function getNotifications() { return adminGetData('notifications'); }
+        function saveNotifications(data) { adminSaveData('notifications', data); }
+
+        function renderNotifications() {
+            const container = document.getElementById('notificationsList');
+            const notifications = getNotifications().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            
+            const unread = notifications.filter(n => !n.read).length;
+            document.getElementById('unreadCount').textContent = `${unread} unread`;
+            
+            const totalPages = Math.ceil(notifications.length / notifsPerPage);
+            const start = (notifPage - 1) * notifsPerPage;
+            const pageNotifs = notifications.slice(start, start + notifsPerPage);
+            
+            if (pageNotifs.length === 0) {
+                container.innerHTML = `<div class="admin-empty-state"><i class="fas fa-bell"></i><h3>No Notifications</h3><p>Create your first announcement</p></div>`;
+                return;
+            }
+            
+            const iconClass = { info: 'info', promo: 'promo', success: 'success', warning: 'warning' };
+            const iconIcons = { info: 'fa-bell', promo: 'fa-gift', success: 'fa-check-circle', warning: 'fa-exclamation-triangle' };
+            
+            container.innerHTML = pageNotifs.map(n => `
+                <div class="notification-card ${n.read ? '' : 'unread'}">
+                    <div class="notification-icon ${iconClass[n.type] || 'info'}">
+                        <i class="fas ${iconIcons[n.type] || 'fa-bell'}"></i>
+                    </div>
+                    <div class="notification-body">
+                        <h4>${n.title}</h4>
+                        <p>${n.message}</p>
+                        <div style="display:flex;gap:12px;margin-top:4px;">
+                            <span style="font-size:0.7rem;color:var(--admin-text-muted);">Target: ${n.target}</span>
+                            ${!n.read ? '<span class="admin-badge admin-badge-rose" style="font-size:0.6rem;">New</span>' : ''}
+                        </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+                        <span class="notification-time">${adminFormatDate(n.createdAt)}</span>
+                        <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="deleteNotification('${n.id}')" style="color:var(--admin-danger);"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>`).join('');
+            
+            // Pagination
+            const pag = document.getElementById('notifPagination');
+            if (totalPages > 1) {
+                let html = `<button ${notifPage <= 1 ? 'disabled' : ''} onclick="notifPage--;renderNotifications();"><i class="fas fa-chevron-left"></i></button>`;
+                for (let i = 1; i <= totalPages; i++) html += `<button class="${i === notifPage ? 'active' : ''}" onclick="notifPage=${i};renderNotifications();">${i}</button>`;
+                html += `<button ${notifPage >= totalPages ? 'disabled' : ''} onclick="notifPage++;renderNotifications();"><i class="fas fa-chevron-right"></i></button>`;
+                pag.innerHTML = html;
+            } else { pag.innerHTML = ''; }
+        }
+
+        function openNotificationModal() {
+            document.getElementById('notifTitle').value = '';
+            document.getElementById('notifMessage').value = '';
+            document.getElementById('notifType').value = 'info';
+            document.getElementById('notifTarget').value = 'all';
+            adminOpenModal('notificationModal');
+        }
+
+        function sendNotification() {
+            const title = document.getElementById('notifTitle').value.trim();
+            const message = document.getElementById('notifMessage').value.trim();
+            if (!title || !message) { adminToast('Title and message are required', 'error'); return; }
+            
+            const notification = {
+                id: adminGenerateId(),
+                title,
+                message,
+                type: document.getElementById('notifType').value,
+                target: document.getElementById('notifTarget').value,
+                read: false,
+                createdAt: new Date().toISOString()
+            };
+            
+            saveNotifications([notification, ...getNotifications()]);
+            adminCloseModal('notificationModal');
+            adminToast('Announcement sent!');
+            renderNotifications();
+        }
+
+        function markAllRead() {
+            const notifications = getNotifications().map(n => ({ ...n, read: true }));
+            saveNotifications(notifications);
+            adminToast('All marked as read');
+            renderNotifications();
+        }
+
+        function deleteNotification(id) {
+            saveNotifications(getNotifications().filter(n => n.id !== id));
+            adminToast('Notification deleted');
+            renderNotifications();
+        }
+
+        // Seed defaults
+        if (getNotifications().length === 0) {
+            saveNotifications([
+                { id: adminGenerateId(), title: 'New Collection Launch', message: 'Our summer collection is now available!', type: 'promo', target: 'all', read: false, createdAt: '2026-08-06' },
+                { id: adminGenerateId(), title: 'Appointment Reminder', message: 'You have 3 appointments scheduled for today.', type: 'info', target: 'admin', read: true, createdAt: '2026-08-05' }
+            ]);
+        }
+
+        renderNotifications();
+    </script>
+</body>
+</html>

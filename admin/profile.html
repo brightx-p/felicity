@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile — Felicity Empire Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+</head>
+<body class="admin-body">
+
+    <button class="admin-mobile-toggle" onclick="adminToggleSidebar()"><i class="fas fa-bars"></i></button>
+    <div class="admin-mobile-overlay" onclick="adminToggleSidebar()"></div>
+
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-brand"><div class="admin-brand-name">FELICITY<span class="admin-brand-accent">EMPIRE</span></div><div class="admin-brand-subtitle">Administration</div></div>
+        <nav class="admin-sidebar-nav">
+            <div class="admin-sidebar-section">Main</div>
+            <a href="index.html" class="admin-sidebar-link"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="products.html" class="admin-sidebar-link"><i class="fas fa-box"></i> Products</a>
+            <a href="orders.html" class="admin-sidebar-link"><i class="fas fa-shopping-bag"></i> Orders</a>
+            <a href="appointments.html" class="admin-sidebar-link"><i class="fas fa-calendar-check"></i> Appointments</a>
+            <a href="customers.html" class="admin-sidebar-link"><i class="fas fa-users"></i> Customers</a>
+            <div class="admin-sidebar-section">Content</div>
+            <a href="categories.html" class="admin-sidebar-link"><i class="fas fa-tags"></i> Categories</a>
+            <a href="gallery.html" class="admin-sidebar-link"><i class="fas fa-images"></i> Gallery</a>
+            <a href="videos.html" class="admin-sidebar-link"><i class="fas fa-video"></i> Videos</a>
+            <a href="reviews.html" class="admin-sidebar-link"><i class="fas fa-star"></i> Reviews</a>
+            <div class="admin-sidebar-section">Management</div>
+            <a href="analytics.html" class="admin-sidebar-link"><i class="fas fa-chart-bar"></i> Analytics</a>
+            <a href="notifications.html" class="admin-sidebar-link"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="qr-code.html" class="admin-sidebar-link"><i class="fas fa-qrcode"></i> QR Code</a>
+            <a href="settings.html" class="admin-sidebar-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <div class="admin-sidebar-footer">
+            <a href="profile.html" class="admin-sidebar-link active"><i class="fas fa-user-circle"></i> Admin Profile</a>
+            <a href="../index.html"><i class="fas fa-external-link-alt"></i> View Website</a>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <div class="admin-topbar">
+            <div class="admin-topbar-left"><h1>Admin Profile</h1></div>
+        </div>
+
+        <div class="admin-page-content">
+            <div class="admin-card" style="max-width:600px;text-align:center;">
+                <div class="admin-upload-zone" style="width:120px;height:120px;border-radius:50%;margin:0 auto 20px;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="document.getElementById('profilePicInput').click()">
+                    <img id="profilePicPreview" src="" alt="Profile" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\\'fas fa-camera\\' style=\\'font-size:2rem;color:var(--admin-rose-light);\\'></i>'" />
+                    <input type="file" id="profilePicInput" accept="image/*" onchange="handleProfilePic(event)" style="display:none;" />
+                </div>
+                <h3 style="font-family:var(--admin-font-display);font-size:1.4rem;">Ogunsanya Felicia</h3>
+                <p style="color:var(--admin-text-muted);">Founder & Creative Director</p>
+                
+                <div style="text-align:left;margin-top:24px;">
+                    <div class="admin-form-group"><label class="admin-form-label">Full Name</label><input type="text" class="admin-form-input" id="profileName" value="Ogunsanya Felicia" /></div>
+                    <div class="admin-form-group"><label class="admin-form-label">Title</label><input type="text" class="admin-form-input" id="profileTitle" value="Founder & Creative Director" /></div>
+                    <div class="admin-form-group"><label class="admin-form-label">Bio</label><textarea class="admin-form-textarea" id="profileBio">Passionate about beauty, elegance, and empowering women through premium products and services.</textarea></div>
+                </div>
+                
+                <button class="admin-btn admin-btn-primary" onclick="saveProfile()"><i class="fas fa-save"></i> Save Profile</button>
+                
+                <div style="margin-top:32px;padding:20px;background:var(--admin-bg-secondary);border-radius:var(--admin-radius-md);text-align:left;">
+                    <h4 style="font-family:var(--admin-font-heading);font-size:0.85rem;margin-bottom:12px;">Change Password</h4>
+                    <div class="admin-form-group"><label class="admin-form-label">Current Password</label><input type="password" class="admin-form-input" id="currentPw" /></div>
+                    <div class="admin-form-group"><label class="admin-form-label">New Password</label><input type="password" class="admin-form-input" id="newPw" /></div>
+                    <div class="admin-form-group"><label class="admin-form-label">Confirm New Password</label><input type="password" class="admin-form-input" id="confirmPw" /></div>
+                    <button class="admin-btn admin-btn-outline" onclick="changePassword()">Update Password</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="admin-toast-container"></div>
+
+    <script src="../assets/js/admin.js"></script>
+    <script>
+        function getProfile() { return JSON.parse(localStorage.getItem('fe_admin_profile') || '{}'); }
+        function saveProfileData(data) { localStorage.setItem('fe_admin_profile', JSON.stringify(data)); }
+
+        function loadProfile() {
+            const p = getProfile();
+            document.getElementById('profileName').value = p.name || 'Ogunsanya Felicia';
+            document.getElementById('profileTitle').value = p.title || 'Founder & Creative Director';
+            document.getElementById('profileBio').value = p.bio || '';
+            if (p.photo) document.getElementById('profilePicPreview').src = p.photo;
+        }
+
+        function handleProfilePic(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profilePicPreview').src = e.target.result;
+                document.getElementById('profilePicPreview').style.display = 'block';
+                const p = getProfile(); p.photo = e.target.result; saveProfileData(p);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveProfile() {
+            const profile = {
+                name: document.getElementById('profileName').value,
+                title: document.getElementById('profileTitle').value,
+                bio: document.getElementById('profileBio').value,
+                photo: getProfile().photo || '',
+                updatedAt: new Date().toISOString()
+            };
+            saveProfileData(profile);
+            adminToast('Profile saved!');
+        }
+
+        function changePassword() {
+            const current = document.getElementById('currentPw').value;
+            const newPw = document.getElementById('newPw').value;
+            const confirm = document.getElementById('confirmPw').value;
+            if (current !== ADMIN_CONFIG.password) { adminToast('Current password is incorrect', 'error'); return; }
+            if (!newPw || newPw.length < 6) { adminToast('Password must be at least 6 characters', 'error'); return; }
+            if (newPw !== confirm) { adminToast('Passwords do not match', 'error'); return; }
+            ADMIN_CONFIG.password = newPw;
+            adminToast('Password updated! Please use the new password next time.');
+            document.getElementById('currentPw').value = '';
+            document.getElementById('newPw').value = '';
+            document.getElementById('confirmPw').value = '';
+        }
+
+        loadProfile();
+    </script>
+</body>
+</html>

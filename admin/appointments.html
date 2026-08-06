@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appointments — Felicity Empire Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+</head>
+<body class="admin-body">
+
+    <button class="admin-mobile-toggle" onclick="adminToggleSidebar()"><i class="fas fa-bars"></i></button>
+    <div class="admin-mobile-overlay" onclick="adminToggleSidebar()"></div>
+
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-brand"><div class="admin-brand-name">FELICITY<span class="admin-brand-accent">EMPIRE</span></div><div class="admin-brand-subtitle">Administration</div></div>
+        <nav class="admin-sidebar-nav">
+            <div class="admin-sidebar-section">Main</div>
+            <a href="index.html" class="admin-sidebar-link"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="products.html" class="admin-sidebar-link"><i class="fas fa-box"></i> Products</a>
+            <a href="orders.html" class="admin-sidebar-link"><i class="fas fa-shopping-bag"></i> Orders</a>
+            <a href="appointments.html" class="admin-sidebar-link active"><i class="fas fa-calendar-check"></i> Appointments</a>
+            <a href="customers.html" class="admin-sidebar-link"><i class="fas fa-users"></i> Customers</a>
+            <div class="admin-sidebar-section">Content</div>
+            <a href="categories.html" class="admin-sidebar-link"><i class="fas fa-tags"></i> Categories</a>
+            <a href="gallery.html" class="admin-sidebar-link"><i class="fas fa-images"></i> Gallery</a>
+            <a href="videos.html" class="admin-sidebar-link"><i class="fas fa-video"></i> Videos</a>
+            <a href="reviews.html" class="admin-sidebar-link"><i class="fas fa-star"></i> Reviews</a>
+            <div class="admin-sidebar-section">Management</div>
+            <a href="analytics.html" class="admin-sidebar-link"><i class="fas fa-chart-bar"></i> Analytics</a>
+            <a href="notifications.html" class="admin-sidebar-link"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="qr-code.html" class="admin-sidebar-link"><i class="fas fa-qrcode"></i> QR Code</a>
+            <a href="settings.html" class="admin-sidebar-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <div class="admin-sidebar-footer">
+            <a href="profile.html"><i class="fas fa-user-circle"></i> Admin Profile</a>
+            <a href="../index.html"><i class="fas fa-external-link-alt"></i> View Website</a>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <div class="admin-topbar">
+            <div class="admin-topbar-left"><h1>Appointments</h1><span class="admin-topbar-breadcrumb">Manage beauty appointments</span></div>
+            <div class="admin-topbar-right">
+                <div class="admin-topbar-search"><i class="fas fa-search"></i><input type="text" id="aptSearch" placeholder="Search appointments..." oninput="filterAppointments()" /></div>
+                <button class="admin-btn admin-btn-primary" onclick="addAppointment()"><i class="fas fa-plus"></i> New Appointment</button>
+            </div>
+        </div>
+
+        <div class="admin-page-content">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                        <input type="date" class="admin-form-input" style="width:auto;" id="aptDateFilter" onchange="filterAppointments()" />
+                        <select class="admin-form-select" style="width:auto;" id="aptServiceFilter" onchange="filterAppointments()">
+                            <option value="all">All Services</option>
+                            <option>Nail Installation</option><option>Nail Refill</option><option>Pedicure</option>
+                            <option>Lash Extension</option><option>Lash Refill</option><option>Makeup Session</option>
+                            <option>Beauty Consultation</option><option>Fashion Styling</option>
+                        </select>
+                        <select class="admin-form-select" style="width:auto;" id="aptStatusFilter" onchange="filterAppointments()">
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option><option value="confirmed">Confirmed</option>
+                            <option value="completed">Completed</option><option value="cancelled">Cancelled</option>
+                            <option value="rescheduled">Rescheduled</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead><tr><th>Customer</th><th>Phone</th><th>Service</th><th>Date</th><th>Time</th><th>Notes</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody id="appointmentsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="admin-toast-container"></div>
+
+    <script src="../assets/js/admin.js"></script>
+    <script>
+        function getAppointments() { return adminGetData('appointments'); }
+        function saveAppointments(data) { adminSaveData('appointments', data); }
+
+        const aptStatusClass = { pending: 'admin-badge-warning', confirmed: 'admin-badge-info', completed: 'admin-badge-success', cancelled: 'admin-badge-danger', rescheduled: 'admin-badge-rose' };
+
+        function renderAppointments(filtered = null) {
+            const tbody = document.getElementById('appointmentsTableBody');
+            let appointments = filtered || getAppointments();
+            
+            if (appointments.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8"><div class="admin-empty-state"><i class="fas fa-calendar"></i><h3>No Appointments</h3><p>Appointments will appear here</p></div></td></tr>`;
+                return;
+            }
+            
+            appointments.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            tbody.innerHTML = appointments.map(a => `
+                <tr>
+                    <td><strong>${a.name}</strong></td>
+                    <td>${a.phone || '—'}</td>
+                    <td>${a.service}</td>
+                    <td>${adminFormatDate(a.date)}</td>
+                    <td>${a.time}</td>
+                    <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${a.notes || '—'}</td>
+                    <td><span class="admin-badge ${aptStatusClass[a.status] || 'admin-badge-warning'}">${a.status}</span></td>
+                    <td>
+                        <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                            ${a.status === 'pending' ? `<button class="admin-btn admin-btn-sm admin-btn-success" onclick="updateAptStatus('${a.id}','confirmed')"><i class="fas fa-check"></i></button>` : ''}
+                            <button class="admin-btn admin-btn-sm admin-btn-info" onclick="updateAptStatus('${a.id}','completed')"><i class="fas fa-flag-checkered"></i></button>
+                            <button class="admin-btn admin-btn-sm admin-btn-danger" onclick="updateAptStatus('${a.id}','cancelled')"><i class="fas fa-times"></i></button>
+                            <button class="admin-btn admin-btn-sm admin-btn-ghost" onclick="contactAptCustomer('${a.phone}')"><i class="fab fa-whatsapp" style="color:#25D366;"></i></button>
+                            <button class="admin-btn admin-btn-sm admin-btn-ghost" onclick="deleteAppointment('${a.id}')" style="color:var(--admin-danger);"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>`).join('');
+        }
+
+        function filterAppointments() {
+            const search = (document.getElementById('aptSearch')?.value || '').toLowerCase();
+            const date = document.getElementById('aptDateFilter')?.value;
+            const service = document.getElementById('aptServiceFilter')?.value;
+            const status = document.getElementById('aptStatusFilter')?.value;
+            let appointments = getAppointments();
+            if (search) appointments = appointments.filter(a => a.name.toLowerCase().includes(search) || a.service.toLowerCase().includes(search));
+            if (date) appointments = appointments.filter(a => a.date === date);
+            if (service !== 'all') appointments = appointments.filter(a => a.service === service);
+            if (status !== 'all') appointments = appointments.filter(a => a.status === status);
+            renderAppointments(appointments);
+        }
+
+        function updateAptStatus(id, status) {
+            let appointments = getAppointments();
+            const idx = appointments.findIndex(a => a.id === id);
+            if (idx > -1) { appointments[idx].status = status; saveAppointments(appointments); adminToast(`Appointment ${status}`); renderAppointments(); updateSidebarBadges(); }
+        }
+
+        function contactAptCustomer(phone) {
+            if (phone) window.open(`https://wa.me/234${phone.replace(/\D/g,'')}`, '_blank');
+        }
+
+        function addAppointment() {
+            const name = prompt('Customer name:');
+            if (!name) return;
+            const phone = prompt('Phone:') || '';
+            const service = prompt('Service (Nail Installation, Pedicure, etc.):') || '';
+            const date = prompt('Date (YYYY-MM-DD):') || new Date().toISOString().split('T')[0];
+            const time = prompt('Time (e.g., 10:00 AM):') || '';
+            const notes = prompt('Notes (optional):') || '';
+            const appointment = { id: adminGenerateId(), name, phone, service, date, time, notes, status: 'pending', createdAt: new Date().toISOString() };
+            saveAppointments([appointment, ...getAppointments()]);
+            adminToast('Appointment added');
+            renderAppointments();
+            updateSidebarBadges();
+        }
+
+        function deleteAppointment(id) {
+            if (!confirm('Delete this appointment?')) return;
+            saveAppointments(getAppointments().filter(a => a.id !== id));
+            adminToast('Appointment deleted');
+            renderAppointments();
+            updateSidebarBadges();
+        }
+
+        // Seed default data
+        if (getAppointments().length === 0) {
+            saveAppointments([
+                { id: adminGenerateId(), name: 'Temilola S.', phone: '08012345678', service: 'Nail Installation', date: '2026-08-10', time: '10:00 AM', notes: '', status: 'pending', createdAt: '2026-08-06' },
+                { id: adminGenerateId(), name: 'Ngozi M.', phone: '08087654321', service: 'Pedicure', date: '2026-08-10', time: '1:00 PM', notes: '', status: 'confirmed', createdAt: '2026-08-06' }
+            ]);
+        }
+
+        renderAppointments();
+        updateSidebarBadges();
+    </script>
+</body>
+</html>

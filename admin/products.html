@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Products — Felicity Empire Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+</head>
+<body class="admin-body">
+
+    <button class="admin-mobile-toggle" onclick="adminToggleSidebar()"><i class="fas fa-bars"></i></button>
+    <div class="admin-mobile-overlay" onclick="adminToggleSidebar()"></div>
+
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-brand"><div class="admin-brand-name">FELICITY<span class="admin-brand-accent">EMPIRE</span></div><div class="admin-brand-subtitle">Administration</div></div>
+        <nav class="admin-sidebar-nav">
+            <div class="admin-sidebar-section">Main</div>
+            <a href="index.html" class="admin-sidebar-link"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="products.html" class="admin-sidebar-link active"><i class="fas fa-box"></i> Products</a>
+            <a href="orders.html" class="admin-sidebar-link"><i class="fas fa-shopping-bag"></i> Orders</a>
+            <a href="appointments.html" class="admin-sidebar-link"><i class="fas fa-calendar-check"></i> Appointments</a>
+            <a href="customers.html" class="admin-sidebar-link"><i class="fas fa-users"></i> Customers</a>
+            <div class="admin-sidebar-section">Content</div>
+            <a href="categories.html" class="admin-sidebar-link"><i class="fas fa-tags"></i> Categories</a>
+            <a href="gallery.html" class="admin-sidebar-link"><i class="fas fa-images"></i> Gallery</a>
+            <a href="videos.html" class="admin-sidebar-link"><i class="fas fa-video"></i> Videos</a>
+            <a href="reviews.html" class="admin-sidebar-link"><i class="fas fa-star"></i> Reviews</a>
+            <div class="admin-sidebar-section">Management</div>
+            <a href="analytics.html" class="admin-sidebar-link"><i class="fas fa-chart-bar"></i> Analytics</a>
+            <a href="notifications.html" class="admin-sidebar-link"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="qr-code.html" class="admin-sidebar-link"><i class="fas fa-qrcode"></i> QR Code</a>
+            <a href="settings.html" class="admin-sidebar-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <div class="admin-sidebar-footer">
+            <a href="profile.html"><i class="fas fa-user-circle"></i> Admin Profile</a>
+            <a href="../index.html"><i class="fas fa-external-link-alt"></i> View Website</a>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <div class="admin-topbar">
+            <div class="admin-topbar-left"><h1>Products</h1><span class="admin-topbar-breadcrumb">Manage your product catalog</span></div>
+            <div class="admin-topbar-right">
+                <div class="admin-topbar-search"><i class="fas fa-search"></i><input type="text" id="productSearch" placeholder="Search products..." oninput="filterProducts()" /></div>
+                <button class="admin-btn admin-btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Add Product</button>
+            </div>
+        </div>
+
+        <div class="admin-page-content">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                        <select class="admin-form-select" style="width:auto;" id="categoryFilter" onchange="filterProducts()">
+                            <option value="all">All Categories</option>
+                            <option value="nails">Nails</option>
+                            <option value="lashes">Lashes</option>
+                            <option value="perfumes">Perfumes</option>
+                            <option value="fashion">Fashion</option>
+                            <option value="joggers">Joggers</option>
+                            <option value="polo">Polo</option>
+                        </select>
+                        <select class="admin-form-select" style="width:auto;" id="statusFilter" onchange="filterProducts()">
+                            <option value="all">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="draft">Draft</option>
+                            <option value="out">Out of Stock</option>
+                        </select>
+                    </div>
+                    <span style="font-size:0.8rem;color:var(--admin-text-muted);" id="productCountDisplay">0 products</span>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead><tr><th class="admin-checkbox-cell"><input type="checkbox" /></th><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Badge</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody id="productsTableBody"></tbody>
+                    </table>
+                </div>
+                <div class="admin-pagination" id="productsPagination"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Product Modal -->
+    <div class="admin-modal-overlay" id="productModal">
+        <div class="admin-modal admin-modal-lg">
+            <div class="admin-modal-header"><h3 id="modalTitle">Add Product</h3><button class="admin-modal-close" onclick="adminCloseModal('productModal')"><i class="fas fa-times"></i></button></div>
+            <div class="admin-form-row">
+                <div class="admin-form-group"><label class="admin-form-label">Product Name <span class="admin-required">*</span></label><input type="text" class="admin-form-input" id="prodName" placeholder="e.g., Luxury Press-On Nails" /></div>
+                <div class="admin-form-group"><label class="admin-form-label">Category <span class="admin-required">*</span></label><select class="admin-form-select" id="prodCategory"><option value="">Select category...</option><option value="nails">Nails</option><option value="lashes">Lashes</option><option value="perfumes">Perfumes</option><option value="fashion">Fashion</option><option value="joggers">Joggers</option><option value="polo">Polo</option></select></div>
+            </div>
+            <div class="admin-form-row">
+                <div class="admin-form-group"><label class="admin-form-label">Price (N) <span class="admin-required">*</span></label><input type="number" class="admin-form-input" id="prodPrice" placeholder="8000" /></div>
+                <div class="admin-form-group"><label class="admin-form-label">Discount Price (N)</label><input type="number" class="admin-form-input" id="prodDiscount" placeholder="Optional" /></div>
+            </div>
+            <div class="admin-form-row">
+                <div class="admin-form-group"><label class="admin-form-label">Stock <span class="admin-required">*</span></label><input type="number" class="admin-form-input" id="prodStock" placeholder="10" /></div>
+                <div class="admin-form-group"><label class="admin-form-label">Badge</label><select class="admin-form-select" id="prodBadge"><option value="">None</option><option value="new">New</option><option value="bestseller">Bestseller</option><option value="trending">Trending</option><option value="limited">Limited Edition</option></select></div>
+            </div>
+            <div class="admin-form-group"><label class="admin-form-label">Description</label><textarea class="admin-form-textarea" id="prodDesc" placeholder="Product description..."></textarea></div>
+            <div class="admin-form-group">
+                <label class="admin-form-label">Product Images</label>
+                <div class="admin-upload-zone" id="productImageUpload" onclick="document.getElementById('prodImageInput').click()">
+                    <i class="fas fa-cloud-upload-alt"></i><h4>Click to Upload Images</h4><p>PNG, JPG, or WEBP (Max 5MB each)</p>
+                    <input type="file" id="prodImageInput" accept="image/*" multiple onchange="handleProductImageUpload(event)" style="display:none;" />
+                </div>
+                <div class="admin-upload-progress" id="uploadProgress"><div class="admin-upload-progress-bar" id="uploadProgressBar"></div></div>
+                <div class="admin-image-grid" id="productImagePreview"></div>
+            </div>
+            <div class="admin-form-group"><label class="admin-form-label">Status</label><select class="admin-form-select" id="prodStatus"><option value="active">Active</option><option value="draft">Draft</option></select></div>
+            <div style="display:flex;gap:12px;margin-top:20px;">
+                <button class="admin-btn admin-btn-primary" onclick="saveProduct()">Save Product</button>
+                <button class="admin-btn admin-btn-outline" onclick="adminCloseModal('productModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-toast-container"></div>
+
+    <script src="../assets/js/admin.js"></script>
+    <script>
+        let editingProductId = null;
+        let tempProductImages = [];
+
+        function getProducts() { return adminGetData('products'); }
+        function saveProducts(data) { adminSaveData('products', data); }
+
+        function renderProducts(filteredProducts = null) {
+            const tbody = document.getElementById('productsTableBody');
+            let products = filteredProducts || getProducts();
+            
+            if (products.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8"><div class="admin-empty-state"><i class="fas fa-box-open"></i><h3>No Products Yet</h3><p>Add your first product to get started</p><button class="admin-btn admin-btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Add Product</button></div></td></tr>`;
+                document.getElementById('productCountDisplay').textContent = '0 products';
+                return;
+            }
+            
+            document.getElementById('productCountDisplay').textContent = `${products.length} product${products.length !== 1 ? 's' : ''}`;
+            
+            const badgeClass = { new: 'admin-badge-rose', bestseller: 'admin-badge-info', trending: 'admin-badge-warning', limited: 'admin-badge-neutral' };
+            const statusClass = { active: 'admin-badge-success', draft: 'admin-badge-warning', out: 'admin-badge-danger' };
+            
+            tbody.innerHTML = products.map((p, i) => `
+                <tr>
+                    <td class="admin-checkbox-cell"><input type="checkbox" /></td>
+                    <td>
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <img src="${p.images?.[0] || 'https://via.placeholder.com/40/F8F4EF/C89A7B?text=P'}" style="width:42px;height:42px;border-radius:8px;object-fit:cover;" onerror="this.style.background='var(--admin-bg-secondary)'" />
+                            <div><strong>${p.name}</strong>${p.featured ? ' <span class="admin-badge admin-badge-rose" style="font-size:0.6rem;">Featured</span>' : ''}</div>
+                        </div>
+                    </td>
+                    <td>${p.category}</td>
+                    <td>${adminFormatCurrency(p.price)}${p.discountPrice ? ` <span style="text-decoration:line-through;color:var(--admin-text-muted);font-size:0.75rem;">${adminFormatCurrency(p.discountPrice)}</span>` : ''}</td>
+                    <td>${p.stock}</td>
+                    <td>${p.badge ? `<span class="admin-badge ${badgeClass[p.badge] || 'admin-badge-neutral'}">${p.badge}</span>` : '—'}</td>
+                    <td><span class="admin-badge ${statusClass[p.status] || 'admin-badge-success'}">${p.status || 'active'}</span></td>
+                    <td>
+                        <div style="display:flex;gap:6px;">
+                            <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="editProduct('${p.id}')" title="Edit"><i class="fas fa-edit"></i></button>
+                            <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="toggleProductStatus('${p.id}')" title="${p.status === 'active' ? 'Draft' : 'Publish'}"><i class="fas fa-${p.status === 'active' ? 'eye-slash' : 'eye'}"></i></button>
+                            <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="deleteProduct('${p.id}')" title="Delete" style="color:var(--admin-danger);"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>`).join('');
+        }
+
+        function filterProducts() {
+            const search = (document.getElementById('productSearch')?.value || '').toLowerCase();
+            const category = document.getElementById('categoryFilter')?.value || 'all';
+            const status = document.getElementById('statusFilter')?.value || 'all';
+            let products = getProducts();
+            if (search) products = products.filter(p => p.name.toLowerCase().includes(search) || p.category.toLowerCase().includes(search));
+            if (category !== 'all') products = products.filter(p => p.category === category);
+            if (status !== 'all') products = products.filter(p => p.status === status);
+            renderProducts(products);
+        }
+
+        function openProductModal() {
+            editingProductId = null;
+            tempProductImages = [];
+            document.getElementById('modalTitle').textContent = 'Add Product';
+            document.getElementById('productImagePreview').innerHTML = '';
+            ['prodName','prodCategory','prodPrice','prodDiscount','prodStock','prodBadge','prodDesc'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('prodStatus').value = 'active';
+            adminOpenModal('productModal');
+        }
+
+        function editProduct(id) {
+            const product = getProducts().find(p => p.id === id);
+            if (!product) return;
+            editingProductId = id;
+            tempProductImages = product.images || [];
+            document.getElementById('modalTitle').textContent = 'Edit Product';
+            document.getElementById('prodName').value = product.name;
+            document.getElementById('prodCategory').value = product.category;
+            document.getElementById('prodPrice').value = product.price;
+            document.getElementById('prodDiscount').value = product.discountPrice || '';
+            document.getElementById('prodStock').value = product.stock;
+            document.getElementById('prodBadge').value = product.badge || '';
+            document.getElementById('prodDesc').value = product.description || '';
+            document.getElementById('prodStatus').value = product.status || 'active';
+            renderProductImagePreview();
+            adminOpenModal('productModal');
+        }
+
+        function handleProductImageUpload(event) {
+            const files = Array.from(event.target.files);
+            files.forEach(file => {
+                if (file.size > 5 * 1024 * 1024) { adminToast('Image must be under 5MB', 'warning'); return; }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    tempProductImages.push(e.target.result);
+                    renderProductImagePreview();
+                };
+                reader.readAsDataURL(file);
+            });
+            event.target.value = '';
+        }
+
+        function renderProductImagePreview() {
+            const container = document.getElementById('productImagePreview');
+            container.innerHTML = tempProductImages.map((img, i) => `
+                <div class="admin-image-item">
+                    <img src="${img}" alt="Product Image" />
+                    <div class="admin-image-actions">
+                        <button onclick="setFeaturedImage(${i})" title="Set as Featured"><i class="fas fa-star"></i></button>
+                        <button class="admin-btn-delete" onclick="removeProductImage(${i})" title="Remove"><i class="fas fa-trash"></i></button>
+                    </div>
+                    ${i === 0 ? '<span style="position:absolute;top:6px;left:6px;background:var(--admin-rose);color:#fff;font-size:0.55rem;padding:3px 8px;border-radius:10px;">Featured</span>' : ''}
+                </div>`).join('');
+        }
+
+        function removeProductImage(index) { tempProductImages.splice(index, 1); renderProductImagePreview(); }
+        function setFeaturedImage(index) { const img = tempProductImages.splice(index, 1)[0]; tempProductImages.unshift(img); renderProductImagePreview(); }
+
+        function saveProduct() {
+            const name = document.getElementById('prodName').value.trim();
+            const category = document.getElementById('prodCategory').value;
+            const price = parseInt(document.getElementById('prodPrice').value) || 0;
+            const stock = parseInt(document.getElementById('prodStock').value) || 0;
+            if (!name) { adminToast('Product name is required', 'error'); return; }
+            if (!category) { adminToast('Category is required', 'error'); return; }
+            if (!price) { adminToast('Price is required', 'error'); return; }
+
+            const product = {
+                id: editingProductId || adminGenerateId(),
+                name, category, price,
+                discountPrice: parseInt(document.getElementById('prodDiscount').value) || null,
+                stock,
+                description: document.getElementById('prodDesc').value.trim(),
+                badge: document.getElementById('prodBadge').value,
+                status: stock <= 0 ? 'out' : document.getElementById('prodStatus').value,
+                images: tempProductImages,
+                featured: document.getElementById('prodBadge').value === 'bestseller',
+                updatedAt: new Date().toISOString(),
+                createdAt: editingProductId ? (getProducts().find(p => p.id === editingProductId)?.createdAt || new Date().toISOString()) : new Date().toISOString()
+            };
+
+            let products = getProducts();
+            if (editingProductId) {
+                products = products.map(p => p.id === editingProductId ? product : p);
+            } else {
+                products.unshift(product);
+            }
+            saveProducts(products);
+            adminCloseModal('productModal');
+            adminToast(editingProductId ? 'Product updated!' : 'Product added!');
+            renderProducts();
+            updateSidebarBadges();
+        }
+
+        function toggleProductStatus(id) {
+            let products = getProducts();
+            const idx = products.findIndex(p => p.id === id);
+            if (idx > -1) {
+                products[idx].status = products[idx].status === 'active' ? 'draft' : 'active';
+                saveProducts(products);
+                renderProducts();
+                adminToast('Status updated');
+            }
+        }
+
+        function deleteProduct(id) {
+            if (!confirm('Delete this product? This cannot be undone.')) return;
+            saveProducts(getProducts().filter(p => p.id !== id));
+            adminToast('Product deleted');
+            renderProducts();
+            updateSidebarBadges();
+        }
+
+        // Initialize
+        renderProducts();
+        updateSidebarBadges();
+    </script>
+</body>
+</html>

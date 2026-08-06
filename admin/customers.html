@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customers — Felicity Empire Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+</head>
+<body class="admin-body">
+
+    <button class="admin-mobile-toggle" onclick="adminToggleSidebar()"><i class="fas fa-bars"></i></button>
+    <div class="admin-mobile-overlay" onclick="adminToggleSidebar()"></div>
+
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-brand"><div class="admin-brand-name">FELICITY<span class="admin-brand-accent">EMPIRE</span></div><div class="admin-brand-subtitle">Administration</div></div>
+        <nav class="admin-sidebar-nav">
+            <div class="admin-sidebar-section">Main</div>
+            <a href="index.html" class="admin-sidebar-link"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="products.html" class="admin-sidebar-link"><i class="fas fa-box"></i> Products</a>
+            <a href="orders.html" class="admin-sidebar-link"><i class="fas fa-shopping-bag"></i> Orders</a>
+            <a href="appointments.html" class="admin-sidebar-link"><i class="fas fa-calendar-check"></i> Appointments</a>
+            <a href="customers.html" class="admin-sidebar-link active"><i class="fas fa-users"></i> Customers</a>
+            <div class="admin-sidebar-section">Content</div>
+            <a href="categories.html" class="admin-sidebar-link"><i class="fas fa-tags"></i> Categories</a>
+            <a href="gallery.html" class="admin-sidebar-link"><i class="fas fa-images"></i> Gallery</a>
+            <a href="videos.html" class="admin-sidebar-link"><i class="fas fa-video"></i> Videos</a>
+            <a href="reviews.html" class="admin-sidebar-link"><i class="fas fa-star"></i> Reviews</a>
+            <div class="admin-sidebar-section">Management</div>
+            <a href="analytics.html" class="admin-sidebar-link"><i class="fas fa-chart-bar"></i> Analytics</a>
+            <a href="notifications.html" class="admin-sidebar-link"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="qr-code.html" class="admin-sidebar-link"><i class="fas fa-qrcode"></i> QR Code</a>
+            <a href="settings.html" class="admin-sidebar-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <div class="admin-sidebar-footer">
+            <a href="profile.html"><i class="fas fa-user-circle"></i> Admin Profile</a>
+            <a href="../index.html"><i class="fas fa-external-link-alt"></i> View Website</a>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <div class="admin-topbar">
+            <div class="admin-topbar-left"><h1>Customers</h1><span class="admin-topbar-breadcrumb">Manage customer records</span></div>
+            <div class="admin-topbar-right">
+                <div class="admin-topbar-search"><i class="fas fa-search"></i><input type="text" id="customerSearch" placeholder="Search customers..." oninput="filterCustomers()" /></div>
+                <button class="admin-btn admin-btn-primary" onclick="addCustomer()"><i class="fas fa-plus"></i> Add Customer</button>
+            </div>
+        </div>
+
+        <div class="admin-page-content">
+            <div class="admin-stats-grid">
+                <div class="admin-stat-card"><div class="admin-stat-icon rose"><i class="fas fa-users"></i></div><div class="admin-stat-info"><h4>Total Customers</h4><div class="admin-stat-value" id="totalCustomers">0</div></div></div>
+                <div class="admin-stat-card"><div class="admin-stat-icon green"><i class="fas fa-user-check"></i></div><div class="admin-stat-info"><h4>Active This Month</h4><div class="admin-stat-value" id="activeCustomers">0</div></div></div>
+                <div class="admin-stat-card"><div class="admin-stat-icon blue"><i class="fas fa-user-plus"></i></div><div class="admin-stat-info"><h4>New This Month</h4><div class="admin-stat-value" id="newCustomers">0</div></div></div>
+                <div class="admin-stat-card"><div class="admin-stat-icon amber"><i class="fas fa-crown"></i></div><div class="admin-stat-info"><h4>Repeat Customers</h4><div class="admin-stat-value" id="repeatCustomers">0</div></div></div>
+            </div>
+
+            <div class="admin-card">
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead><tr><th>Customer</th><th>Phone</th><th>Email</th><th>Orders</th><th>Appointments</th><th>Total Spent</th><th>Last Visit</th><th>Actions</th></tr></thead>
+                        <tbody id="customersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="admin-toast-container"></div>
+
+    <script src="../assets/js/admin.js"></script>
+    <script>
+        function getCustomers() { return adminGetData('customers'); }
+        function saveCustomers(data) { adminSaveData('customers', data); }
+
+        function renderCustomers(filtered = null) {
+            const tbody = document.getElementById('customersTableBody');
+            let customers = filtered || getCustomers();
+            
+            document.getElementById('totalCustomers').textContent = customers.length;
+            document.getElementById('activeCustomers').textContent = customers.filter(c => c.lastVisit).length;
+            document.getElementById('newCustomers').textContent = customers.filter(c => {
+                const d = new Date(c.joinDate); const now = new Date();
+                return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+            }).length;
+            document.getElementById('repeatCustomers').textContent = customers.filter(c => (c.orderCount || 0) > 1).length;
+            
+            if (customers.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8"><div class="admin-empty-state"><i class="fas fa-users"></i><h3>No Customers Yet</h3><p>Customer records will appear here</p></div></td></tr>`;
+                return;
+            }
+            
+            tbody.innerHTML = customers.map(c => `
+                <tr>
+                    <td>
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="admin-avatar-sm" style="width:38px;height:38px;font-size:0.8rem;">${c.name.charAt(0)}</div>
+                            <strong>${c.name}</strong>
+                        </div>
+                    </td>
+                    <td>${c.phone || '—'}</td>
+                    <td>${c.email || '—'}</td>
+                    <td>${c.orderCount || 0}</td>
+                    <td>${c.appointmentCount || 0}</td>
+                    <td><strong>${adminFormatCurrency(c.totalSpent || 0)}</strong></td>
+                    <td>${c.lastVisit ? adminFormatDate(c.lastVisit) : '—'}</td>
+                    <td>
+                        <div style="display:flex;gap:6px;">
+                            <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="viewCustomer('${c.id}')"><i class="fas fa-eye"></i></button>
+                            <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="contactCustomer('${c.phone}')"><i class="fab fa-whatsapp" style="color:#25D366;"></i></button>
+                            <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="deleteCustomer('${c.id}')" style="color:var(--admin-danger);"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>`).join('');
+        }
+
+        function filterCustomers() {
+            const search = (document.getElementById('customerSearch')?.value || '').toLowerCase();
+            let customers = getCustomers();
+            if (search) customers = customers.filter(c => c.name.toLowerCase().includes(search) || (c.phone || '').includes(search));
+            renderCustomers(customers);
+        }
+
+        function viewCustomer(id) {
+            const c = getCustomers().find(c => c.id === id);
+            if (c) alert(`Customer: ${c.name}\nPhone: ${c.phone}\nEmail: ${c.email || 'N/A'}\nOrders: ${c.orderCount || 0}\nTotal Spent: ${adminFormatCurrency(c.totalSpent || 0)}`);
+        }
+
+        function contactCustomer(phone) {
+            if (phone) window.open(`https://wa.me/234${phone.replace(/\D/g,'')}`, '_blank');
+        }
+
+        function addCustomer() {
+            const name = prompt('Customer name:');
+            if (!name) return;
+            const phone = prompt('Phone:') || '';
+            const email = prompt('Email (optional):') || '';
+            const customer = { id: adminGenerateId(), name, phone, email, orderCount: 0, appointmentCount: 0, totalSpent: 0, joinDate: new Date().toISOString() };
+            saveCustomers([customer, ...getCustomers()]);
+            adminToast('Customer added');
+            renderCustomers();
+        }
+
+        function deleteCustomer(id) {
+            if (!confirm('Delete this customer?')) return;
+            saveCustomers(getCustomers().filter(c => c.id !== id));
+            adminToast('Customer deleted');
+            renderCustomers();
+        }
+
+        if (getCustomers().length === 0) {
+            saveCustomers([
+                { id: adminGenerateId(), name: 'Amara O.', phone: '08012345678', email: 'amara@email.com', orderCount: 3, appointmentCount: 1, totalSpent: 48000, lastVisit: '2026-08-05', joinDate: '2026-06-15' },
+                { id: adminGenerateId(), name: 'Chioma E.', phone: '08087654321', email: '', orderCount: 5, appointmentCount: 2, totalSpent: 95000, lastVisit: '2026-08-06', joinDate: '2026-05-20' }
+            ]);
+        }
+
+        renderCustomers();
+    </script>
+</body>
+</html>

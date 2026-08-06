@@ -23,10 +23,9 @@
             --beige-soft: #F4ECE5; --beige-warm: #EFE6DD; --beige-deep: #E8DED5;
             --ivory: #FFFDFC; --white-soft: #FAF8F6;
             --rose-gold: #C89A7B; --rose-gold-light: #D4B09A; --rose-gold-dark: #B58465;
-            --rose-gold-glow: rgba(200, 154, 123, 0.15); --rose-gold-shimmer: rgba(200, 154, 123, 0.08);
-            --text-dark: #3E312C; --text-charcoal: #2E2E2E; --text-brown: #5C4A42;
-            --text-muted: #8B7E78; --text-light: #B5A9A2;
-            --card-white: #FFFFFF; --card-ivory: #FFFDFA; --card-cream: #FEFCF9;
+            --rose-gold-glow: rgba(200,154,123,0.15); --rose-gold-shimmer: rgba(200,154,123,0.08);
+            --text-dark: #3E312C; --text-brown: #5C4A42; --text-muted: #8B7E78; --text-light: #B5A9A2;
+            --card-white: #FFFFFF;
             --shadow-xs: 0 1px 3px rgba(62,49,44,0.04); --shadow-sm: 0 2px 8px rgba(62,49,44,0.06);
             --shadow-md: 0 8px 30px rgba(62,49,44,0.08); --shadow-lg: 0 16px 50px rgba(62,49,44,0.10);
             --shadow-xl: 0 24px 70px rgba(62,49,44,0.12); --shadow-rose: 0 12px 40px rgba(200,154,123,0.2);
@@ -71,7 +70,7 @@
         /* Navbar */
         .navbar { position: sticky; top: 0; width: 100%; z-index: 1000; background: rgba(255,255,255,0.85); backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) saturate(180%); border-bottom: 1px solid rgba(200,154,123,0.08); box-shadow: 0 2px 20px rgba(62,49,44,0.04); }
         .nav-container { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--container-padding); display: flex; justify-content: space-between; align-items: center; height: var(--nav-height); }
-        .nav-logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+        .nav-logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; cursor: pointer; }
         .logo-img { height: 38px; width: auto; }
         .logo-text { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; letter-spacing: 0.06em; color: var(--text-dark); }
         .logo-text .accent { color: var(--rose-gold); }
@@ -82,36 +81,41 @@
         .nav-link:hover::after, .nav-link.active::after { width: 100%; }
         .nav-link.active { font-weight: 600; }
         .nav-icons { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-        .nav-icon-btn { position: relative; width: 40px; height: 40px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; color: var(--text-brown); transition: var(--transition-fast); font-size: 0.95rem; }
+        .nav-icon-btn { position: relative; width: 40px; height: 40px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; color: var(--text-brown); transition: var(--transition-fast); font-size: 0.95rem; text-decoration: none; }
         .nav-icon-btn:hover { background: var(--rose-gold-shimmer); color: var(--rose-gold); }
-        .badge-count { position: absolute; top: 4px; right: 4px; min-width: 18px; height: 18px; background: var(--rose-gold); color: #fff; font-size: 0.55rem; font-weight: 700; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0 5px; font-family: var(--font-heading); }
+        .badge-count { position: absolute; top: 2px; right: 2px; min-width: 18px; height: 18px; background: #e74c3c; color: #fff; font-size: 0.55rem; font-weight: 700; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0 5px; font-family: var(--font-heading); border: 2px solid #fff; }
         .mobile-toggle { display: none; width: 40px; height: 40px; border-radius: var(--radius-full); align-items: center; justify-content: center; font-size: 1.1rem; color: var(--text-dark); transition: var(--transition-fast); }
         .mobile-toggle:hover { background: var(--rose-gold-shimmer); }
 
         /* Cart Icon with Dropdown */
-        .cart-icon-container { position: relative; }
-        .mini-cart-dropdown { display: none; position: absolute; right: 0; top: 50px; background: var(--card-white); width: 320px; border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); padding: 20px; z-index: 50; border: 1px solid rgba(200,154,123,0.06); }
-        .cart-icon-container:hover .mini-cart-dropdown { display: block; }
-        .mini-cart-dropdown h4 { font-family: var(--font-display); font-size: 1rem; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--beige-soft); }
-        .mini-cart-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f5f0e8; font-size: 0.8rem; }
-        .mini-cart-item-img { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; background: var(--cream-light); flex-shrink: 0; }
+        .cart-icon-wrap { position: relative; display: inline-block; }
+        .mini-cart-dropdown { display: none; position: absolute; right: -10px; top: 48px; background: var(--card-white); width: 340px; border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); padding: 20px; z-index: 50; border: 1px solid rgba(200,154,123,0.08); }
+        .cart-icon-wrap:hover .mini-cart-dropdown { display: block; }
+        .mini-cart-dropdown::before { content: ''; position: absolute; top: -8px; right: 18px; width: 16px; height: 16px; background: var(--card-white); transform: rotate(45deg); border-left: 1px solid rgba(200,154,123,0.08); border-top: 1px solid rgba(200,154,123,0.08); }
+        .mini-cart-header { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--beige-soft); display: flex; justify-content: space-between; align-items: center; }
+        .mini-cart-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f5f0e8; }
+        .mini-cart-item-img { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; background: var(--cream-light); flex-shrink: 0; }
         .mini-cart-item-info { flex: 1; min-width: 0; }
-        .mini-cart-item-info p { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .mini-cart-remove { background: none; border: none; color: #ccc; cursor: pointer; font-size: 0.75rem; padding: 4px; }
-        .mini-cart-remove:hover { color: #e74c3c; }
-        .mini-cart-total { font-weight: 600; padding: 10px 0; font-size: 0.9rem; border-top: 1px solid var(--beige-soft); margin-top: 8px; }
-        .mini-cart-empty { color: #999; font-size: 0.8rem; text-align: center; padding: 10px 0; }
+        .mini-cart-item-info .item-name { font-weight: 600; font-size: 0.82rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mini-cart-item-info .item-meta { font-size: 0.7rem; color: var(--text-muted); }
+        .mini-cart-actions { display: flex; gap: 6px; flex-shrink: 0; }
+        .mini-cart-btn { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; transition: var(--transition-fast); border: 1px solid #eee; background: #fff; color: #666; }
+        .mini-cart-btn.delete:hover { background: #ffe0e0; color: #e74c3c; border-color: #ffc0c0; }
+        .mini-cart-btn.view:hover { background: var(--rose-gold-shimmer); color: var(--rose-gold); border-color: var(--rose-gold-light); }
+        .mini-cart-total { font-weight: 700; padding: 12px 0; font-size: 0.95rem; border-top: 2px solid var(--beige-soft); margin-top: 10px; display: flex; justify-content: space-between; }
+        .mini-cart-empty { color: #999; font-size: 0.82rem; text-align: center; padding: 16px 0; }
+        .mini-cart-footer { display: flex; gap: 8px; margin-top: 12px; }
+        .mini-cart-footer .btn { flex: 1; justify-content: center; font-size: 0.7rem; padding: 10px 16px; }
 
         /* Mobile Menu */
         .mobile-menu-overlay { position: fixed; inset: 0; background: rgba(62,49,44,0.35); backdrop-filter: blur(6px); z-index: 998; opacity: 0; visibility: hidden; transition: all 0.4s var(--ease-out-expo); }
         .mobile-menu-overlay.open { opacity: 1; visibility: visible; }
         .mobile-menu-panel { position: fixed; top: 0; right: -100%; width: 85%; max-width: 420px; height: 100vh; background: var(--cream-light); z-index: 999; transition: right 0.45s var(--ease-out-expo); display: flex; flex-direction: column; overflow-y: auto; box-shadow: -8px 0 50px rgba(62,49,44,0.12); }
         .mobile-menu-panel.open { right: 0; }
-        .mobile-menu-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid var(--beige-soft); flex-shrink: 0; }
+        .mobile-menu-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid var(--beige-soft); }
         .mobile-menu-logo { display: flex; align-items: center; gap: 10px; }
         .mobile-menu-logo img { height: 30px; width: auto; }
-        .mobile-menu-logo span { font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; color: var(--text-dark); }
-        .mobile-menu-close { width: 38px; height: 38px; border-radius: var(--radius-full); background: var(--beige-soft); display: flex; align-items: center; justify-content: center; font-size: 0.95rem; color: var(--text-dark); transition: all 0.3s; }
+        .mobile-menu-close { width: 38px; height: 38px; border-radius: var(--radius-full); background: var(--beige-soft); display: flex; align-items: center; justify-content: center; font-size: 0.95rem; color: var(--text-dark); }
         .mobile-menu-close:hover { background: var(--rose-gold); color: #fff; transform: rotate(90deg); }
         .mobile-menu-nav { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 2px; }
         .mobile-menu-nav a { font-family: var(--font-display); font-size: 1.15rem; font-weight: 500; color: var(--text-dark); padding: 13px 16px; border-radius: var(--radius-md); transition: all 0.3s; display: flex; align-items: center; justify-content: space-between; }
@@ -121,26 +125,26 @@
         .mobile-menu-divider { height: 1px; background: var(--beige-soft); margin: 6px 16px; }
         .mobile-menu-nav .menu-icon-link { font-family: var(--font-heading); font-size: 0.9rem; font-weight: 500; }
         .mobile-menu-nav .menu-icon-link i { font-size: 0.9rem; color: var(--rose-gold-light); opacity: 1; transform: none; width: 20px; text-align: center; }
-        .mobile-menu-footer { padding: 20px 24px; border-top: 1px solid var(--beige-soft); flex-shrink: 0; }
+        .mobile-menu-footer { padding: 20px 24px; border-top: 1px solid var(--beige-soft); }
         .mobile-menu-contact { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
-        .mobile-menu-contact a { display: flex; align-items: center; gap: 12px; font-size: 0.82rem; color: var(--text-muted); transition: color 0.3s; padding: 6px 0; font-family: var(--font-body); }
+        .mobile-menu-contact a { display: flex; align-items: center; gap: 12px; font-size: 0.82rem; color: var(--text-muted); font-family: var(--font-body); }
         .mobile-menu-contact a:hover { color: var(--rose-gold); }
-        .mobile-menu-contact a i { width: 18px; text-align: center; color: var(--rose-gold-light); font-size: 0.85rem; }
+        .mobile-menu-contact a i { width: 18px; text-align: center; color: var(--rose-gold-light); }
         .mobile-menu-social { display: flex; gap: 10px; }
-        .mobile-menu-social a { width: 38px; height: 38px; border-radius: var(--radius-full); background: var(--beige-soft); display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: all 0.3s; font-size: 0.85rem; }
+        .mobile-menu-social a { width: 38px; height: 38px; border-radius: var(--radius-full); background: var(--beige-soft); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.85rem; }
         .mobile-menu-social a:hover { background: var(--rose-gold); color: #fff; transform: translateY(-3px); }
 
         /* Search Overlay */
         .search-overlay { position: fixed; inset: 0; background: rgba(249,245,241,0.98); backdrop-filter: blur(30px); z-index: 2000; display: flex; align-items: flex-start; justify-content: center; padding-top: 140px; opacity: 0; visibility: hidden; transition: var(--transition-smooth); }
         .search-overlay.active { opacity: 1; visibility: visible; }
         .search-container { width: 100%; max-width: 640px; padding: 0 24px; }
-        .search-input-main { width: 100%; padding: 20px 0; font-family: var(--font-display); font-size: 1.4rem; border: none; border-bottom: 2px solid var(--beige-deep); background: transparent; color: var(--text-dark); outline: none; transition: var(--transition-fast); }
+        .search-input-main { width: 100%; padding: 20px 0; font-family: var(--font-display); font-size: 1.4rem; border: none; border-bottom: 2px solid var(--beige-deep); background: transparent; color: var(--text-dark); outline: none; }
         .search-input-main:focus { border-bottom-color: var(--rose-gold); }
         .search-input-main::placeholder { color: var(--text-light); }
-        .search-close { position: absolute; top: 32px; right: 32px; width: 50px; height: 50px; border-radius: var(--radius-full); background: var(--beige-soft); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--text-dark); transition: var(--transition-fast); }
+        .search-close { position: absolute; top: 32px; right: 32px; width: 50px; height: 50px; border-radius: var(--radius-full); background: var(--beige-soft); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--text-dark); }
         .search-close:hover { background: var(--rose-gold); color: #fff; }
 
-        /* Hero */
+        /* Hero — Circular Video */
         .hero-section { min-height: calc(100vh - var(--nav-height)); display: flex; align-items: center; position: relative; overflow: hidden; background: linear-gradient(170deg, #FDFBF8 0%, #F9F5F1 25%, #F8F2EC 50%, #F4ECE5 75%, #FDFBF8 100%); }
         .hero-shape { position: absolute; border-radius: 50%; pointer-events: none; opacity: 0.5; }
         .hero-shape-1 { width: 700px; height: 700px; background: radial-gradient(circle, rgba(200,154,123,0.06) 0%, transparent 70%); top: -20%; right: -15%; animation: floatSlow 25s infinite ease-in-out; }
@@ -159,9 +163,13 @@
         .hero-subtitle { font-family: var(--font-elegant); font-size: clamp(1.2rem, 2vw, 1.8rem); font-weight: 400; font-style: italic; color: var(--rose-gold-dark); margin-bottom: 8px; }
         .hero-description { font-family: var(--font-body); font-size: 1rem; color: var(--text-muted); margin-bottom: 40px; line-height: 1.8; }
         .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
-        /* Hero image — properly styled with curved border */
-        .hero-image-wrapper { display: flex; align-items: center; justify-content: center; }
-        .hero-img { width: 100%; max-width: 480px; height: auto; object-fit: contain; filter: drop-shadow(0 20px 40px rgba(62,49,44,0.1)); }
+        .hero-video-wrapper { display: flex; align-items: center; justify-content: center; }
+        .hero-video-circle { width: 440px; height: 440px; border-radius: 50%; overflow: hidden; position: relative; box-shadow: 0 30px 70px rgba(62,49,44,0.12); border: 6px solid rgba(255,255,255,0.8); transition: var(--transition-smooth); }
+        .hero-video-circle:hover { transform: scale(1.03); box-shadow: 0 40px 90px rgba(62,49,44,0.18); }
+        .hero-video-circle video { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .video-play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.15); opacity: 0; transition: var(--transition-fast); cursor: pointer; }
+        .hero-video-circle:hover .video-play-overlay { opacity: 1; }
+        .video-play-overlay i { font-size: 3rem; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
 
         /* Buttons */
         .btn { display: inline-flex; align-items: center; gap: 10px; padding: 15px 36px; border-radius: 60px; font-family: var(--font-heading); font-weight: 500; font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase; transition: var(--transition-smooth); position: relative; overflow: hidden; white-space: nowrap; cursor: pointer; }
@@ -180,7 +188,6 @@
         .section-title { font-family: var(--font-display); font-size: clamp(1.8rem, 3vw, 3rem); font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
         .section-title .accent { color: var(--rose-gold); }
         .section-divider { width: 60px; height: 2px; background: linear-gradient(90deg, var(--rose-gold), transparent); margin: 16px auto; border-radius: 2px; }
-        .section-description { color: var(--text-muted); font-size: 1rem; max-width: 520px; margin: 0 auto; line-height: 1.7; }
 
         /* Features */
         .features-section { padding: 100px 0; background: var(--ivory); }
@@ -201,23 +208,25 @@
         .category-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-xl); }
         .category-card img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition-smooth); }
         .category-card:hover img { transform: scale(1.1); }
-        .category-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 30%, rgba(62,49,44,0.7) 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; transition: var(--transition-smooth); }
+        .category-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 30%, rgba(62,49,44,0.7) 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; }
         .category-overlay h3 { font-family: var(--font-display); font-size: 1.1rem; color: #fff; font-weight: 600; margin-bottom: 4px; }
         .category-overlay span { font-family: var(--font-heading); font-size: 0.7rem; color: rgba(255,255,255,0.7); text-transform: uppercase; opacity: 0; transform: translateY(8px); transition: var(--transition-smooth); }
         .category-card:hover .category-overlay span { opacity: 1; transform: translateY(0); }
         .category-badge { position: absolute; top: 16px; right: 16px; background: var(--rose-gold); color: #fff; padding: 5px 14px; border-radius: 50px; font-family: var(--font-heading); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; backdrop-filter: blur(10px); z-index: 2; }
+        .category-disabled { position: absolute; inset: 0; background: rgba(255,255,255,0.6); display: flex; align-items: center; justify-content: center; z-index: 3; cursor: not-allowed; }
+        .category-disabled span { background: var(--text-muted); color: #fff; padding: 6px 16px; border-radius: 50px; font-family: var(--font-heading); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.04em; }
 
         /* Products */
         .products-section { padding: 100px 0; background: var(--cream-warm); }
         .products-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
-        .product-card { background: var(--card-white); border-radius: var(--radius-xl); overflow: hidden; transition: var(--transition-smooth); border: 1px solid rgba(200,154,123,0.06); position: relative; }
+        .product-card { background: var(--card-white); border-radius: var(--radius-xl); overflow: hidden; transition: var(--transition-smooth); border: 1px solid rgba(200,154,123,0.06); }
         .product-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-xl); }
         .product-image-wrap { position: relative; overflow: hidden; aspect-ratio: 1; background: var(--cream-light); }
         .product-image-wrap img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition-smooth); }
         .product-card:hover .product-image-wrap img { transform: scale(1.08); }
         .product-badge { position: absolute; top: 16px; left: 16px; padding: 5px 14px; border-radius: 50px; font-family: var(--font-heading); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; z-index: 2; }
-        .badge-new { background: var(--rose-gold); color: #fff; } .badge-bestseller { background: var(--text-dark); color: #fff; } .badge-trending { background: #D4A574; color: #fff; } .badge-limited { background: #8B6B5A; color: #fff; } .badge-soldout { background: #C4A89A; color: #fff; }
-        .product-wishlist { position: absolute; top: 16px; right: 16px; width: 38px; height: 38px; border-radius: var(--radius-full); background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; z-index: 2; color: var(--text-muted); transition: var(--transition-fast); font-size: 0.9rem; box-shadow: var(--shadow-xs); }
+        .badge-new { background: var(--rose-gold); color: #fff; } .badge-bestseller { background: var(--text-dark); color: #fff; } .badge-trending { background: #D4A574; color: #fff; } .badge-limited { background: #8B6B5A; color: #fff; }
+        .product-wishlist { position: absolute; top: 16px; right: 16px; width: 38px; height: 38px; border-radius: var(--radius-full); background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; z-index: 2; color: var(--text-muted); font-size: 0.9rem; box-shadow: var(--shadow-xs); }
         .product-wishlist:hover { background: var(--rose-gold); color: #fff; transform: scale(1.1); }
         .product-wishlist.active { color: #E74C3C; }
         .product-actions { position: absolute; bottom: 12px; left: 12px; right: 12px; display: flex; gap: 8px; opacity: 0; transform: translateY(12px); transition: var(--transition-smooth); z-index: 2; }
@@ -246,22 +255,21 @@
 
         /* Founder */
         .founder-section { padding: 100px 0; background: var(--beige-soft); }
-        .founder-card { background: var(--card-white); border-radius: var(--radius-2xl); overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid rgba(200,154,123,0.08); }
+        .founder-card { background: var(--card-white); border-radius: var(--radius-2xl); overflow: hidden; box-shadow: var(--shadow-lg); }
         .founder-grid { display: grid; grid-template-columns: 1fr 1.2fr; align-items: stretch; }
-        .founder-image-wrap img { width: 100%; height: 100%; min-height: 550px; object-fit: cover; transition: var(--transition-smooth); }
-        .founder-card:hover .founder-image-wrap img { transform: scale(1.03); }
+        .founder-image-wrap img { width: 100%; height: 100%; min-height: 550px; object-fit: cover; }
         .founder-content { padding: 64px 56px; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(135deg, var(--card-white), var(--cream-light)); }
         .founder-label { font-family: var(--font-heading); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rose-gold); margin-bottom: 16px; }
-        .founder-name { font-family: var(--font-display); font-size: 2.4rem; font-weight: 700; margin-bottom: 4px; }
+        .founder-name { font-family: var(--font-display); font-size: 2.4rem; font-weight: 700; }
         .founder-title { font-family: var(--font-elegant); font-size: 1.2rem; font-style: italic; color: var(--rose-gold-dark); margin-bottom: 24px; }
         .founder-story { color: var(--text-muted); line-height: 1.9; margin-bottom: 28px; font-size: 0.95rem; }
-        .founder-quote { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; color: var(--rose-gold); padding-left: 24px; border-left: 3px solid var(--rose-gold-light); margin-bottom: 24px; line-height: 1.5; }
+        .founder-quote { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; color: var(--rose-gold); padding-left: 24px; border-left: 3px solid var(--rose-gold-light); margin-bottom: 24px; }
         .founder-mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
         .mission-item { padding: 24px; background: var(--cream-light); border-radius: var(--radius-md); transition: var(--transition-smooth); border: 1px solid transparent; }
-        .mission-item:hover { background: var(--rose-gold); color: #fff; border-color: var(--rose-gold); transform: translateY(-4px); }
+        .mission-item:hover { background: var(--rose-gold); color: #fff; transform: translateY(-4px); }
         .mission-item i { font-size: 1.3rem; margin-bottom: 10px; color: var(--rose-gold); }
         .mission-item:hover i { color: #fff; }
-        .mission-item h4 { font-family: var(--font-heading); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+        .mission-item h4 { font-family: var(--font-heading); font-size: 0.75rem; text-transform: uppercase; }
         .mission-item p { font-size: 0.8rem; opacity: 0.7; }
         .founder-signature { font-family: var(--font-elegant); font-style: italic; font-size: 1.2rem; color: var(--rose-gold-dark); opacity: 0.7; }
 
@@ -270,15 +278,15 @@
         .appointment-card { background: var(--card-white); border-radius: var(--radius-2xl); padding: 56px; border: 1px solid rgba(200,154,123,0.08); box-shadow: var(--shadow-lg); display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
         .apt-form .form-group { margin-bottom: 16px; }
         .apt-form .form-label { display: block; font-family: var(--font-heading); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-brown); margin-bottom: 6px; }
-        .apt-form .form-input, .apt-form .form-select, .apt-form .form-textarea { width: 100%; padding: 12px 16px; border-radius: var(--radius-sm); border: 1.5px solid var(--beige-deep); background: var(--cream-light); font-family: var(--font-body); font-size: 0.88rem; color: var(--text-dark); transition: var(--transition-fast); outline: none; }
+        .apt-form .form-input, .apt-form .form-select, .apt-form .form-textarea { width: 100%; padding: 12px 16px; border-radius: var(--radius-sm); border: 1.5px solid var(--beige-deep); background: var(--cream-light); font-family: var(--font-body); font-size: 0.88rem; color: var(--text-dark); outline: none; }
         .apt-form .form-input:focus, .apt-form .form-select:focus { border-color: var(--rose-gold); box-shadow: 0 0 0 4px var(--rose-gold-glow); background: #fff; }
         .apt-form .form-select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%238B7E78'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
         .apt-form .form-textarea { min-height: 80px; resize: vertical; }
         .apt-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .apt-features { display: flex; flex-direction: column; gap: 20px; }
         .apt-feature { display: flex; gap: 14px; align-items: flex-start; }
-        .apt-feature i { font-size: 1.3rem; color: var(--rose-gold); flex-shrink: 0; margin-top: 2px; }
-        .apt-feature h4 { font-family: var(--font-heading); font-size: 0.8rem; font-weight: 600; margin-bottom: 2px; }
+        .apt-feature i { font-size: 1.3rem; color: var(--rose-gold); flex-shrink: 0; }
+        .apt-feature h4 { font-family: var(--font-heading); font-size: 0.8rem; font-weight: 600; }
         .apt-feature p { font-size: 0.8rem; color: var(--text-muted); }
 
         /* Testimonials */
@@ -287,105 +295,77 @@
         .testimonials-track:hover { animation-play-state: paused; }
         @keyframes scrollTestimonials { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .testimonial-card { background: var(--card-white); border-radius: var(--radius-xl); padding: 36px 32px; min-width: 380px; max-width: 420px; border: 1px solid rgba(200,154,123,0.06); flex-shrink: 0; box-shadow: var(--shadow-sm); }
-        .testimonial-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-xl); }
-        .testimonial-stars { color: #E8B84B; margin-bottom: 16px; letter-spacing: 3px; }
+        .testimonial-stars { color: #E8B84B; margin-bottom: 16px; }
         .testimonial-text { font-family: var(--font-elegant); font-style: italic; font-size: 1rem; color: var(--text-muted); margin-bottom: 20px; }
         .testimonial-author { display: flex; align-items: center; gap: 14px; }
         .testimonial-avatar { width: 52px; height: 52px; border-radius: var(--radius-full); object-fit: cover; border: 2px solid var(--rose-gold-light); }
-        .testimonial-name { font-family: var(--font-heading); font-weight: 600; font-size: 0.9rem; }
-        .testimonial-role { font-size: 0.75rem; color: var(--text-light); }
 
-        /* Instagram */
+        /* Instagram, Join, Business Card, Footer */
         .instagram-section { padding: 100px 0; background: var(--cream); }
         .instagram-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
         .instagram-item { position: relative; border-radius: var(--radius-md); overflow: hidden; aspect-ratio: 1; cursor: pointer; }
-        .instagram-item img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition-smooth); }
-        .instagram-item:hover img { transform: scale(1.12); }
+        .instagram-item img { width: 100%; height: 100%; object-fit: cover; }
         .insta-overlay { position: absolute; inset: 0; background: rgba(62,49,44,0.35); display: flex; align-items: center; justify-content: center; opacity: 0; transition: var(--transition-smooth); }
         .instagram-item:hover .insta-overlay { opacity: 1; }
-        .insta-overlay i { font-size: 2.2rem; color: #fff; transform: scale(0.5); transition: var(--transition-spring); }
-        .instagram-item:hover .insta-overlay i { transform: scale(1); }
+        .insta-overlay i { font-size: 2.2rem; color: #fff; }
 
-        /* Join */
         .join-section { padding: 100px 0; background: var(--beige-soft); }
         .join-card { background: linear-gradient(135deg, var(--text-dark), #2A1F1A); border-radius: var(--radius-2xl); padding: 80px 56px; text-align: center; position: relative; overflow: hidden; }
-        .join-card::before { content: ''; position: absolute; top: -40%; right: -20%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(200,154,123,0.08) 0%, transparent 70%); border-radius: 50%; animation: floatSlow 18s infinite; }
         .join-content { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
-        .join-icon { font-size: 2.8rem; color: var(--rose-gold-light); margin-bottom: 24px; animation: pulseSoft 2.5s infinite; }
-        .join-title { font-family: var(--font-display); font-size: clamp(1.8rem, 2.5vw, 2.5rem); font-weight: 700; color: #fff; margin-bottom: 8px; }
-        .join-title .accent { color: var(--rose-gold-light); }
+        .join-icon { font-size: 2.8rem; color: var(--rose-gold-light); margin-bottom: 24px; }
+        .join-title { font-family: var(--font-display); font-size: clamp(1.8rem, 2.5vw, 2.5rem); font-weight: 700; color: #fff; }
         .join-description { color: rgba(255,255,255,0.55); margin-bottom: 36px; }
         .join-form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 12px; }
         .join-input { width: 100%; padding: 16px 20px; border-radius: 60px; border: 1.5px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: #fff; font-family: var(--font-body); font-size: 0.88rem; outline: none; }
         .join-input::placeholder { color: rgba(255,255,255,0.3); }
-        .join-input:focus { border-color: var(--rose-gold); }
         .join-note { color: rgba(255,255,255,0.3); font-size: 0.75rem; margin-top: 12px; }
-        .join-note i { color: var(--rose-gold-light); }
 
-        /* Business Card */
         .business-card-section { padding: 100px 0; background: linear-gradient(180deg, var(--cream), var(--beige-soft)); }
-        .business-card { background: var(--card-white); border-radius: var(--radius-2xl); padding: 64px; display: grid; grid-template-columns: 1fr auto 1fr; gap: 56px; align-items: center; border: 1px solid rgba(200,154,123,0.08); box-shadow: var(--shadow-xl); }
-        .bc-info h3 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 16px; }
-        .bc-logo-text { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; margin-bottom: 16px; }
+        .business-card { background: var(--card-white); border-radius: var(--radius-2xl); padding: 64px; display: grid; grid-template-columns: 1fr auto 1fr; gap: 56px; align-items: center; box-shadow: var(--shadow-xl); }
         .bc-qr-wrap { background: #fff; padding: 24px; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
         .bc-qr-wrap img { width: 170px; height: 170px; object-fit: contain; }
-        .bc-contact { text-align: right; }
         .bc-contact h4 { font-family: var(--font-heading); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; color: var(--rose-gold); margin-bottom: 20px; }
         .bc-contact-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
         .bc-contact-list li { display: flex; align-items: center; gap: 12px; color: var(--text-muted); justify-content: flex-end; }
-        .bc-contact-list li i { color: var(--rose-gold); width: 18px; text-align: center; }
+        .bc-contact-list li i { color: var(--rose-gold); }
 
-        /* Footer */
-        .footer { background: linear-gradient(180deg, #2A1F1A, #1A1210); color: rgba(255,255,255,0.5); padding: 80px 0 0; position: relative; }
-        .footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--rose-gold-dark), transparent); opacity: 0.3; }
+        .footer { background: linear-gradient(180deg, #2A1F1A, #1A1210); color: rgba(255,255,255,0.5); padding: 80px 0 0; }
         .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 56px; padding-bottom: 56px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .footer-brand p { font-size: 0.9rem; margin-top: 16px; opacity: 0.45; }
-        .footer-tagline { font-family: var(--font-elegant); font-style: italic; font-size: 0.95rem; color: var(--rose-gold-light); opacity: 0.5; margin-top: 8px; }
+        .footer-tagline { font-family: var(--font-elegant); font-style: italic; color: var(--rose-gold-light); opacity: 0.5; }
         .footer-social { display: flex; gap: 12px; margin-top: 20px; }
-        .footer-social a { width: 44px; height: 44px; border-radius: var(--radius-full); background: rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: center; transition: var(--transition-smooth); color: rgba(255,255,255,0.35); }
-        .footer-social a:hover { background: var(--rose-gold); color: #fff; transform: translateY(-4px); }
+        .footer-social a { width: 44px; height: 44px; border-radius: var(--radius-full); background: rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.35); }
+        .footer-social a:hover { background: var(--rose-gold); color: #fff; }
         .footer-links h4 { color: #fff; font-family: var(--font-heading); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 20px; opacity: 0.7; }
         .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-        .footer-links a { color: rgba(255,255,255,0.35); font-size: 0.85rem; transition: var(--transition-fast); }
-        .footer-links a:hover { color: var(--rose-gold-light); padding-left: 4px; }
+        .footer-links a { color: rgba(255,255,255,0.35); font-size: 0.85rem; }
+        .footer-links a:hover { color: var(--rose-gold-light); }
         .footer-newsletter h4 { color: #fff; font-family: var(--font-heading); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 20px; opacity: 0.7; }
         .newsletter-form { display: flex; gap: 8px; }
         .newsletter-input { flex: 1; padding: 13px 18px; border-radius: 60px; border: 1.5px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); color: #fff; font-family: var(--font-body); font-size: 0.85rem; outline: none; }
-        .newsletter-input:focus { border-color: var(--rose-gold); }
         .footer-bottom { padding: 28px 0; display: flex; justify-content: space-between; font-size: 0.78rem; color: rgba(255,255,255,0.2); }
-        .footer-bottom i { color: var(--rose-gold-light); }
 
-        /* Toast, Scroll Top */
         .toast-container { position: fixed; bottom: 40px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-        .toast { padding: 16px 24px; border-radius: var(--radius-md); background: var(--card-white); box-shadow: var(--shadow-xl); border-left: 3px solid var(--rose-gold); font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; gap: 12px; transform: translateX(120%); transition: var(--transition-spring); }
+        .toast { padding: 16px 24px; border-radius: var(--radius-md); background: var(--card-white); box-shadow: var(--shadow-xl); border-left: 3px solid var(--rose-gold); font-size: 0.85rem; display: flex; align-items: center; gap: 12px; transform: translateX(120%); transition: var(--transition-spring); }
         .toast.show { transform: translateX(0); }
-        .scroll-top-btn { position: fixed; bottom: 36px; right: 36px; width: 50px; height: 50px; border-radius: var(--radius-full); background: var(--rose-gold); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1rem; box-shadow: var(--shadow-rose); transition: var(--transition-smooth); opacity: 0; visibility: hidden; transform: translateY(16px); z-index: 999; }
+        .scroll-top-btn { position: fixed; bottom: 36px; right: 36px; width: 50px; height: 50px; border-radius: var(--radius-full); background: var(--rose-gold); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1rem; box-shadow: var(--shadow-rose); opacity: 0; visibility: hidden; transform: translateY(16px); z-index: 999; transition: var(--transition-smooth); }
         .scroll-top-btn.visible { opacity: 1; visibility: visible; transform: translateY(0); }
-        .scroll-top-btn:hover { transform: translateY(-6px); background: var(--rose-gold-dark); }
 
-        /* ================================================================
-           RESPONSIVE
-           ================================================================ */
-        @media (max-width: 1200px) {
-            .products-grid { grid-template-columns: repeat(3,1fr); }
-            .categories-grid { grid-template-columns: repeat(3,1fr); }
-            .features-grid { grid-template-columns: repeat(2,1fr); }
-            .instagram-grid { grid-template-columns: repeat(3,1fr); }
-        }
+        /* Responsive */
+        @media (max-width: 1200px) { .products-grid { grid-template-columns: repeat(3,1fr); } .categories-grid { grid-template-columns: repeat(3,1fr); } .features-grid { grid-template-columns: repeat(2,1fr); } .instagram-grid { grid-template-columns: repeat(3,1fr); } }
         @media (max-width: 1024px) {
             .nav-links { display: none; } .mobile-toggle { display: flex; }
-            .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+            .hero-grid { grid-template-columns: 1fr; text-align: center; }
             .hero-content { max-width: 100%; } .hero-accent-line { margin: 0 auto 28px; }
             .hero-buttons { justify-content: center; }
-            /* Hide hero image on tablet/mobile */
-            .hero-image-wrapper { display: none; }
+            .hero-video-wrapper { display: none; }
             .hero-title { font-size: 3rem; }
             .founder-grid { grid-template-columns: 1fr; }
             .founder-image-wrap img { min-height: 400px; }
             .founder-content { padding: 48px 36px; }
             .appointment-card { grid-template-columns: 1fr; padding: 40px 32px; }
             .business-card { grid-template-columns: 1fr; text-align: center; gap: 40px; }
-            .bc-contact { text-align: center; } .bc-contact-list li { justify-content: center; }
+            .bc-contact-list li { justify-content: center; }
             .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
             .join-form-grid { grid-template-columns: 1fr 1fr; }
             .qv-content { grid-template-columns: 1fr; }
@@ -394,25 +374,17 @@
         @media (max-width: 768px) {
             :root { --container-padding: 20px; }
             .hero-title { font-size: 2.4rem; }
-            .hero-image-wrapper { display: none; }
+            .hero-video-wrapper { display: none; }
             .hero-buttons { flex-direction: column; align-items: center; }
-            /* Products — 2 columns on mobile */
             .products-grid { grid-template-columns: repeat(2,1fr); gap: 14px; }
             .product-actions { position: relative; opacity: 1; transform: none; padding: 12px 14px; }
             .product-actions .btn { font-size: 0.6rem; padding: 8px 10px; }
             .product-info { padding: 14px 16px; }
             .product-info h3 { font-size: 0.9rem; }
-            .product-wishlist { width: 32px; height: 32px; font-size: 0.8rem; top: 10px; right: 10px; }
-            .product-badge { font-size: 0.55rem; padding: 3px 10px; top: 10px; left: 10px; }
-            /* Categories — horizontal scroll */
             .categories-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; padding-bottom: 16px; }
             .category-card { flex: 0 0 180px; scroll-snap-align: start; }
-            /* Features — 2x2 grid */
             .features-grid { grid-template-columns: repeat(2,1fr); gap: 12px; }
             .feature-card { padding: 24px 14px; }
-            .feature-icon { font-size: 1.5rem; margin-bottom: 12px; }
-            .feature-card h4 { font-size: 0.75rem; }
-            .feature-card p { font-size: 0.75rem; }
             .testimonial-card { min-width: 290px; max-width: 320px; }
             .instagram-grid { grid-template-columns: repeat(2,1fr); }
             .footer-grid { grid-template-columns: 1fr; }
@@ -421,26 +393,18 @@
             .business-card { padding: 36px 24px; }
             .appointment-card { padding: 32px 20px; }
             .apt-form .form-row { grid-template-columns: 1fr; }
-            .section-header { margin-bottom: 32px; }
-            .section-title { font-size: 1.8rem; }
-            .section-label { font-size: 0.62rem; }
-            .mini-cart-dropdown { width: 280px; right: -20px; }
+            .mini-cart-dropdown { width: 300px; right: -40px; }
+            .mini-cart-dropdown::before { right: 50px; }
         }
         @media (max-width: 480px) {
             .hero-title { font-size: 2rem; }
-            .hero-image-wrapper { display: none; }
+            .hero-video-wrapper { display: none; }
             .products-grid { grid-template-columns: repeat(2,1fr); gap: 10px; }
-            .product-image-wrap { aspect-ratio: 1; }
-            .product-info h3 { font-size: 0.8rem; }
-            .product-price { font-size: 0.9rem; }
             .features-grid { grid-template-columns: repeat(2,1fr); gap: 8px; }
-            .feature-card { padding: 18px 10px; }
             .category-card { flex: 0 0 150px; }
             .founder-name { font-size: 1.5rem; }
             .founder-mission-grid { grid-template-columns: 1fr; }
             .testimonial-card { min-width: 260px; }
-            .section-title { font-size: 1.6rem; }
-            .mini-cart-dropdown { width: 260px; right: -30px; }
         }
     </style>
 </head>
@@ -470,17 +434,16 @@
             </div>
             <div class="nav-icons">
                 <button class="nav-icon-btn" id="searchToggle" aria-label="Search"><i class="fas fa-search"></i></button>
-                <!-- Cart icon with mini dropdown -->
-                <div class="cart-icon-container">
-                    <a href="checkout.html" class="nav-icon-btn" aria-label="Checkout" style="text-decoration:none;">
+                <div class="cart-icon-wrap">
+                    <a href="checkout.html" class="nav-icon-btn" aria-label="Checkout">
                         <i class="fas fa-shopping-bag"></i>
                         <span class="badge-count" id="cartCount" style="display:none;">0</span>
                     </a>
                     <div class="mini-cart-dropdown" id="miniCartDropdown">
-                        <h4>Your Cart</h4>
+                        <div class="mini-cart-header">Your Cart <span style="font-size:0.7rem;font-weight:400;color:var(--text-muted);" id="cartItemCount">0 items</span></div>
                         <div id="miniCartItems"><p class="mini-cart-empty">Your cart is empty</p></div>
-                        <div class="mini-cart-total" id="miniCartTotal" style="display:none;"></div>
-                        <a href="checkout.html" class="btn btn-primary btn-sm" style="width:100%;margin-top:10px;display:none;" id="viewCartBtn">View Checkout</a>
+                        <div class="mini-cart-total" id="miniCartTotal" style="display:none;"><span>Total</span><span id="miniTotalAmount">N0</span></div>
+                        <div class="mini-cart-footer"><a href="checkout.html" class="btn btn-outline btn-sm">Checkout</a></div>
                     </div>
                 </div>
                 <button class="mobile-toggle" id="mobileToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
@@ -523,7 +486,7 @@
         <div class="search-container"><input type="text" class="search-input-main" placeholder="Search luxury products..." id="searchInput" /></div>
     </div>
 
-    <!-- Hero Section -->
+    <!-- Hero Section with Circular Video -->
     <section class="hero-section">
         <div class="hero-shape hero-shape-1"></div>
         <div class="hero-shape hero-shape-2"></div>
@@ -540,8 +503,15 @@
                         <a href="#appointment" class="btn btn-outline"><i class="fas fa-calendar-check"></i> <span>Book Appointment</span></a>
                     </div>
                 </div>
-                <div class="hero-image-wrapper">
-                    <img src="https://plain-weur-prod-public.komododecks.com/202608/02/1vGEhfTaOAu15glW0GJp/image.png" alt="Felicity Empire" class="hero-img" loading="eager" onerror="this.style.display='none'" />
+                <div class="hero-video-wrapper">
+                    <div class="hero-video-circle">
+                        <video autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=500&h=500&fit=crop">
+                            <source src="https://videos.pexels.com/video-files/3997886/3997886-hd_1080_1920_25fps.mp4" type="video/mp4" />
+                        </video>
+                        <div class="video-play-overlay" onclick="toggleHeroVideo()">
+                            <i class="fas fa-pause" id="videoPlayIcon"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -550,9 +520,7 @@
     <!-- Features -->
     <section class="features-section">
         <div class="container">
-            <div class="section-header" data-aos="fade-up">
-                <p class="section-label">The Felicity Promise</p><h2 class="section-title">Why Choose <span class="accent">Us</span></h2><div class="section-divider"></div><p class="section-description">Experience luxury shopping redefined</p>
-            </div>
+            <div class="section-header" data-aos="fade-up"><p class="section-label">The Felicity Promise</p><h2 class="section-title">Why Choose <span class="accent">Us</span></h2><div class="section-divider"></div></div>
             <div class="features-grid">
                 <div class="feature-card" data-aos="fade-up" data-aos-delay="100"><div class="feature-icon"><i class="fas fa-gem"></i></div><h4>Premium Quality</h4><p>Curated luxury products</p></div>
                 <div class="feature-card" data-aos="fade-up" data-aos-delay="200"><div class="feature-icon"><i class="fas fa-certificate"></i></div><h4>100% Authentic</h4><p>Genuine products guaranteed</p></div>
@@ -564,96 +532,45 @@
 
     <!-- Categories -->
     <section class="categories-section">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up"><p class="section-label">Collections</p><h2 class="section-title">Shop by <span class="accent">Category</span></h2><div class="section-divider"></div></div>
-            <div class="categories-grid" id="categoriesGrid" data-aos="fade-up"></div>
-        </div>
+        <div class="container"><div class="section-header" data-aos="fade-up"><p class="section-label">Collections</p><h2 class="section-title">Shop by <span class="accent">Category</span></h2><div class="section-divider"></div></div>
+        <div class="categories-grid" id="categoriesGrid" data-aos="fade-up"></div></div>
     </section>
 
-    <!-- Featured Products -->
+    <!-- Products -->
     <section class="products-section">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up"><p class="section-label">Featured</p><h2 class="section-title">Trending <span class="accent">Products</span></h2><div class="section-divider"></div></div>
-            <div class="products-grid" id="featuredProducts" data-aos="fade-up"></div>
-        </div>
+        <div class="container"><div class="section-header" data-aos="fade-up"><p class="section-label">Featured</p><h2 class="section-title">Trending <span class="accent">Products</span></h2><div class="section-divider"></div></div>
+        <div class="products-grid" id="featuredProducts" data-aos="fade-up"></div></div>
     </section>
 
     <!-- Founder -->
     <section class="founder-section">
-        <div class="container">
-            <div class="founder-card" data-aos="fade-up">
-                <div class="founder-grid">
-                    <div class="founder-image-wrap"><img src="https://plain-weur-prod-public.komododecks.com/202608/02/GCeWQfVMFTuD9riHWYEo/image.png" alt="Founder" loading="lazy" /></div>
-                    <div class="founder-content">
-                        <p class="founder-label">Our Story</p><h2 class="founder-name">Ogunsanya Felicia</h2><p class="founder-title">Founder & Creative Director</p>
-                        <p class="founder-story">Felicity Empire was born from an unwavering passion for beauty, elegance, and empowerment.</p>
-                        <blockquote class="founder-quote">"Luxury is not about price — it's about the feeling of confidence."</blockquote>
-                        <div class="founder-mission-grid">
-                            <div class="mission-item"><i class="fas fa-bullseye"></i><h4>Our Mission</h4><p>To deliver premium beauty and fashion</p></div>
-                            <div class="mission-item"><i class="fas fa-eye"></i><h4>Our Vision</h4><p>Africa's most trusted luxury destination</p></div>
-                        </div>
-                        <p class="founder-signature">— Ogunsanya Felicia</p>
-                        <a href="about.html" class="btn btn-primary" style="margin-top:24px;"><i class="fas fa-book-open"></i> Read Our Story</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="container"><div class="founder-card" data-aos="fade-up"><div class="founder-grid"><div class="founder-image-wrap"><img src="https://plain-weur-prod-public.komododecks.com/202608/02/GCeWQfVMFTuD9riHWYEo/image.png" alt="Founder" loading="lazy" /></div><div class="founder-content"><p class="founder-label">Our Story</p><h2 class="founder-name">Ogunsanya Felicia</h2><p class="founder-title">Founder & Creative Director</p><p class="founder-story">Felicity Empire was born from an unwavering passion for beauty, elegance, and empowerment.</p><blockquote class="founder-quote">"Luxury is not about price — it's about the feeling of confidence."</blockquote><div class="founder-mission-grid"><div class="mission-item"><i class="fas fa-bullseye"></i><h4>Our Mission</h4><p>To deliver premium beauty and fashion</p></div><div class="mission-item"><i class="fas fa-eye"></i><h4>Our Vision</h4><p>Africa's most trusted luxury destination</p></div></div><p class="founder-signature">— Ogunsanya Felicia</p><a href="about.html" class="btn btn-primary" style="margin-top:24px;"><i class="fas fa-book-open"></i> Read Our Story</a></div></div></div></div>
     </section>
 
-    <!-- Book Appointment -->
+    <!-- Appointment -->
     <section class="appointment-section" id="appointment">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up"><p class="section-label">Beauty Services</p><h2 class="section-title">Book an <span class="accent">Appointment</span></h2><div class="section-divider"></div><p class="section-description">Reserve your session for nails, lashes, beauty treatments, or a consultation</p></div>
-            <div class="appointment-card" data-aos="fade-up">
-                <div class="apt-form">
-                    <div class="form-row"><div class="form-group"><label class="form-label">Full Name *</label><input type="text" class="form-input" id="aptName" placeholder="Your full name" /></div><div class="form-group"><label class="form-label">Phone Number *</label><input type="tel" class="form-input" id="aptPhone" placeholder="08012345678" /></div></div>
-                    <div class="form-group"><label class="form-label">Service Type *</label><select class="form-select" id="aptService"><option value="">Select a service...</option><option>Nail Installation</option><option>Nail Refill</option><option>Pedicure</option><option>Lash Extension</option><option>Lash Refill</option><option>Makeup Session</option><option>Beauty Consultation</option><option>Fashion Styling</option><option>Other</option></select></div>
-                    <div class="form-row"><div class="form-group"><label class="form-label">Preferred Date *</label><input type="date" class="form-input" id="aptDate" /></div><div class="form-group"><label class="form-label">Preferred Time *</label><select class="form-select" id="aptTime"><option value="">Select time...</option><option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option><option>12:00 PM</option><option>1:00 PM</option><option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option></select></div></div>
-                    <div class="form-group"><label class="form-label">Additional Notes</label><textarea class="form-textarea" id="aptNotes" placeholder="e.g., I would like a nude nail design for my graduation."></textarea></div>
-                    <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center;" onclick="submitAppointment()"><i class="fab fa-whatsapp"></i> Book via WhatsApp</button>
-                </div>
-                <div class="apt-features">
-                    <div class="apt-feature"><i class="fas fa-user-graduate"></i><div><h4>Professional Artist</h4><p>Expertly trained beauty professional</p></div></div>
-                    <div class="apt-feature"><i class="fas fa-pump-medical"></i><div><h4>Hygienic Environment</h4><p>Clean, sanitized tools and workspace</p></div></div>
-                    <div class="apt-feature"><i class="fas fa-heart"></i><div><h4>Personalized Service</h4><p>Tailored to your unique style</p></div></div>
-                    <div class="apt-feature"><i class="fas fa-clock"></i><div><h4>Flexible Scheduling</h4><p>Convenient appointment times</p></div></div>
-                </div>
-            </div>
-        </div>
+        <div class="container"><div class="section-header" data-aos="fade-up"><p class="section-label">Beauty Services</p><h2 class="section-title">Book an <span class="accent">Appointment</span></h2><div class="section-divider"></div></div>
+        <div class="appointment-card" data-aos="fade-up"><div class="apt-form"><div class="form-row"><div class="form-group"><label class="form-label">Full Name *</label><input type="text" class="form-input" id="aptName" /></div><div class="form-group"><label class="form-label">Phone *</label><input type="tel" class="form-input" id="aptPhone" /></div></div><div class="form-group"><label class="form-label">Service *</label><select class="form-select" id="aptService"><option value="">Select...</option><option>Nail Installation</option><option>Nail Refill</option><option>Pedicure</option><option>Makeup</option><option>Consultation</option></select></div><div class="form-row"><div class="form-group"><label class="form-label">Date *</label><input type="date" class="form-input" id="aptDate" /></div><div class="form-group"><label class="form-label">Time *</label><select class="form-select" id="aptTime"><option value="">Select...</option><option>9AM</option><option>10AM</option><option>11AM</option><option>12PM</option><option>1PM</option><option>2PM</option><option>3PM</option><option>4PM</option></select></div></div><div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="aptNotes"></textarea></div><button class="btn btn-primary btn-lg" style="width:100%;justify-content:center;" onclick="submitAppointment()"><i class="fab fa-whatsapp"></i> Book via WhatsApp</button></div><div class="apt-features"><div class="apt-feature"><i class="fas fa-user-graduate"></i><div><h4>Professional Artist</h4><p>Expertly trained</p></div></div><div class="apt-feature"><i class="fas fa-pump-medical"></i><div><h4>Hygienic</h4><p>Sanitized tools</p></div></div><div class="apt-feature"><i class="fas fa-heart"></i><div><h4>Personalized</h4><p>Tailored to you</p></div></div></div></div></div>
     </section>
 
     <!-- Testimonials -->
-    <section class="testimonials-section">
-        <div class="container"><div class="section-header" data-aos="fade-up"><p class="section-label">Testimonials</p><h2 class="section-title">What Our <span class="accent">Customers Say</span></h2><div class="section-divider"></div></div></div>
-        <div class="testimonials-track" id="testimonialsTrack"></div>
-    </section>
-
+    <section class="testimonials-section"><div class="container"><div class="section-header" data-aos="fade-up"><p class="section-label">Testimonials</p><h2 class="section-title">What Our <span class="accent">Customers Say</span></h2></div></div><div class="testimonials-track" id="testimonialsTrack"></div></section>
+    
     <!-- Instagram -->
-    <section class="instagram-section">
-        <div class="container"><div class="section-header" data-aos="fade-up"><p class="section-label">Follow Us</p><h2 class="section-title">Instagram <span class="accent">Gallery</span></h2><div class="section-divider"></div></div>
-        <div class="instagram-grid" id="instagramGrid" data-aos="fade-up"></div></div>
-    </section>
-
+    <section class="instagram-section"><div class="container"><div class="section-header" data-aos="fade-up"><p class="section-label">Follow Us</p><h2 class="section-title">Instagram <span class="accent">Gallery</span></h2></div><div class="instagram-grid" id="instagramGrid"></div></div></section>
+    
     <!-- Join -->
-    <section id="join" class="join-section">
-        <div class="container"><div class="join-card" data-aos="fade-up"><div class="join-content"><div class="join-icon"><i class="fas fa-crown"></i></div><h2 class="join-title">Join the <span class="accent">Empire</span></h2><p class="join-description">Subscribe for exclusive updates, discounts, and members-only offers.</p><form id="joinForm" class="join-form"><div class="join-form-grid"><input type="text" class="join-input" placeholder="Your Name" required /><input type="tel" class="join-input" placeholder="Phone Number" required /><input type="email" class="join-input" placeholder="Email (Optional)" /><button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Subscribe</button></div></form><p class="join-note"><i class="fas fa-lock"></i> Your information is secure.</p></div></div></div>
-    </section>
-
+    <section class="join-section"><div class="container"><div class="join-card"><div class="join-content"><div class="join-icon"><i class="fas fa-crown"></i></div><h2 class="join-title">Join the <span class="accent">Empire</span></h2><p class="join-description">Subscribe for exclusive updates.</p><form id="joinForm" class="join-form"><div class="join-form-grid"><input type="text" class="join-input" placeholder="Name" required /><input type="tel" class="join-input" placeholder="Phone" required /><input type="email" class="join-input" placeholder="Email" /><button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Subscribe</button></div></form><p class="join-note"><i class="fas fa-lock"></i> Your info is secure.</p></div></div></div></section>
+    
     <!-- Business Card -->
-    <section class="business-card-section">
-        <div class="container"><div class="business-card" data-aos="fade-up"><div class="bc-info"><p class="bc-logo-text">FELICITY<span class="accent">EMPIRE</span></p><h3>Scan to <span class="accent">Visit Us</span></h3><p>Save our QR code to share with friends and family.</p></div><div class="bc-qr-wrap"><img src="assets/img/qr-code.png" alt="QR Code" onerror="this.style.display='none'" /></div><div class="bc-contact"><h4>Connect With Us</h4><ul class="bc-contact-list"><li><span>08125913807</span> <i class="fas fa-phone"></i></li><li><span>Chat on WhatsApp</span> <i class="fab fa-whatsapp"></i></li><li><span>info@felicityempire.com</span> <i class="fas fa-envelope"></i></li></ul></div></div></div>
-    </section>
-
+    <section class="business-card-section"><div class="container"><div class="business-card"><div><p style="font-family:var(--font-display);font-size:1.3rem;font-weight:700;">FELICITY<span style="color:var(--rose-gold);">EMPIRE</span></p><h3>Scan to <span style="color:var(--rose-gold);">Visit Us</span></h3></div><div class="bc-qr-wrap"><img src="assets/img/qr-code.png" alt="QR" /></div><div class="bc-contact"><h4>Connect</h4><ul class="bc-contact-list"><li><span>08125913807</span> <i class="fas fa-phone"></i></li><li><span>WhatsApp</span> <i class="fab fa-whatsapp"></i></li></ul></div></div></div></section>
+    
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container"><div class="footer-grid"><div class="footer-brand"><a href="index.html" style="display:flex;align-items:center;gap:12px;"><img src="assets/img/FELICITY-EMPIRE-logo.png" alt="Felicity Empire" style="height:36px;filter:brightness(0) invert(1);" /><span style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:#fff;">FELICITY<span style="color:var(--rose-gold-light);">EMPIRE</span></span></a><p>Your destination for luxury beauty and fashion.</p><p class="footer-tagline">Luxury that speaks for you.</p><div class="footer-social"><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-tiktok"></i></a></div></div><div class="footer-links"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="checkout.html">Checkout</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div><div class="footer-links"><h4>Collections</h4><ul><li><a href="shop.html?category=nails">Nails</a></li><li><a href="shop.html?category=lashes">Lashes</a></li><li><a href="shop.html?category=perfumes">Perfumes</a></li><li><a href="shop.html?category=clothes">Clothes</a></li></ul></div><div class="footer-newsletter"><h4>Stay Connected</h4><form class="newsletter-form"><input type="email" class="newsletter-input" placeholder="Your email" /><button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-arrow-right"></i></button></form></div></div><div class="footer-bottom"><p>&copy; 2026 Felicity Empire.</p><p>Designed with <i class="fas fa-heart"></i> for our queens</p></div></div>
-    </footer>
+    <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a href="index.html" style="display:flex;align-items:center;gap:12px;"><img src="assets/img/FELICITY-EMPIRE-logo.png" style="height:36px;filter:brightness(0) invert(1);" /><span style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:#fff;">FELICITY<span style="color:var(--rose-gold-light);">EMPIRE</span></span></a><p>Luxury beauty and fashion.</p><p class="footer-tagline">Luxury that speaks for you.</p></div><div class="footer-links"><h4>Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="checkout.html">Checkout</a></li></ul></div><div class="footer-newsletter"><h4>Stay Connected</h4><form class="newsletter-form"><input type="email" class="newsletter-input" placeholder="Your email" /><button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-arrow-right"></i></button></form></div></div><div class="footer-bottom"><p>&copy; 2026 Felicity Empire.</p></div></div></footer>
 
     <!-- Quick View Modal -->
     <div class="qv-modal" id="qvModal"><div class="qv-content" id="qvContent"></div></div>
-    <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
-    <!-- Scroll to Top -->
     <button class="scroll-top-btn" id="scrollTopBtn"><i class="fas fa-chevron-up"></i></button>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -670,118 +587,141 @@
             categoriesGrid: $('#categoriesGrid'), featuredProducts: $('#featuredProducts'),
             testimonialsTrack: $('#testimonialsTrack'), instagramGrid: $('#instagramGrid'),
             qvModal: $('#qvModal'), qvContent: $('#qvContent'), scrollTopBtn: $('#scrollTopBtn'),
-            toastContainer: $('#toastContainer'), cartCount: $('#cartCount'),
-            miniCartItems: $('#miniCartItems'), miniCartTotal: $('#miniCartTotal'), viewCartBtn: $('#viewCartBtn'),
+            toastContainer: $('#toastContainer'), cartCount: $('#cartCount'), cartItemCount: $('#cartItemCount'),
+            miniCartItems: $('#miniCartItems'), miniCartTotal: $('#miniCartTotal'), miniTotalAmount: $('#miniTotalAmount'),
             joinForm: $('#joinForm')
         };
         const Toast = { show(msg, type = 'success') { const t = document.createElement('div'); t.className = `toast ${type}`; t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':'exclamation-circle'}"></i><span>${msg}</span>`; DOM.toastContainer.appendChild(t); requestAnimationFrame(() => t.classList.add('show')); setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 3000); } };
-        
         const Cart = {
             get() { return JSON.parse(localStorage.getItem('fe_cart') || '[]'); },
             save(c) { localStorage.setItem('fe_cart', JSON.stringify(c)); this.updateUI(); },
             add(p) { const c = this.get(); const e = c.find(i => i.id === p.id); if (e) { if (e.qty >= p.stock) { Toast.show('Not enough stock', 'error'); return false; } e.qty++; } else c.push({ id: p.id, name: p.name, price: p.price, qty: 1, stock: p.stock, image: p.image }); this.save(c); Toast.show(`${p.name} added to cart`); return true; },
-            remove(id) { const c = this.get().filter(i => i.id !== id); this.save(c); Toast.show('Item removed'); },
+            remove(id) { this.save(this.get().filter(i => i.id !== id)); Toast.show('Item removed'); },
             count() { return this.get().reduce((s, i) => s + i.qty, 0); },
             updateUI() {
-                const c = this.count();
+                const cart = this.get(); const c = this.count();
                 if (DOM.cartCount) { DOM.cartCount.textContent = c; DOM.cartCount.style.display = c > 0 ? 'flex' : 'none'; }
-                // Update mini cart dropdown
-                const cart = this.get();
+                if (DOM.cartItemCount) DOM.cartItemCount.textContent = `${cart.length} item${cart.length !== 1 ? 's' : ''}`;
                 if (DOM.miniCartItems) {
-                    if (cart.length === 0) {
-                        DOM.miniCartItems.innerHTML = '<p class="mini-cart-empty">Your cart is empty</p>';
-                        DOM.miniCartTotal.style.display = 'none';
-                        DOM.viewCartBtn.style.display = 'none';
-                    } else {
-                        DOM.miniCartItems.innerHTML = cart.map(i => `
-                            <div class="mini-cart-item">
-                                <img src="${i.image || ''}" class="mini-cart-item-img" onerror="this.style.background='var(--cream-light)';" />
-                                <div class="mini-cart-item-info"><p style="font-weight:500;">${i.name}</p><p style="font-size:0.7rem;color:#999;">Qty: ${i.qty} × N${i.price.toLocaleString()}</p></div>
-                                <button class="mini-cart-remove" onclick="event.stopPropagation(); window.removeFromCart('${i.id}')"><i class="fas fa-times"></i></button>
-                            </div>`).join('');
-                        const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
-                        DOM.miniCartTotal.textContent = `Total: N${total.toLocaleString()}`;
-                        DOM.miniCartTotal.style.display = 'block';
-                        DOM.viewCartBtn.style.display = 'flex';
-                    }
+                    if (cart.length === 0) { DOM.miniCartItems.innerHTML = '<p class="mini-cart-empty">Your cart is empty</p>'; DOM.miniCartTotal.style.display = 'none'; }
+                    else { DOM.miniCartItems.innerHTML = cart.map(i => `<div class="mini-cart-item"><img src="${i.image||''}" class="mini-cart-item-img" /><div class="mini-cart-item-info"><p class="item-name">${i.name}</p><p class="item-meta">Qty: ${i.qty} × N${i.price.toLocaleString()}</p></div><div class="mini-cart-actions"><button class="mini-cart-btn view" onclick="viewCartItem('${i.id}')"><i class="fas fa-eye"></i></button><button class="mini-cart-btn delete" onclick="removeCartItem('${i.id}')"><i class="fas fa-trash-alt"></i></button></div></div>`).join(''); DOM.miniTotalAmount.textContent = 'N' + cart.reduce((s,i) => s + (i.price*i.qty), 0).toLocaleString(); DOM.miniCartTotal.style.display = 'flex'; }
                 }
             }
         };
-        window.removeFromCart = (id) => Cart.remove(id);
-
-        const Wishlist = { get() { return JSON.parse(localStorage.getItem('fe_wishlist') || '[]'); }, toggle(id) { const w = this.get(); const i = w.indexOf(id); i > -1 ? w.splice(i, 1) : w.push(id); localStorage.setItem('fe_wishlist', JSON.stringify(w)); return w; }, has(id) { return this.get().includes(id); } };
-        
+        window.removeCartItem = (id) => Cart.remove(id);
+        window.viewCartItem = (id) => window.location.href = `product.html?id=${id}`;
+        const Wishlist = { get() { return JSON.parse(localStorage.getItem('fe_wishlist')||'[]'); }, toggle(id) { const w = this.get(); const i = w.indexOf(id); i>-1?w.splice(i,1):w.push(id); localStorage.setItem('fe_wishlist',JSON.stringify(w)); return w; }, has(id) { return this.get().includes(id); } };
         const QuickView = {
-            open(p) { DOM.qvContent.innerHTML = `<button class="qv-close" onclick="QuickView.close()"><i class="fas fa-times"></i></button><img src="${p.image}" class="qv-image" /><div class="qv-details"><p class="qv-category">${p.category||''}</p><h3>${p.name}</h3><p class="qv-price">N${p.price.toLocaleString()}</p><p class="qv-desc">${p.description||''}</p><div class="qv-quantity"><button onclick="QuickView.dec()"><i class="fas fa-minus"></i></button><input id="qvQty" value="1" min="1" max="${p.stock}" readonly /><button onclick="QuickView.inc(${p.stock})"><i class="fas fa-plus"></i></button></div><button class="btn btn-primary" onclick="QuickView.addToCart()"><i class="fas fa-shopping-bag"></i> Add to Cart</button></div>`; DOM.qvContent._product = p; DOM.qvModal.classList.add('active'); document.body.style.overflow = 'hidden'; },
+            open(p) { DOM.qvContent.innerHTML = `<button class="qv-close" onclick="QuickView.close()"><i class="fas fa-times"></i></button><img src="${p.image}" class="qv-image" /><div class="qv-details"><p class="qv-category">${p.category||''}</p><h3>${p.name}</h3><p class="qv-price">N${p.price.toLocaleString()}</p><p class="qv-desc">${p.description||''}</p><div class="qv-quantity"><button onclick="QuickView.dec()"><i class="fas fa-minus"></i></button><input id="qvQty" value="1" min="1" max="${p.stock}" readonly /><button onclick="QuickView.inc(${p.stock})"><i class="fas fa-plus"></i></button></div><button class="btn btn-primary" onclick="QuickView.addToCart()"><i class="fas fa-shopping-bag"></i> Add</button></div>`; DOM.qvContent._product = p; DOM.qvModal.classList.add('active'); document.body.style.overflow = 'hidden'; },
             close() { DOM.qvModal.classList.remove('active'); document.body.style.overflow = ''; },
-            inc(m) { const i = $('#qvQty'); if (i && parseInt(i.value) < m) i.value = parseInt(i.value) + 1; },
-            dec() { const i = $('#qvQty'); if (i && parseInt(i.value) > 1) i.value = parseInt(i.value) - 1; },
-            addToCart() { const p = DOM.qvContent._product; const q = parseInt($('#qvQty').value); for (let i = 0; i < q; i++) Cart.add(p); this.close(); }
+            inc(m) { const i=$('#qvQty'); if(i&&parseInt(i.value)<m) i.value=parseInt(i.value)+1; },
+            dec() { const i=$('#qvQty'); if(i&&parseInt(i.value)>1) i.value=parseInt(i.value)-1; },
+            addToCart() { const p=DOM.qvContent._product; const q=parseInt($('#qvQty').value); for(let i=0;i<q;i++) Cart.add(p); this.close(); }
         };
         window.QuickView = QuickView;
 
-        let isMobileMenuOpen = false;
-        function openMobileMenu() { DOM.mobilePanel.classList.add('open'); DOM.mobileOverlay.classList.add('open'); isMobileMenuOpen = true; document.body.style.overflow = 'hidden'; DOM.mobileToggle.querySelector('i').className = 'fas fa-times'; }
-        function closeMobileMenu() { DOM.mobilePanel.classList.remove('open'); DOM.mobileOverlay.classList.remove('open'); isMobileMenuOpen = false; document.body.style.overflow = ''; DOM.mobileToggle.querySelector('i').className = 'fas fa-bars'; }
-        window.closeMobileMenu = closeMobileMenu;
+        window.toggleHeroVideo = function() {
+            const video = document.querySelector('.hero-video-circle video');
+            const icon = document.getElementById('videoPlayIcon');
+            if (video.paused) { video.play(); icon.className = 'fas fa-pause'; }
+            else { video.pause(); icon.className = 'fas fa-play'; }
+        };
 
+        let isMobileMenuOpen = false;
+        function openMobileMenu() { DOM.mobilePanel.classList.add('open'); DOM.mobileOverlay.classList.add('open'); isMobileMenuOpen=true; document.body.style.overflow='hidden'; DOM.mobileToggle.querySelector('i').className='fas fa-times'; }
+        function closeMobileMenu() { DOM.mobilePanel.classList.remove('open'); DOM.mobileOverlay.classList.remove('open'); isMobileMenuOpen=false; document.body.style.overflow=''; DOM.mobileToggle.querySelector('i').className='fas fa-bars'; }
+        window.closeMobileMenu = closeMobileMenu;
         window.submitAppointment = function() {
-            const name = $('#aptName')?.value?.trim() || '', phone = $('#aptPhone')?.value?.trim() || '', service = $('#aptService')?.value || '', date = $('#aptDate')?.value || '', time = $('#aptTime')?.value || '', notes = $('#aptNotes')?.value?.trim() || '';
-            if (!name || !phone || !service || !date || !time) { Toast.show('Please fill all required fields', 'error'); return; }
-            const fd = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(`*FELICITY EMPIRE — Appointment*\n\nName: ${name}\nPhone: ${phone}\nService: ${service}\nDate: ${fd}\nTime: ${time}${notes ? `\nNotes: ${notes}` : ''}\n\nPlease confirm availability.`)}`, '_blank');
-            Toast.show('Opening WhatsApp...');
+            const name=$('#aptName')?.value?.trim()||'', phone=$('#aptPhone')?.value?.trim()||'', service=$('#aptService')?.value||'', date=$('#aptDate')?.value||'', time=$('#aptTime')?.value||'', notes=$('#aptNotes')?.value?.trim()||'';
+            if(!name||!phone||!service||!date||!time){Toast.show('Fill all fields','error');return;}
+            const fd=new Date(date+'T00:00:00').toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+            window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(`*FELICITY EMPIRE — Appointment*\n\nName: ${name}\nPhone: ${phone}\nService: ${service}\nDate: ${fd}\nTime: ${time}${notes?`\nNotes: ${notes}`:''}\n\nPlease confirm.`)}`,'_blank');
         };
 
         async function loadCategories() {
-            const d = [{ id: 'nails', name: 'Nails', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=500&fit=crop' },{ id: 'lashes', name: 'Lashes', image: 'https://images.unsplash.com/photo-1583243130284-7d9f9b67f865?w=400&h=500&fit=crop' },{ id: 'perfumes', name: 'Perfumes', image: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=500&fit=crop' },{ id: 'clothes', name: 'Clothes', image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=500&fit=crop' },{ id: 'joggers', name: 'Joggers', image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop', comingSoon: true },{ id: 'polo', name: 'Polo', image: 'https://images.unsplash.com/photo-1582418702059-97ebafb35d09?w=400&h=500&fit=crop', comingSoon: true }];
-            try { const s = await getDocs(collection(db, 'categories')); let c = []; s.forEach(d => c.push({ id: d.id, ...d.data() })); if (!c.length) c = d; renderCategories(c); } catch (e) { renderCategories(d); }
+            const d = [{id:'nails',name:'Nails',image:'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=500'},{id:'lashes',name:'Lashes',image:'https://images.unsplash.com/photo-1583243130284-7d9f9b67f865?w=400&h=500',disabled:true},{id:'perfumes',name:'Perfumes',image:'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=500'},{id:'clothes',name:'Clothes',image:'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=500'},{id:'joggers',name:'Joggers',image:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500',comingSoon:true},{id:'polo',name:'Polo',image:'https://images.unsplash.com/photo-1582418702059-97ebafb35d09?w=400&h=500',comingSoon:true}];
+            try{const s=await getDocs(collection(db,'categories'));let c=[];s.forEach(d=>c.push({id:d.id,...d.data()}));if(!c.length)c=d;renderCategories(c);}catch(e){renderCategories(d);}
         }
-        function renderCategories(c) { if (!DOM.categoriesGrid) return; DOM.categoriesGrid.innerHTML = c.map(cat => `<a href="shop.html?category=${cat.id}" class="category-card"><img src="${cat.image}" loading="lazy" /><div class="category-overlay"><h3>${cat.name}</h3><span>Explore <i class="fas fa-arrow-right"></i></span></div>${cat.comingSoon ? '<span class="category-badge">Coming Soon</span>' : ''}</a>`).join(''); }
+        function renderCategories(c){if(!DOM.categoriesGrid)return;DOM.categoriesGrid.innerHTML=c.map(cat=>{if(cat.disabled)return`<div class="category-card" style="cursor:not-allowed;"><img src="${cat.image}" loading="lazy" /><div class="category-overlay"><h3>${cat.name}</h3></div><div class="category-disabled"><span>Coming Soon</span></div></div>`;return`<a href="shop.html?category=${cat.id}" class="category-card"><img src="${cat.image}" loading="lazy" /><div class="category-overlay"><h3>${cat.name}</h3><span>Explore <i class="fas fa-arrow-right"></i></span></div>${cat.comingSoon?'<span class="category-badge">Coming Soon</span>':''}</a>`;}).join('');}
+        async function loadProducts(){const d=[{id:'1',name:'Luxury Press-On Nails',price:8000,images:['https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=400'],stock:10,category:'nails',badge:'bestseller'},{id:'2',name:'Felicity Signature Perfume',price:28000,images:['https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=400'],stock:5,category:'perfumes',badge:'new'},{id:'3',name:'Crystal Nail Art Set',price:12000,images:['https://images.unsplash.com/photo-1607779097040-26e80aa78e66?w=400&h=400'],stock:8,category:'nails',badge:'trending'},{id:'4',name:'Designer Joggers Set',price:15000,images:['https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=400'],stock:12,category:'joggers',badge:'limited'}];try{const q=query(collection(db,'products'),orderBy('createdAt','desc'),limit(8));const s=await getDocs(q);let p=[];s.forEach(d=>p.push({id:d.id,...d.data()}));if(!p.length)p=d;renderProducts(p);}catch(e){renderProducts(d);}}
+        function renderProducts(prods){if(!DOM.featuredProducts)return;const bm={new:'badge-new',bestseller:'badge-bestseller',trending:'badge-trending',limited:'badge-limited'};DOM.featuredProducts.innerHTML=prods.map(p=>{const img=p.images?.[0]||'',w=Wishlist.has(p.id);return`<div class="product-card"><div class="product-image-wrap"><img src="${img}" loading="lazy" />${p.badge?`<span class="product-badge ${bm[p.badge]||''}">${p.badge}</span>`:''}<button class="product-wishlist ${w?'active':''}" onclick="toggleWishlist('${p.id}',this)"><i class="${w?'fas':'far'} fa-heart"></i></button><div class="product-actions"><button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}','${p.name.replace(/'/g,"\\'")}',${p.price},${p.stock},'${img}')"><i class="fas fa-plus"></i> Add</button><button class="btn btn-outline btn-sm" onclick="openQuickView('${p.id}','${p.name.replace(/'/g,"\\'")}',${p.price},'${(p.description||'').replace(/'/g,"\\'")}','${img}',${p.stock},'${p.category||''}')"><i class="fas fa-eye"></i></button></div></div><div class="product-info"><p class="product-category">${p.category||''}</p><h3>${p.name}</h3><p class="product-price">N${p.price.toLocaleString()}</p></div></div>`;}).join('');}
+        function loadTestimonials(){const items=[{name:'Amara O.',role:'Verified Buyer',avatar:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face',text:'Absolutely in love with my nails! Quality is exceptional.',stars:5},{name:'Chioma E.',role:'Regular Customer',avatar:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face',text:'Best service ever. So professional.',stars:5},{name:'Folake A.',role:'Fashion Enthusiast',avatar:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face',text:'Everything screams luxury!',stars:5}];if(DOM.testimonialsTrack)DOM.testimonialsTrack.innerHTML=[...items,...items].map(t=>`<div class="testimonial-card"><div class="testimonial-stars">${'<i class="fas fa-star"></i>'.repeat(t.stars)}</div><p class="testimonial-text">"${t.text}"</p><div class="testimonial-author"><img src="${t.avatar}" class="testimonial-avatar" /><div><p style="font-weight:600;">${t.name}</p></div></div></div>`).join('');}
+        function loadInstagram(){const imgs=['https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=400','https://images.unsplash.com/photo-1607779097040-26e80aa78e66?w=400&h=400','https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=400','https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=400'];if(DOM.instagramGrid)DOM.instagramGrid.innerHTML=imgs.map(i=>`<div class="instagram-item"><img src="${i}" loading="lazy" /><div class="insta-overlay"><i class="fab fa-instagram"></i></div></div>`).join('');}
+        window.toggleWishlist=function(id,btn){Wishlist.toggle(id);const icon=btn.querySelector('i');icon.className=Wishlist.has(id)?'fas fa-heart':'far fa-heart';btn.classList.toggle('active',Wishlist.has(id));};
+        window.addToCart=function(id,name,price,stock,image){Cart.add({id,name,price,stock,image});};
+        window.openQuickView=function(id,name,price,desc,image,stock,category){QuickView.open({id,name,price,description:desc,image,stock,category});};
 
-        async function loadProducts() {
-            const d = [{ id: '1', name: 'Luxury Press-On Nails', price: 8000, images: ['https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=400'], stock: 10, category: 'nails', badge: 'bestseller' },{ id: '2', name: '3D Mink Lashes', price: 9500, images: ['https://images.unsplash.com/photo-1583243130284-7d9f9b67f865?w=400&h=400'], stock: 8, category: 'lashes', badge: 'trending' },{ id: '3', name: 'Felicity Signature Perfume', price: 28000, images: ['https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=400'], stock: 5, category: 'perfumes', badge: 'new' },{ id: '4', name: 'Designer Joggers Set', price: 15000, images: ['https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=400'], stock: 12, category: 'joggers', badge: 'limited' }];
-            try { const q = query(collection(db, 'products'), orderBy('createdAt', 'desc'), limit(8)); const s = await getDocs(q); let p = []; s.forEach(d => p.push({ id: d.id, ...d.data() })); if (!p.length) p = d; renderProducts(p); } catch (e) { renderProducts(d); }
-        }
-        function renderProducts(prods) {
-            if (!DOM.featuredProducts) return;
-            const bm = { new: 'badge-new', bestseller: 'badge-bestseller', trending: 'badge-trending', limited: 'badge-limited' };
-            DOM.featuredProducts.innerHTML = prods.map(p => {
-                const img = p.images?.[0] || '', w = Wishlist.has(p.id);
-                return `<div class="product-card"><div class="product-image-wrap"><img src="${img}" loading="lazy" />${p.badge ? `<span class="product-badge ${bm[p.badge]||''}">${p.badge}</span>` : ''}<button class="product-wishlist ${w?'active':''}" onclick="toggleWishlist('${p.id}',this)"><i class="${w?'fas':'far'} fa-heart"></i></button><div class="product-actions"><button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}','${p.name.replace(/'/g,"\\'")}',${p.price},${p.stock},'${img}')"><i class="fas fa-plus"></i> Add</button><button class="btn btn-outline btn-sm" onclick="openQuickView('${p.id}','${p.name.replace(/'/g,"\\'")}',${p.price},'${(p.description||'').replace(/'/g,"\\'")}','${img}',${p.stock},'${p.category||''}')"><i class="fas fa-eye"></i></button></div></div><div class="product-info"><p class="product-category">${p.category||''}</p><h3>${p.name}</h3><p class="product-price">N${p.price.toLocaleString()}</p></div></div>`;
-            }).join('');
-        }
-        function loadTestimonials() {
-            const items = [{ name: 'Amara O.', role: 'Verified Buyer', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face', text: 'Absolutely in love with my nails! Quality is exceptional.', stars: 5 },{ name: 'Chioma E.', role: 'Regular Customer', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face', text: 'Best lashes ever. Lightweight and comfortable.', stars: 5 },{ name: 'Folake A.', role: 'Fashion Enthusiast', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face', text: 'Everything screams luxury.', stars: 5 },{ name: 'Temilola S.', role: 'Beauty Blogger', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=face', text: 'I recommend to all followers.', stars: 5 },{ name: 'Ngozi M.', role: 'Loyal Customer', avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop&crop=face', text: 'My perfume always gets compliments!', stars: 5 }];
-            if (DOM.testimonialsTrack) DOM.testimonialsTrack.innerHTML = [...items, ...items].map(t => `<div class="testimonial-card"><div class="testimonial-stars">${'<i class="fas fa-star"></i>'.repeat(t.stars)}</div><p class="testimonial-text">"${t.text}"</p><div class="testimonial-author"><img src="${t.avatar}" class="testimonial-avatar" /><div><p class="testimonial-name">${t.name}</p><p class="testimonial-role">${t.role}</p></div></div></div>`).join('');
-        }
-        function loadInstagram() {
-            const imgs = ['https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=400','https://images.unsplash.com/photo-1583243130284-7d9f9b67f865?w=400&h=400','https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=400','https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=400','https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=400','https://images.unsplash.com/photo-1582418702059-97ebafb35d09?w=400&h=400','https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&h=400','https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400'];
-            if (DOM.instagramGrid) DOM.instagramGrid.innerHTML = imgs.map(i => `<div class="instagram-item"><img src="${i}" loading="lazy" /><div class="insta-overlay"><i class="fab fa-instagram"></i></div></div>`).join('');
-        }
-
-        window.toggleWishlist = function(id, btn) { Wishlist.toggle(id); const icon = btn.querySelector('i'); icon.className = Wishlist.has(id) ? 'fas fa-heart' : 'far fa-heart'; btn.classList.toggle('active', Wishlist.has(id)); };
-        window.addToCart = function(id, name, price, stock, image) { Cart.add({ id, name, price, stock, image }); };
-        window.openQuickView = function(id, name, price, desc, image, stock, category) { QuickView.open({ id, name, price, description: desc, image, stock, category }); };
-
-        window.addEventListener('load', () => { setTimeout(() => DOM.loadingScreen?.classList.add('hidden'), 800); });
-        window.addEventListener('scroll', () => { DOM.scrollTopBtn?.classList.toggle('visible', window.scrollY > 500); });
-        DOM.mobileToggle?.addEventListener('click', () => isMobileMenuOpen ? closeMobileMenu() : openMobileMenu());
-        DOM.mobileClose?.addEventListener('click', closeMobileMenu);
-        DOM.mobileOverlay?.addEventListener('click', closeMobileMenu);
-        document.addEventListener('keydown', e => { if (e.key === 'Escape' && isMobileMenuOpen) closeMobileMenu(); });
-        DOM.searchToggle?.addEventListener('click', () => { DOM.searchOverlay.classList.add('active'); DOM.searchInput.focus(); });
-        DOM.searchClose?.addEventListener('click', () => DOM.searchOverlay.classList.remove('active'));
-        DOM.qvModal?.addEventListener('click', e => { if (e.target === DOM.qvModal) QuickView.close(); });
-        DOM.scrollTopBtn?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-        DOM.joinForm?.addEventListener('submit', async e => {
-            e.preventDefault(); const n = $('#joinName').value.trim(), p = $('#joinPhone').value.trim(), em = $('#joinEmail').value.trim();
-            if (!n || !p) { Toast.show('Please fill name and phone', 'error'); return; }
-            try { await setDoc(doc(db, 'subscribers', p), { name: n, phone: p, email: em || '', subscribedAt: serverTimestamp() }); Toast.show('Welcome!'); DOM.joinForm.reset(); } catch (er) { Toast.show('Error.', 'error'); }
-        });
-
-        function init() { AOS.init({ duration: 800, once: true, offset: 80 }); Cart.updateUI(); loadCategories(); loadProducts(); loadTestimonials(); loadInstagram(); }
+        window.addEventListener('load',()=>{setTimeout(()=>DOM.loadingScreen?.classList.add('hidden'),800);});
+        window.addEventListener('scroll',()=>{DOM.scrollTopBtn?.classList.toggle('visible',window.scrollY>500);});
+        DOM.mobileToggle?.addEventListener('click',()=>isMobileMenuOpen?closeMobileMenu():openMobileMenu());
+        DOM.mobileClose?.addEventListener('click',closeMobileMenu);
+        DOM.mobileOverlay?.addEventListener('click',closeMobileMenu);
+        document.addEventListener('keydown',e=>{if(e.key==='Escape'&&isMobileMenuOpen)closeMobileMenu();});
+        DOM.searchToggle?.addEventListener('click',()=>{DOM.searchOverlay.classList.add('active');DOM.searchInput.focus();});
+        DOM.searchClose?.addEventListener('click',()=>DOM.searchOverlay.classList.remove('active'));
+        DOM.qvModal?.addEventListener('click',e=>{if(e.target===DOM.qvModal)QuickView.close();});
+        DOM.scrollTopBtn?.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+        DOM.joinForm?.addEventListener('submit',async e=>{e.preventDefault();const n=$('#joinName').value.trim(),p=$('#joinPhone').value.trim();if(!n||!p){Toast.show('Fill name and phone','error');return;}try{await setDoc(doc(db,'subscribers',p),{name:n,phone:p,subscribedAt:serverTimestamp()});Toast.show('Welcome!');DOM.joinForm.reset();}catch(er){Toast.show('Error.','error');}});
+        function init(){AOS.init({duration:800,once:true,offset:80});Cart.updateUI();loadCategories();loadProducts();loadTestimonials();loadInstagram();}
         init();
+    </script>
+
+    <!-- ================================================================
+         HIDDEN ADMIN ACCESS
+         Click logo 5 times or press Ctrl+Shift+A
+         Password: felicity2026
+         ================================================================ -->
+    <script>
+        (function() {
+            var clicks = 0, timer = null;
+            var logo = document.querySelector('.nav-logo');
+            if (logo) {
+                logo.addEventListener('click', function(e) {
+                    clicks++;
+                    if (timer) clearTimeout(timer);
+                    if (clicks >= 5) { clicks = 0; showModal(); }
+                    timer = setTimeout(function() { clicks = 0; }, 2000);
+                });
+            }
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+                    e.preventDefault(); showModal();
+                }
+            });
+            function showModal() {
+                var old = document.querySelector('.fe-admin-modal');
+                if (old) old.remove();
+                var modal = document.createElement('div');
+                modal.className = 'fe-admin-modal';
+                modal.style.cssText = 'position:fixed;inset:0;background:rgba(30,20,15,0.6);backdrop-filter:blur(10px);z-index:99999;display:flex;align-items:center;justify-content:center;';
+                modal.innerHTML = '<div style="background:#fff;border-radius:28px;padding:40px 32px;max-width:400px;width:90%;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,0.25);animation:feSlideIn 0.4s ease;">' +
+                    '<style>@keyframes feSlideIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}</style>' +
+                    '<div style="width:60px;height:60px;border-radius:50%;background:rgba(200,154,123,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:1.6rem;color:#C89A7B;"><i class="fas fa-lock"></i></div>' +
+                    '<h3 style="font-family:\'Playfair Display\',serif;font-size:1.35rem;color:#3E312C;margin-bottom:6px;">Admin Access</h3>' +
+                    '<p style="color:#8B7E78;font-size:0.82rem;margin-bottom:22px;">Enter administrator password</p>' +
+                    '<input type="password" id="feAdminPw" placeholder="Password" style="width:100%;padding:13px 16px;border-radius:14px;border:1.5px solid #E8DED5;background:#F9F5F1;font-size:0.9rem;outline:none;text-align:center;margin-bottom:10px;font-family:\'Manrope\',sans-serif;" />' +
+                    '<p id="feAdminErr" style="color:#EF4444;font-size:0.75rem;margin-bottom:10px;display:none;"><i class="fas fa-exclamation-circle"></i> Incorrect password</p>' +
+                    '<button onclick="window.feAdminLogin()" style="width:100%;padding:13px;border-radius:50px;background:#C89A7B;color:#fff;border:none;font-weight:600;font-size:0.85rem;cursor:pointer;font-family:\'Poppins\',sans-serif;letter-spacing:0.03em;"><i class="fas fa-arrow-right"></i> Access Panel</button>' +
+                    '<button onclick="this.closest(\'.fe-admin-modal\').remove()" style="margin-top:14px;background:none;border:none;color:#8B7E78;cursor:pointer;font-size:0.78rem;">Cancel</button></div>';
+                document.body.appendChild(modal);
+                modal.addEventListener('click', function(e) { if (e.target === modal) modal.remove(); });
+                setTimeout(function() { var inp = document.getElementById('feAdminPw'); if (inp) inp.focus(); }, 150);
+                modal.addEventListener('keydown', function(e) { if (e.key === 'Enter') window.feAdminLogin(); });
+            }
+            window.feAdminLogin = function() {
+                var pw = document.getElementById('feAdminPw') ? document.getElementById('feAdminPw').value : '';
+                if (pw === 'felicity2026') {
+                    sessionStorage.setItem('fe_admin_auth', 'true');
+                    sessionStorage.setItem('fe_admin_pw', pw);
+                    window.location.href = '../admin/index.html';
+                } else {
+                    var err = document.getElementById('feAdminErr');
+                    if (err) err.style.display = 'block';
+                    var inp = document.getElementById('feAdminPw');
+                    if (inp) { inp.value = ''; inp.focus(); }
+                }
+            };
+        })();
     </script>
 </body>
 </html>

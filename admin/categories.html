@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Categories — Felicity Empire Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+    <style>
+        .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+        .category-card-item { background: var(--admin-card); border-radius: var(--admin-radius-lg); overflow: hidden; border: 1px solid var(--admin-border-light); transition: var(--admin-transition); }
+        .category-card-item:hover { transform: translateY(-4px); box-shadow: var(--admin-shadow-md); }
+        .category-card-image { height: 160px; background: var(--admin-bg-secondary); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: var(--admin-rose-light); position: relative; overflow: hidden; }
+        .category-card-image img { width: 100%; height: 100%; object-fit: cover; }
+        .category-card-body { padding: 18px; }
+        .category-card-body h4 { font-family: var(--admin-font-heading); font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
+        .category-card-body p { font-size: 0.75rem; color: var(--admin-text-muted); }
+        .category-card-actions { display: flex; gap: 8px; padding: 0 18px 18px; }
+    </style>
+</head>
+<body class="admin-body">
+
+    <button class="admin-mobile-toggle" onclick="adminToggleSidebar()"><i class="fas fa-bars"></i></button>
+    <div class="admin-mobile-overlay" onclick="adminToggleSidebar()"></div>
+
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-brand"><div class="admin-brand-name">FELICITY<span class="admin-brand-accent">EMPIRE</span></div><div class="admin-brand-subtitle">Administration</div></div>
+        <nav class="admin-sidebar-nav">
+            <div class="admin-sidebar-section">Main</div>
+            <a href="index.html" class="admin-sidebar-link"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="products.html" class="admin-sidebar-link"><i class="fas fa-box"></i> Products</a>
+            <a href="orders.html" class="admin-sidebar-link"><i class="fas fa-shopping-bag"></i> Orders</a>
+            <a href="appointments.html" class="admin-sidebar-link"><i class="fas fa-calendar-check"></i> Appointments</a>
+            <a href="customers.html" class="admin-sidebar-link"><i class="fas fa-users"></i> Customers</a>
+            <div class="admin-sidebar-section">Content</div>
+            <a href="categories.html" class="admin-sidebar-link active"><i class="fas fa-tags"></i> Categories</a>
+            <a href="gallery.html" class="admin-sidebar-link"><i class="fas fa-images"></i> Gallery</a>
+            <a href="videos.html" class="admin-sidebar-link"><i class="fas fa-video"></i> Videos</a>
+            <a href="reviews.html" class="admin-sidebar-link"><i class="fas fa-star"></i> Reviews</a>
+            <div class="admin-sidebar-section">Management</div>
+            <a href="analytics.html" class="admin-sidebar-link"><i class="fas fa-chart-bar"></i> Analytics</a>
+            <a href="notifications.html" class="admin-sidebar-link"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="qr-code.html" class="admin-sidebar-link"><i class="fas fa-qrcode"></i> QR Code</a>
+            <a href="settings.html" class="admin-sidebar-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <div class="admin-sidebar-footer">
+            <a href="profile.html"><i class="fas fa-user-circle"></i> Admin Profile</a>
+            <a href="../index.html"><i class="fas fa-external-link-alt"></i> View Website</a>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <div class="admin-topbar">
+            <div class="admin-topbar-left"><h1>Categories</h1><span class="admin-topbar-breadcrumb">Manage product categories</span></div>
+            <div class="admin-topbar-right">
+                <button class="admin-btn admin-btn-primary" onclick="openCategoryModal()"><i class="fas fa-plus"></i> Add Category</button>
+            </div>
+        </div>
+
+        <div class="admin-page-content">
+            <div class="category-grid" id="categoriesGrid"></div>
+        </div>
+    </main>
+
+    <!-- Category Modal -->
+    <div class="admin-modal-overlay" id="categoryModal">
+        <div class="admin-modal">
+            <div class="admin-modal-header"><h3 id="catModalTitle">Add Category</h3><button class="admin-modal-close" onclick="adminCloseModal('categoryModal')"><i class="fas fa-times"></i></button></div>
+            <div class="admin-form-group"><label class="admin-form-label">Category Name <span class="admin-required">*</span></label><input type="text" class="admin-form-input" id="catName" placeholder="e.g., Nails" /></div>
+            <div class="admin-form-group"><label class="admin-form-label">Category ID (slug) <span class="admin-required">*</span></label><input type="text" class="admin-form-input" id="catId" placeholder="e.g., nails" /></div>
+            <div class="admin-form-group"><label class="admin-form-label">Image</label>
+                <div class="admin-upload-zone" onclick="document.getElementById('catImageInput').click()">
+                    <i class="fas fa-cloud-upload-alt"></i><h4>Upload Category Image</h4>
+                    <input type="file" id="catImageInput" accept="image/*" onchange="handleCatImageUpload(event)" style="display:none;" />
+                </div>
+                <div id="catImagePreview" style="margin-top:10px;"></div>
+            </div>
+            <div class="admin-form-group"><label class="admin-form-label">Status</label><select class="admin-form-select" id="catStatus"><option value="active">Active</option><option value="disabled">Disabled (Coming Soon)</option></select></div>
+            <div style="display:flex;gap:12px;margin-top:20px;">
+                <button class="admin-btn admin-btn-primary" onclick="saveCategory()">Save Category</button>
+                <button class="admin-btn admin-btn-outline" onclick="adminCloseModal('categoryModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-toast-container"></div>
+
+    <script src="../assets/js/admin.js"></script>
+    <script>
+        let editingCatId = null;
+        let tempCatImage = null;
+
+        function getCategories() { return adminGetData('categories'); }
+        function saveCategories(data) { adminSaveData('categories', data); }
+
+        function renderCategories() {
+            const grid = document.getElementById('categoriesGrid');
+            let categories = getCategories();
+            
+            if (categories.length === 0) {
+                const defaults = [
+                    { id: 'nails', name: 'Nails', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=300', status: 'active' },
+                    { id: 'lashes', name: 'Lashes', image: 'https://images.unsplash.com/photo-1583243130284-7d9f9b67f865?w=400&h=300', status: 'disabled' },
+                    { id: 'perfumes', name: 'Perfumes', image: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=300', status: 'active' },
+                    { id: 'fashion', name: 'Fashion', image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=300', status: 'active' },
+                    { id: 'joggers', name: 'Joggers', image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=300', status: 'active' },
+                    { id: 'polo', name: 'Polo', image: 'https://images.unsplash.com/photo-1582418702059-97ebafb35d09?w=400&h=300', status: 'active' }
+                ];
+                saveCategories(defaults);
+                categories = defaults;
+            }
+            
+            grid.innerHTML = categories.map(c => `
+                <div class="category-card-item">
+                    <div class="category-card-image">
+                        <img src="${c.image || ''}" alt="${c.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-${getCatIcon(c.id)}\\'></i>'" />
+                        ${c.status === 'disabled' ? '<span style="position:absolute;top:10px;right:10px;background:var(--admin-warning-bg);color:#92400E;padding:4px 10px;border-radius:20px;font-size:0.6rem;font-weight:600;">Coming Soon</span>' : ''}
+                    </div>
+                    <div class="category-card-body">
+                        <h4>${c.name}</h4>
+                        <p>ID: ${c.id} | ${c.status === 'active' ? 'Active' : 'Disabled'}</p>
+                    </div>
+                    <div class="category-card-actions">
+                        <button class="admin-btn admin-btn-outline admin-btn-sm" onclick="editCategory('${c.id}')"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="toggleCategory('${c.id}')">${c.status === 'active' ? 'Disable' : 'Enable'}</button>
+                    </div>
+                </div>`).join('');
+        }
+
+        function getCatIcon(id) {
+            const icons = { nails: 'hand-sparkles', lashes: 'eye', perfumes: 'spray-can-sparkles', fashion: 'tshirt', joggers: 'person-running', polo: 'shirt' };
+            return icons[id] || 'folder';
+        }
+
+        function openCategoryModal() {
+            editingCatId = null; tempCatImage = null;
+            document.getElementById('catModalTitle').textContent = 'Add Category';
+            document.getElementById('catName').value = '';
+            document.getElementById('catId').value = '';
+            document.getElementById('catImagePreview').innerHTML = '';
+            document.getElementById('catStatus').value = 'active';
+            adminOpenModal('categoryModal');
+        }
+
+        function editCategory(id) {
+            const cat = getCategories().find(c => c.id === id);
+            if (!cat) return;
+            editingCatId = id; tempCatImage = cat.image;
+            document.getElementById('catModalTitle').textContent = 'Edit Category';
+            document.getElementById('catName').value = cat.name;
+            document.getElementById('catId').value = cat.id;
+            document.getElementById('catStatus').value = cat.status;
+            document.getElementById('catImagePreview').innerHTML = cat.image ? `<img src="${cat.image}" style="width:100px;height:100px;object-fit:cover;border-radius:8px;" />` : '';
+            adminOpenModal('categoryModal');
+        }
+
+        function handleCatImageUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(ev) { tempCatImage = ev.target.result; document.getElementById('catImagePreview').innerHTML = `<img src="${ev.target.result}" style="width:100px;height:100px;object-fit:cover;border-radius:8px;" />`; };
+            reader.readAsDataURL(file);
+        }
+
+        function saveCategory() {
+            const name = document.getElementById('catName').value.trim();
+            const id = document.getElementById('catId').value.trim().toLowerCase();
+            if (!name || !id) { adminToast('Name and ID are required', 'error'); return; }
+            let categories = getCategories();
+            if (!editingCatId && categories.find(c => c.id === id)) { adminToast('Category ID already exists', 'error'); return; }
+            const cat = { id, name, image: tempCatImage || '', status: document.getElementById('catStatus').value };
+            if (editingCatId) { categories = categories.map(c => c.id === editingCatId ? cat : c); }
+            else { categories.push(cat); }
+            saveCategories(categories);
+            adminCloseModal('categoryModal');
+            adminToast('Category saved!');
+            renderCategories();
+        }
+
+        function toggleCategory(id) {
+            let categories = getCategories();
+            const idx = categories.findIndex(c => c.id === id);
+            if (idx > -1) { categories[idx].status = categories[idx].status === 'active' ? 'disabled' : 'active'; saveCategories(categories); adminToast('Category updated'); renderCategories(); }
+        }
+
+        renderCategories();
+    </script>
+</body>
+</html>

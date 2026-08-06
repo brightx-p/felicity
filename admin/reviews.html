@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reviews — Felicity Empire Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+    <style>
+        .review-card { background: var(--admin-card); border-radius: var(--admin-radius-lg); padding: 24px; border: 1px solid var(--admin-border-light); margin-bottom: 16px; }
+        .review-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; flex-wrap: wrap; gap: 12px; }
+        .review-author { display: flex; align-items: center; gap: 12px; }
+        .review-stars { color: #E8B84B; letter-spacing: 2px; }
+        .review-text { color: var(--admin-text-secondary); line-height: 1.7; font-style: italic; }
+        .review-meta { font-size: 0.75rem; color: var(--admin-text-muted); margin-top: 8px; }
+    </style>
+</head>
+<body class="admin-body">
+
+    <button class="admin-mobile-toggle" onclick="adminToggleSidebar()"><i class="fas fa-bars"></i></button>
+    <div class="admin-mobile-overlay" onclick="adminToggleSidebar()"></div>
+
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-brand"><div class="admin-brand-name">FELICITY<span class="admin-brand-accent">EMPIRE</span></div><div class="admin-brand-subtitle">Administration</div></div>
+        <nav class="admin-sidebar-nav">
+            <div class="admin-sidebar-section">Main</div>
+            <a href="index.html" class="admin-sidebar-link"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="products.html" class="admin-sidebar-link"><i class="fas fa-box"></i> Products</a>
+            <a href="orders.html" class="admin-sidebar-link"><i class="fas fa-shopping-bag"></i> Orders</a>
+            <a href="appointments.html" class="admin-sidebar-link"><i class="fas fa-calendar-check"></i> Appointments</a>
+            <a href="customers.html" class="admin-sidebar-link"><i class="fas fa-users"></i> Customers</a>
+            <div class="admin-sidebar-section">Content</div>
+            <a href="categories.html" class="admin-sidebar-link"><i class="fas fa-tags"></i> Categories</a>
+            <a href="gallery.html" class="admin-sidebar-link"><i class="fas fa-images"></i> Gallery</a>
+            <a href="videos.html" class="admin-sidebar-link"><i class="fas fa-video"></i> Videos</a>
+            <a href="reviews.html" class="admin-sidebar-link active"><i class="fas fa-star"></i> Reviews</a>
+            <div class="admin-sidebar-section">Management</div>
+            <a href="analytics.html" class="admin-sidebar-link"><i class="fas fa-chart-bar"></i> Analytics</a>
+            <a href="notifications.html" class="admin-sidebar-link"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="qr-code.html" class="admin-sidebar-link"><i class="fas fa-qrcode"></i> QR Code</a>
+            <a href="settings.html" class="admin-sidebar-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <div class="admin-sidebar-footer">
+            <a href="profile.html"><i class="fas fa-user-circle"></i> Admin Profile</a>
+            <a href="../index.html"><i class="fas fa-external-link-alt"></i> View Website</a>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <div class="admin-topbar">
+            <div class="admin-topbar-left"><h1>Reviews</h1><span class="admin-topbar-breadcrumb">Manage customer reviews</span></div>
+            <div class="admin-topbar-right">
+                <div class="admin-topbar-search"><i class="fas fa-search"></i><input type="text" id="reviewSearch" placeholder="Search reviews..." oninput="filterReviews()" /></div>
+                <button class="admin-btn admin-btn-primary" onclick="addReview()"><i class="fas fa-plus"></i> Add Review</button>
+            </div>
+        </div>
+
+        <div class="admin-page-content">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                        <select class="admin-form-select" style="width:auto;" id="reviewStatusFilter" onchange="filterReviews()">
+                            <option value="all">All</option>
+                            <option value="approved">Approved</option>
+                            <option value="pending">Pending</option>
+                            <option value="hidden">Hidden</option>
+                            <option value="featured">Featured</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="reviewsList"></div>
+                <div class="admin-pagination" id="reviewsPagination"></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="admin-toast-container"></div>
+
+    <script src="../assets/js/admin.js"></script>
+    <script>
+        let reviewPage = 1;
+        const reviewsPerPage = 8;
+
+        function getReviews() { return adminGetData('reviews'); }
+        function saveReviews(data) { adminSaveData('reviews', data); }
+
+        function renderReviews() {
+            const container = document.getElementById('reviewsList');
+            let reviews = getReviews();
+            
+            const statusFilter = document.getElementById('reviewStatusFilter')?.value || 'all';
+            const search = (document.getElementById('reviewSearch')?.value || '').toLowerCase();
+            
+            if (statusFilter !== 'all') reviews = reviews.filter(r => r.status === statusFilter);
+            if (search) reviews = reviews.filter(r => r.name.toLowerCase().includes(search) || r.text.toLowerCase().includes(search));
+            
+            const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+            const start = (reviewPage - 1) * reviewsPerPage;
+            const pageReviews = reviews.slice(start, start + reviewsPerPage);
+            
+            if (pageReviews.length === 0) {
+                container.innerHTML = `<div class="admin-empty-state"><i class="fas fa-star"></i><h3>No Reviews</h3><p>Customer reviews will appear here</p></div>`;
+                return;
+            }
+            
+            container.innerHTML = pageReviews.map(r => `
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-author">
+                            <div class="admin-avatar-sm">${r.name.charAt(0)}</div>
+                            <div>
+                                <strong>${r.name}</strong>
+                                <div class="review-stars">${'<i class="fas fa-star"></i>'.repeat(r.stars)}${'<i class="far fa-star"></i>'.repeat(5 - r.stars)}</div>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:6px;align-items:center;">
+                            <span class="admin-badge ${r.status === 'approved' ? 'admin-badge-success' : r.status === 'featured' ? 'admin-badge-rose' : r.status === 'hidden' ? 'admin-badge-danger' : 'admin-badge-warning'}">${r.status}</span>
+                        </div>
+                    </div>
+                    <p class="review-text">"${r.text}"</p>
+                    <p class="review-meta">${r.product ? 'Product: ' + r.product + ' | ' : ''}${adminFormatDate(r.createdAt)}</p>
+                    <div style="display:flex;gap:8px;margin-top:12px;">
+                        <button class="admin-btn admin-btn-sm admin-btn-success" onclick="updateReviewStatus('${r.id}','approved')"><i class="fas fa-check"></i> Approve</button>
+                        <button class="admin-btn admin-btn-sm admin-btn-rose" onclick="updateReviewStatus('${r.id}','featured')"><i class="fas fa-star"></i> Feature</button>
+                        <button class="admin-btn admin-btn-sm admin-btn-warning" onclick="updateReviewStatus('${r.id}','hidden')"><i class="fas fa-eye-slash"></i> Hide</button>
+                        <button class="admin-btn admin-btn-sm admin-btn-ghost" onclick="deleteReview('${r.id}')" style="color:var(--admin-danger);"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>`).join('');
+            
+            // Pagination
+            const pag = document.getElementById('reviewsPagination');
+            if (totalPages > 1) {
+                let html = `<button ${reviewPage <= 1 ? 'disabled' : ''} onclick="reviewPage--;renderReviews();"><i class="fas fa-chevron-left"></i></button>`;
+                for (let i = 1; i <= totalPages; i++) html += `<button class="${i === reviewPage ? 'active' : ''}" onclick="reviewPage=${i};renderReviews();">${i}</button>`;
+                html += `<button ${reviewPage >= totalPages ? 'disabled' : ''} onclick="reviewPage++;renderReviews();"><i class="fas fa-chevron-right"></i></button>`;
+                pag.innerHTML = html;
+            } else { pag.innerHTML = ''; }
+        }
+
+        function filterReviews() { reviewPage = 1; renderReviews(); }
+
+        function updateReviewStatus(id, status) {
+            let reviews = getReviews();
+            const idx = reviews.findIndex(r => r.id === id);
+            if (idx > -1) { reviews[idx].status = status; saveReviews(reviews); adminToast(`Review ${status}`); renderReviews(); }
+        }
+
+        function addReview() {
+            const name = prompt('Customer name:');
+            if (!name) return;
+            const text = prompt('Review text:');
+            const stars = parseInt(prompt('Rating (1-5):', '5')) || 5;
+            const product = prompt('Product name (optional):') || '';
+            const review = { id: adminGenerateId(), name, text, stars: Math.min(5, Math.max(1, stars)), product, status: 'pending', createdAt: new Date().toISOString() };
+            saveReviews([review, ...getReviews()]);
+            adminToast('Review added');
+            renderReviews();
+        }
+
+        function deleteReview(id) {
+            if (!confirm('Delete this review?')) return;
+            saveReviews(getReviews().filter(r => r.id !== id));
+            adminToast('Review deleted');
+            renderReviews();
+        }
+
+        // Seed default reviews
+        if (getReviews().length === 0) {
+            saveReviews([
+                { id: adminGenerateId(), name: 'Amara O.', text: 'Absolutely in love with my press-on nails! The quality is exceptional.', stars: 5, status: 'approved', createdAt: '2026-08-01' },
+                { id: adminGenerateId(), name: 'Chioma E.', text: 'Best lashes ever. Lightweight and so comfortable.', stars: 5, status: 'featured', createdAt: '2026-08-03' },
+                { id: adminGenerateId(), name: 'Folake A.', text: 'Everything screams luxury. Highly recommend!', stars: 5, status: 'approved', createdAt: '2026-08-05' }
+            ]);
+        }
+
+        renderReviews();
+    </script>
+</body>
+</html>

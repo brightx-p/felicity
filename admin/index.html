@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — Felicity Empire Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+    <style>
+        .admin-content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        .admin-list-item { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--admin-border-light); }
+        .admin-list-item:last-child { border-bottom: none; }
+        .admin-avatar-sm { width: 42px; height: 42px; border-radius: 50%; background: var(--admin-bg-secondary); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; color: var(--admin-rose); flex-shrink: 0; }
+        .admin-list-info { flex: 1; min-width: 0; }
+        .admin-list-info h4 { font-size: 0.85rem; font-weight: 600; }
+        .admin-list-info p { font-size: 0.75rem; color: var(--admin-text-muted); }
+        .admin-list-value { font-weight: 600; font-size: 0.85rem; text-align: right; white-space: nowrap; }
+        @media (max-width: 1024px) { .admin-content-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body class="admin-body">
+
+    <button class="admin-mobile-toggle" onclick="adminToggleSidebar()"><i class="fas fa-bars"></i></button>
+    <div class="admin-mobile-overlay" onclick="adminToggleSidebar()"></div>
+
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-brand">
+            <div class="admin-brand-name">FELICITY<span class="admin-brand-accent">EMPIRE</span></div>
+            <div class="admin-brand-subtitle">Administration</div>
+        </div>
+        <nav class="admin-sidebar-nav">
+            <div class="admin-sidebar-section">Main</div>
+            <a href="index.html" class="admin-sidebar-link active"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="products.html" class="admin-sidebar-link"><i class="fas fa-box"></i> Products <span class="admin-sidebar-badge" id="productCount">0</span></a>
+            <a href="orders.html" class="admin-sidebar-link"><i class="fas fa-shopping-bag"></i> Orders <span class="admin-sidebar-badge" id="orderCount">0</span></a>
+            <a href="appointments.html" class="admin-sidebar-link"><i class="fas fa-calendar-check"></i> Appointments <span class="admin-sidebar-badge" id="aptCount">0</span></a>
+            <a href="customers.html" class="admin-sidebar-link"><i class="fas fa-users"></i> Customers</a>
+            <div class="admin-sidebar-section">Content</div>
+            <a href="categories.html" class="admin-sidebar-link"><i class="fas fa-tags"></i> Categories</a>
+            <a href="gallery.html" class="admin-sidebar-link"><i class="fas fa-images"></i> Gallery</a>
+            <a href="videos.html" class="admin-sidebar-link"><i class="fas fa-video"></i> Videos</a>
+            <a href="reviews.html" class="admin-sidebar-link"><i class="fas fa-star"></i> Reviews</a>
+            <div class="admin-sidebar-section">Management</div>
+            <a href="analytics.html" class="admin-sidebar-link"><i class="fas fa-chart-bar"></i> Analytics</a>
+            <a href="notifications.html" class="admin-sidebar-link"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="qr-code.html" class="admin-sidebar-link"><i class="fas fa-qrcode"></i> QR Code</a>
+            <a href="settings.html" class="admin-sidebar-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <div class="admin-sidebar-footer">
+            <a href="profile.html"><i class="fas fa-user-circle"></i> Admin Profile</a>
+            <a href="../index.html"><i class="fas fa-external-link-alt"></i> View Website</a>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <div class="admin-topbar">
+            <div class="admin-topbar-left">
+                <h1>Dashboard</h1>
+                <span class="admin-topbar-breadcrumb">Welcome back, Felicia</span>
+            </div>
+            <div class="admin-topbar-right">
+                <div class="admin-topbar-search"><i class="fas fa-search"></i><input type="text" placeholder="Search..." /></div>
+                <a href="products.html" class="admin-btn admin-btn-primary"><i class="fas fa-plus"></i> Add Product</a>
+            </div>
+        </div>
+
+        <div class="admin-page-content">
+            <!-- Stats -->
+            <div class="admin-stats-grid">
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon rose"><i class="fas fa-naira-sign"></i></div>
+                    <div class="admin-stat-info"><h4>Today's Revenue</h4><div class="admin-stat-value" id="todayRevenue">N0</div><div class="admin-stat-change up">+12% from yesterday</div></div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon green"><i class="fas fa-shopping-bag"></i></div>
+                    <div class="admin-stat-info"><h4>Total Orders</h4><div class="admin-stat-value" id="totalOrders">0</div><div class="admin-stat-change up">+5 this week</div></div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon blue"><i class="fas fa-calendar-check"></i></div>
+                    <div class="admin-stat-info"><h4>Appointments Today</h4><div class="admin-stat-value" id="todayAppointments">0</div></div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon amber"><i class="fas fa-box"></i></div>
+                    <div class="admin-stat-info"><h4>Total Products</h4><div class="admin-stat-value" id="totalProducts">0</div></div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="admin-quick-actions">
+                <div class="admin-quick-action" onclick="location.href='products.html'"><i class="fas fa-plus-circle"></i><h4>Add Product</h4></div>
+                <div class="admin-quick-action" onclick="location.href='appointments.html'"><i class="fas fa-calendar-plus"></i><h4>New Appointment</h4></div>
+                <div class="admin-quick-action" onclick="location.href='gallery.html'"><i class="fas fa-upload"></i><h4>Upload Portfolio</h4></div>
+                <div class="admin-quick-action" onclick="location.href='videos.html'"><i class="fas fa-video"></i><h4>Upload Video</h4></div>
+                <div class="admin-quick-action" onclick="location.href='notifications.html'"><i class="fas fa-bullhorn"></i><h4>Send Announcement</h4></div>
+                <div class="admin-quick-action" onclick="location.href='qr-code.html'"><i class="fas fa-qrcode"></i><h4>QR Code</h4></div>
+                <div class="admin-quick-action" onclick="location.href='categories.html'"><i class="fas fa-tags"></i><h4>Categories</h4></div>
+                <div class="admin-quick-action" onclick="location.href='orders.html'"><i class="fas fa-clipboard-list"></i><h4>View Orders</h4></div>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="admin-content-grid">
+                <div class="admin-card">
+                    <div class="admin-card-header"><h3>Recent Orders</h3><a href="orders.html" style="color:var(--admin-rose);font-size:0.8rem;">View All</a></div>
+                    <div id="recentOrders"><div class="admin-empty-state"><i class="fas fa-inbox"></i><p>No orders yet</p></div></div>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-header"><h3>Upcoming Appointments</h3><a href="appointments.html" style="color:var(--admin-rose);font-size:0.8rem;">View All</a></div>
+                    <div id="upcomingAppointments"><div class="admin-empty-state"><i class="fas fa-calendar"></i><p>No appointments</p></div></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="admin-toast-container"></div>
+
+    <script src="../assets/js/admin.js"></script>
+    <script>
+        function loadDashboard() {
+            const products = adminGetData('products');
+            const orders = adminGetData('orders');
+            const appointments = adminGetData('appointments');
+            
+            document.getElementById('totalProducts').textContent = products.length;
+            document.getElementById('totalOrders').textContent = orders.length;
+            document.getElementById('todayAppointments').textContent = appointments.filter(a => a.status === 'pending' || a.status === 'confirmed').length;
+            
+            const today = new Date().toISOString().split('T')[0];
+            const todayOrders = orders.filter(o => o.date === today);
+            const revenue = todayOrders.reduce((sum, o) => sum + (o.total || 0), 0);
+            document.getElementById('todayRevenue').textContent = adminFormatCurrency(revenue);
+            
+            // Recent Orders
+            const recentOrdersEl = document.getElementById('recentOrders');
+            const recent = orders.slice(-5).reverse();
+            if (recent.length > 0) {
+                recentOrdersEl.innerHTML = recent.map(o => `
+                    <div class="admin-list-item">
+                        <div class="admin-avatar-sm">${(o.customer || 'C').charAt(0)}</div>
+                        <div class="admin-list-info"><h4>${o.customer || 'Customer'}</h4><p>${o.items || 'Order'}</p></div>
+                        <div class="admin-list-value">${adminFormatCurrency(o.total)}</div>
+                    </div>`).join('');
+            }
+            
+            // Upcoming Appointments
+            const aptEl = document.getElementById('upcomingAppointments');
+            const upcoming = appointments.filter(a => a.status === 'pending' || a.status === 'confirmed').slice(0, 5);
+            if (upcoming.length > 0) {
+                aptEl.innerHTML = upcoming.map(a => `
+                    <div class="admin-list-item">
+                        <div class="admin-avatar-sm">${a.name.charAt(0)}</div>
+                        <div class="admin-list-info"><h4>${a.name}</h4><p>${a.service} — ${a.time}</p></div>
+                        <span class="admin-badge ${a.status === 'confirmed' ? 'admin-badge-info' : 'admin-badge-warning'}">${a.status}</span>
+                    </div>`).join('');
+            }
+            
+            updateSidebarBadges();
+        }
+        
+        loadDashboard();
+    </script>
+</body>
+</html>

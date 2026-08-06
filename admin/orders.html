@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orders — Felicity Empire Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+</head>
+<body class="admin-body">
+
+    <button class="admin-mobile-toggle" onclick="adminToggleSidebar()"><i class="fas fa-bars"></i></button>
+    <div class="admin-mobile-overlay" onclick="adminToggleSidebar()"></div>
+
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-brand"><div class="admin-brand-name">FELICITY<span class="admin-brand-accent">EMPIRE</span></div><div class="admin-brand-subtitle">Administration</div></div>
+        <nav class="admin-sidebar-nav">
+            <div class="admin-sidebar-section">Main</div>
+            <a href="index.html" class="admin-sidebar-link"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="products.html" class="admin-sidebar-link"><i class="fas fa-box"></i> Products</a>
+            <a href="orders.html" class="admin-sidebar-link active"><i class="fas fa-shopping-bag"></i> Orders</a>
+            <a href="appointments.html" class="admin-sidebar-link"><i class="fas fa-calendar-check"></i> Appointments</a>
+            <a href="customers.html" class="admin-sidebar-link"><i class="fas fa-users"></i> Customers</a>
+            <div class="admin-sidebar-section">Content</div>
+            <a href="categories.html" class="admin-sidebar-link"><i class="fas fa-tags"></i> Categories</a>
+            <a href="gallery.html" class="admin-sidebar-link"><i class="fas fa-images"></i> Gallery</a>
+            <a href="videos.html" class="admin-sidebar-link"><i class="fas fa-video"></i> Videos</a>
+            <a href="reviews.html" class="admin-sidebar-link"><i class="fas fa-star"></i> Reviews</a>
+            <div class="admin-sidebar-section">Management</div>
+            <a href="analytics.html" class="admin-sidebar-link"><i class="fas fa-chart-bar"></i> Analytics</a>
+            <a href="notifications.html" class="admin-sidebar-link"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="qr-code.html" class="admin-sidebar-link"><i class="fas fa-qrcode"></i> QR Code</a>
+            <a href="settings.html" class="admin-sidebar-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <div class="admin-sidebar-footer">
+            <a href="profile.html"><i class="fas fa-user-circle"></i> Admin Profile</a>
+            <a href="../index.html"><i class="fas fa-external-link-alt"></i> View Website</a>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <div class="admin-topbar">
+            <div class="admin-topbar-left"><h1>Orders</h1><span class="admin-topbar-breadcrumb">Manage customer orders</span></div>
+            <div class="admin-topbar-right">
+                <div class="admin-topbar-search"><i class="fas fa-search"></i><input type="text" id="orderSearch" placeholder="Search orders..." oninput="filterOrders()" /></div>
+                <button class="admin-btn admin-btn-primary" onclick="addOrder()"><i class="fas fa-plus"></i> New Order</button>
+            </div>
+        </div>
+
+        <div class="admin-page-content">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                        <select class="admin-form-select" style="width:auto;" id="orderStatusFilter" onchange="filterOrders()">
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="processing">Processing</option>
+                            <option value="ready">Ready</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                        <input type="date" class="admin-form-input" style="width:auto;" id="orderDateFilter" onchange="filterOrders()" />
+                    </div>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead><tr><th>Order ID</th><th>Customer</th><th>Phone</th><th>Products</th><th>Total</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody id="ordersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="admin-toast-container"></div>
+
+    <script src="../assets/js/admin.js"></script>
+    <script>
+        function getOrders() { return adminGetData('orders'); }
+        function saveOrders(data) { adminSaveData('orders', data); }
+
+        const orderStatuses = ['pending', 'confirmed', 'processing', 'ready', 'delivered', 'cancelled'];
+        const statusClass = { pending: 'admin-badge-warning', confirmed: 'admin-badge-info', processing: 'admin-badge-rose', ready: 'admin-badge-info', delivered: 'admin-badge-success', cancelled: 'admin-badge-danger' };
+
+        function renderOrders(filtered = null) {
+            const tbody = document.getElementById('ordersTableBody');
+            let orders = filtered || getOrders();
+            
+            if (orders.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8"><div class="admin-empty-state"><i class="fas fa-shopping-bag"></i><h3>No Orders Yet</h3><p>Orders will appear here when customers place them</p></div></td></tr>`;
+                return;
+            }
+            
+            tbody.innerHTML = orders.map(o => `
+                <tr>
+                    <td><code style="background:var(--admin-bg);padding:4px 8px;border-radius:4px;font-size:0.75rem;">${o.id}</code></td>
+                    <td><strong>${o.customer || 'Walk-in'}</strong></td>
+                    <td>${o.phone || '—'}</td>
+                    <td>${o.items || '—'}</td>
+                    <td><strong>${adminFormatCurrency(o.total)}</strong></td>
+                    <td>${adminFormatDate(o.date)}</td>
+                    <td><span class="admin-badge ${statusClass[o.status] || 'admin-badge-warning'}">${o.status}</span></td>
+                    <td>
+                        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                            <select class="admin-form-select" style="width:auto;padding:6px 10px;font-size:0.7rem;" onchange="updateOrderStatus('${o.id}', this.value)" value="${o.status}">
+                                ${orderStatuses.map(s => `<option value="${s}" ${o.status === s ? 'selected' : ''}>${s}</option>`).join('')}
+                            </select>
+                            <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="contactCustomer('${o.phone}')" title="WhatsApp"><i class="fab fa-whatsapp" style="color:#25D366;"></i></button>
+                            <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="deleteOrder('${o.id}')" style="color:var(--admin-danger);"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>`).join('');
+        }
+
+        function filterOrders() {
+            const search = (document.getElementById('orderSearch')?.value || '').toLowerCase();
+            const status = document.getElementById('orderStatusFilter')?.value || 'all';
+            const date = document.getElementById('orderDateFilter')?.value;
+            let orders = getOrders();
+            if (search) orders = orders.filter(o => (o.customer || '').toLowerCase().includes(search) || o.id.includes(search));
+            if (status !== 'all') orders = orders.filter(o => o.status === status);
+            if (date) orders = orders.filter(o => o.date === date);
+            renderOrders(orders);
+        }
+
+        function updateOrderStatus(id, status) {
+            let orders = getOrders();
+            const idx = orders.findIndex(o => o.id === id);
+            if (idx > -1) { orders[idx].status = status; saveOrders(orders); adminToast('Order status updated'); renderOrders(); }
+        }
+
+        function contactCustomer(phone) {
+            if (phone) window.open(`https://wa.me/234${phone.replace(/\D/g,'')}`, '_blank');
+            else adminToast('No phone number available', 'warning');
+        }
+
+        function addOrder() {
+            const customer = prompt('Customer name:');
+            if (!customer) return;
+            const phone = prompt('Phone number:');
+            const items = prompt('Products ordered:');
+            const total = parseInt(prompt('Total amount (N):')) || 0;
+            const order = { id: adminGenerateId(), customer, phone, items, total, status: 'pending', date: new Date().toISOString().split('T')[0], createdAt: new Date().toISOString() };
+            saveOrders([order, ...getOrders()]);
+            adminToast('Order added');
+            renderOrders();
+            updateSidebarBadges();
+        }
+
+        function deleteOrder(id) {
+            if (!confirm('Delete this order?')) return;
+            saveOrders(getOrders().filter(o => o.id !== id));
+            adminToast('Order deleted');
+            renderOrders();
+            updateSidebarBadges();
+        }
+
+        // Seed default data if empty
+        if (getOrders().length === 0) {
+            saveOrders([
+                { id: adminGenerateId(), customer: 'Amara O.', phone: '08012345678', items: 'Luxury Press-On Nails (x1)', total: 8000, status: 'confirmed', date: '2026-08-05', createdAt: '2026-08-05' },
+                { id: adminGenerateId(), customer: 'Chioma E.', phone: '08087654321', items: 'Felicity Signature Perfume (x1)', total: 28000, status: 'pending', date: '2026-08-06', createdAt: '2026-08-06' }
+            ]);
+        }
+
+        renderOrders();
+        updateSidebarBadges();
+    </script>
+</body>
+</html>

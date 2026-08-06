@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Code — Felicity Empire Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+</head>
+<body class="admin-body">
+
+    <button class="admin-mobile-toggle" onclick="adminToggleSidebar()"><i class="fas fa-bars"></i></button>
+    <div class="admin-mobile-overlay" onclick="adminToggleSidebar()"></div>
+
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-brand"><div class="admin-brand-name">FELICITY<span class="admin-brand-accent">EMPIRE</span></div><div class="admin-brand-subtitle">Administration</div></div>
+        <nav class="admin-sidebar-nav">
+            <div class="admin-sidebar-section">Main</div>
+            <a href="index.html" class="admin-sidebar-link"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="products.html" class="admin-sidebar-link"><i class="fas fa-box"></i> Products</a>
+            <a href="orders.html" class="admin-sidebar-link"><i class="fas fa-shopping-bag"></i> Orders</a>
+            <a href="appointments.html" class="admin-sidebar-link"><i class="fas fa-calendar-check"></i> Appointments</a>
+            <a href="customers.html" class="admin-sidebar-link"><i class="fas fa-users"></i> Customers</a>
+            <div class="admin-sidebar-section">Content</div>
+            <a href="categories.html" class="admin-sidebar-link"><i class="fas fa-tags"></i> Categories</a>
+            <a href="gallery.html" class="admin-sidebar-link"><i class="fas fa-images"></i> Gallery</a>
+            <a href="videos.html" class="admin-sidebar-link"><i class="fas fa-video"></i> Videos</a>
+            <a href="reviews.html" class="admin-sidebar-link"><i class="fas fa-star"></i> Reviews</a>
+            <div class="admin-sidebar-section">Management</div>
+            <a href="analytics.html" class="admin-sidebar-link"><i class="fas fa-chart-bar"></i> Analytics</a>
+            <a href="notifications.html" class="admin-sidebar-link"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="qr-code.html" class="admin-sidebar-link active"><i class="fas fa-qrcode"></i> QR Code</a>
+            <a href="settings.html" class="admin-sidebar-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <div class="admin-sidebar-footer">
+            <a href="profile.html"><i class="fas fa-user-circle"></i> Admin Profile</a>
+            <a href="../index.html"><i class="fas fa-external-link-alt"></i> View Website</a>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <div class="admin-topbar">
+            <div class="admin-topbar-left"><h1>QR Code</h1><span class="admin-topbar-breadcrumb">Manage business QR code</span></div>
+        </div>
+
+        <div class="admin-page-content">
+            <div class="admin-card" style="max-width:600px;text-align:center;">
+                <h3 style="font-family:var(--admin-font-display);font-size:1.3rem;margin-bottom:8px;">Business QR Code</h3>
+                <p style="color:var(--admin-text-muted);margin-bottom:24px;">This QR code appears on your website and business card. Customers can scan it to visit your website instantly.</p>
+                
+                <div style="background:#fff;display:inline-block;padding:24px;border-radius:var(--admin-radius-lg);box-shadow:var(--admin-shadow-md);margin-bottom:24px;">
+                    <img id="qrPreview" src="" alt="QR Code" style="width:200px;height:200px;object-fit:contain;" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://felicityempire.com';this.style.width='200px';this.style.height='200px';" />
+                </div>
+                
+                <div class="admin-form-group" style="text-align:left;"><label class="admin-form-label">Website URL for QR Code</label><input type="text" class="admin-form-input" id="qrUrl" value="https://felicityempire.com" oninput="updateQRPreview()" /></div>
+                
+                <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+                    <button class="admin-btn admin-btn-primary" onclick="uploadQRCode()"><i class="fas fa-upload"></i> Upload Custom QR Code</button>
+                    <button class="admin-btn admin-btn-outline" onclick="downloadQRCode()"><i class="fas fa-download"></i> Download</button>
+                    <button class="admin-btn admin-btn-outline" onclick="generateQRCode()"><i class="fas fa-sync-alt"></i> Generate New</button>
+                </div>
+                
+                <input type="file" id="qrFileInput" accept="image/*" onchange="handleQRUpload(event)" style="display:none;" />
+                
+                <div style="margin-top:32px;text-align:left;padding:20px;background:var(--admin-bg-secondary);border-radius:var(--admin-radius-md);">
+                    <h4 style="font-family:var(--admin-font-heading);font-size:0.85rem;margin-bottom:8px;">QR Code Information</h4>
+                    <p style="font-size:0.8rem;color:var(--admin-text-muted);">The QR code is displayed on:</p>
+                    <ul style="font-size:0.8rem;color:var(--admin-text-muted);padding-left:20px;margin-top:8px;">
+                        <li>Homepage Business Card Section</li>
+                        <li>Website Footer</li>
+                        <li>Checkout Page</li>
+                        <li>Can be downloaded for print materials</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="admin-toast-container"></div>
+
+    <script src="../assets/js/admin.js"></script>
+    <script>
+        function getQRData() { return JSON.parse(localStorage.getItem('fe_admin_qrcode') || '{}'); }
+        function saveQRData(data) { localStorage.setItem('fe_admin_qrcode', JSON.stringify(data)); }
+
+        function loadQRCode() {
+            const data = getQRData();
+            const url = data.url || 'https://felicityempire.com';
+            document.getElementById('qrUrl').value = url;
+            if (data.image) {
+                document.getElementById('qrPreview').src = data.image;
+            } else {
+                updateQRPreview();
+            }
+        }
+
+        function updateQRPreview() {
+            const url = document.getElementById('qrUrl').value || 'https://felicityempire.com';
+            const qrPreview = document.getElementById('qrPreview');
+            if (!getQRData().image) {
+                qrPreview.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
+            }
+        }
+
+        function generateQRCode() {
+            const url = document.getElementById('qrUrl').value || 'https://felicityempire.com';
+            document.getElementById('qrPreview').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
+            saveQRData({ url, image: '', generatedAt: new Date().toISOString() });
+            adminToast('QR Code generated!');
+        }
+
+        function uploadQRCode() {
+            document.getElementById('qrFileInput').click();
+        }
+
+        function handleQRUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('qrPreview').src = e.target.result;
+                const data = getQRData();
+                data.image = e.target.result;
+                data.uploadedAt = new Date().toISOString();
+                saveQRData(data);
+                adminToast('QR Code uploaded!');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function downloadQRCode() {
+            const img = document.getElementById('qrPreview');
+            const link = document.createElement('a');
+            link.download = 'felicity-empire-qr-code.png';
+            link.href = img.src;
+            link.click();
+            adminToast('Downloading QR Code...');
+        }
+
+        loadQRCode();
+    </script>
+</body>
+</html>

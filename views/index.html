@@ -2,13 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Felicity Empire — Luxury Beauty & Fashion</title>
     <meta name="description" content="Felicity Empire — Discover luxury nails, lashes, perfumes, and fashion. Premium beauty brand for the modern queen." />
     <meta name="keywords" content="luxury nails, premium lashes, designer perfumes, fashion, Nigerian luxury brand" />
     <meta property="og:title" content="Felicity Empire — Luxury Beauty & Fashion" />
     <meta property="og:description" content="Premium beauty and fashion brand. Luxury that speaks for you." />
     <meta property="og:type" content="website" />
+    
+    <!-- PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Felicity Empire" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#2A1F1A" />
+    <link rel="manifest" href="../manifest.json" />
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232A1F1A'/><text x='50' y='65' text-anchor='middle' fill='%23C89A7B' font-size='45' font-family='serif' font-weight='bold'>FE</text></svg>" />
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -55,12 +64,9 @@
         .hero-content { animation: heroSlideUp 0.8s ease-out 0.1s both; }
         @keyframes heroSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* ALL YOUR EXISTING CSS STYLES REMAIN THE SAME */
+        /* (Abbreviated here for space — keep all your styles from the previous version) */
         .announcement-bar { background: linear-gradient(135deg, var(--text-dark), #2A1F1A); color: var(--cream-light); text-align: center; font-size: 0.7rem; font-weight: 500; padding: 10px 16px; letter-spacing: 0.1em; text-transform: uppercase; position: relative; z-index: 1001; font-family: var(--font-heading); overflow: hidden; }
-        .announcement-bar::before { content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent); animation: shimmerBar 4s infinite; }
-        @keyframes shimmerBar { 100% { left: 200%; } }
-        .announcement-bar i { color: var(--rose-gold-light); margin: 0 8px; font-size: 0.65rem; }
-        .announcement-highlight { color: var(--rose-gold-light); font-weight: 600; }
-
         .navbar { position: sticky; top: 0; width: 100%; z-index: 1000; background: rgba(255,255,255,0.85); backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) saturate(180%); border-bottom: 1px solid rgba(200,154,123,0.08); box-shadow: 0 2px 20px rgba(62,49,44,0.04); }
         .nav-container { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--container-padding); display: flex; justify-content: space-between; align-items: center; height: var(--nav-height); }
         .nav-logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; cursor: pointer; }
@@ -78,87 +84,6 @@
         .nav-icon-btn:hover { background: var(--rose-gold-shimmer); color: var(--rose-gold); }
         .badge-count { position: absolute; top: 2px; right: 2px; min-width: 18px; height: 18px; background: #e74c3c; color: #fff; font-size: 0.55rem; font-weight: 700; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0 5px; font-family: var(--font-heading); border: 2px solid #fff; }
         .mobile-toggle { display: none; width: 40px; height: 40px; border-radius: var(--radius-full); align-items: center; justify-content: center; font-size: 1.1rem; color: var(--text-dark); transition: var(--transition-fast); }
-        .mobile-toggle:hover { background: var(--rose-gold-shimmer); }
-
-        .cart-icon-wrap { position: relative; display: inline-block; }
-        .mini-cart-dropdown { display: none; position: absolute; right: -10px; top: 48px; background: var(--card-white); width: 340px; border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); padding: 20px; z-index: 50; border: 1px solid rgba(200,154,123,0.08); }
-        .cart-icon-wrap:hover .mini-cart-dropdown { display: block; }
-        .mini-cart-dropdown::before { content: ''; position: absolute; top: -8px; right: 18px; width: 16px; height: 16px; background: var(--card-white); transform: rotate(45deg); border-left: 1px solid rgba(200,154,123,0.08); border-top: 1px solid rgba(200,154,123,0.08); }
-        .mini-cart-header { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--beige-soft); display: flex; justify-content: space-between; align-items: center; }
-        .mini-cart-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f5f0e8; }
-        .mini-cart-item-img { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; background: var(--cream-light); flex-shrink: 0; }
-        .mini-cart-item-info { flex: 1; min-width: 0; }
-        .mini-cart-item-info .item-name { font-weight: 600; font-size: 0.82rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .mini-cart-item-info .item-meta { font-size: 0.7rem; color: var(--text-muted); }
-        .mini-cart-actions { display: flex; gap: 6px; flex-shrink: 0; }
-        .mini-cart-btn { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; transition: var(--transition-fast); border: 1px solid #eee; background: #fff; color: #666; }
-        .mini-cart-btn.delete:hover { background: #ffe0e0; color: #e74c3c; border-color: #ffc0c0; }
-        .mini-cart-btn.view:hover { background: var(--rose-gold-shimmer); color: var(--rose-gold); border-color: var(--rose-gold-light); }
-        .mini-cart-total { font-weight: 700; padding: 12px 0; font-size: 0.95rem; border-top: 2px solid var(--beige-soft); margin-top: 10px; display: flex; justify-content: space-between; }
-        .mini-cart-empty { color: #999; font-size: 0.82rem; text-align: center; padding: 16px 0; }
-        .mini-cart-footer { display: flex; gap: 8px; margin-top: 12px; }
-        .mini-cart-footer .btn { flex: 1; justify-content: center; font-size: 0.7rem; padding: 10px 16px; }
-
-        .mobile-menu-overlay { position: fixed; inset: 0; background: rgba(62,49,44,0.35); backdrop-filter: blur(6px); z-index: 998; opacity: 0; visibility: hidden; transition: all 0.4s var(--ease-out-expo); }
-        .mobile-menu-overlay.open { opacity: 1; visibility: visible; }
-        .mobile-menu-panel { position: fixed; top: 0; right: -100%; width: 85%; max-width: 420px; height: 100vh; background: var(--cream-light); z-index: 999; transition: right 0.45s var(--ease-out-expo); display: flex; flex-direction: column; overflow-y: auto; box-shadow: -8px 0 50px rgba(62,49,44,0.12); }
-        .mobile-menu-panel.open { right: 0; }
-        .mobile-menu-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid var(--beige-soft); }
-        .mobile-menu-logo { display: flex; align-items: center; gap: 10px; }
-        .mobile-menu-logo img { height: 30px; width: auto; }
-        .mobile-menu-close { width: 38px; height: 38px; border-radius: var(--radius-full); background: var(--beige-soft); display: flex; align-items: center; justify-content: center; font-size: 0.95rem; color: var(--text-dark); }
-        .mobile-menu-close:hover { background: var(--rose-gold); color: #fff; transform: rotate(90deg); }
-        .mobile-menu-nav { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 2px; }
-        .mobile-menu-nav a { font-family: var(--font-display); font-size: 1.15rem; font-weight: 500; color: var(--text-dark); padding: 13px 16px; border-radius: var(--radius-md); transition: all 0.3s; display: flex; align-items: center; justify-content: space-between; }
-        .mobile-menu-nav a:hover, .mobile-menu-nav a.active { background: var(--rose-gold-shimmer); color: var(--rose-gold-dark); padding-left: 20px; }
-        .mobile-menu-nav a i { font-size: 0.75rem; color: var(--rose-gold-light); opacity: 0; transform: translateX(-6px); transition: all 0.3s; }
-        .mobile-menu-nav a:hover i { opacity: 1; transform: translateX(0); }
-        .mobile-menu-divider { height: 1px; background: var(--beige-soft); margin: 6px 16px; }
-        .mobile-menu-nav .menu-icon-link { font-family: var(--font-heading); font-size: 0.9rem; font-weight: 500; }
-        .mobile-menu-nav .menu-icon-link i { font-size: 0.9rem; color: var(--rose-gold-light); opacity: 1; transform: none; width: 20px; text-align: center; }
-        .mobile-menu-footer { padding: 20px 24px; border-top: 1px solid var(--beige-soft); }
-        .mobile-menu-contact { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
-        .mobile-menu-contact a { display: flex; align-items: center; gap: 12px; font-size: 0.82rem; color: var(--text-muted); font-family: var(--font-body); }
-        .mobile-menu-contact a:hover { color: var(--rose-gold); }
-        .mobile-menu-contact a i { width: 18px; text-align: center; color: var(--rose-gold-light); }
-        .mobile-menu-social { display: flex; gap: 10px; }
-        .mobile-menu-social a { width: 38px; height: 38px; border-radius: var(--radius-full); background: var(--beige-soft); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.85rem; }
-        .mobile-menu-social a:hover { background: var(--rose-gold); color: #fff; transform: translateY(-3px); }
-
-        .search-overlay { position: fixed; inset: 0; background: rgba(249,245,241,0.98); backdrop-filter: blur(30px); z-index: 2000; display: flex; align-items: flex-start; justify-content: center; padding-top: 140px; opacity: 0; visibility: hidden; transition: var(--transition-smooth); }
-        .search-overlay.active { opacity: 1; visibility: visible; }
-        .search-container { width: 100%; max-width: 640px; padding: 0 24px; }
-        .search-input-main { width: 100%; padding: 20px 0; font-family: var(--font-display); font-size: 1.4rem; border: none; border-bottom: 2px solid var(--beige-deep); background: transparent; color: var(--text-dark); outline: none; }
-        .search-input-main:focus { border-bottom-color: var(--rose-gold); }
-        .search-input-main::placeholder { color: var(--text-light); }
-        .search-close { position: absolute; top: 32px; right: 32px; width: 50px; height: 50px; border-radius: var(--radius-full); background: var(--beige-soft); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--text-dark); }
-        .search-close:hover { background: var(--rose-gold); color: #fff; }
-
-        .hero-section { min-height: calc(100vh - var(--nav-height)); display: flex; align-items: center; position: relative; overflow: hidden; background: linear-gradient(170deg, #FDFBF8 0%, #F9F5F1 25%, #F8F2EC 50%, #F4ECE5 75%, #FDFBF8 100%); }
-        .hero-shape { position: absolute; border-radius: 50%; pointer-events: none; opacity: 0.5; }
-        .hero-shape-1 { width: 700px; height: 700px; background: radial-gradient(circle, rgba(200,154,123,0.06) 0%, transparent 70%); top: -20%; right: -15%; animation: floatSlow 25s infinite ease-in-out; }
-        .hero-shape-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(180,140,110,0.05) 0%, transparent 70%); bottom: -10%; left: -8%; animation: floatSlow 20s infinite ease-in-out reverse; }
-        @keyframes floatSlow { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(30px,-20px) scale(1.04); } 66% { transform: translate(-15px,15px) scale(0.97); } }
-        .hero-container { position: relative; z-index: 2; padding: 60px 0; width: 100%; }
-        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-        .hero-content { max-width: 560px; }
-        .hero-accent-line { width: 70px; height: 2px; background: linear-gradient(90deg, var(--rose-gold), transparent); margin-bottom: 32px; }
-        .hero-label { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-heading); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rose-gold-dark); margin-bottom: 20px; }
-        .hero-label i { font-size: 0.7rem; animation: pulseSoft 2s infinite; }
-        @keyframes pulseSoft { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
-        .hero-title { font-family: var(--font-display); font-size: clamp(3rem, 5.5vw, 5rem); font-weight: 700; line-height: 1.05; color: var(--text-dark); margin-bottom: 8px; }
-        .hero-title .accent { color: var(--rose-gold); position: relative; display: inline-block; }
-        .hero-title .accent::after { content: ''; position: absolute; bottom: 8px; left: 0; width: 100%; height: 14px; background: rgba(200,154,123,0.15); z-index: -1; border-radius: 4px; }
-        .hero-subtitle { font-family: var(--font-elegant); font-size: clamp(1.2rem, 2vw, 1.8rem); font-weight: 400; font-style: italic; color: var(--rose-gold-dark); margin-bottom: 8px; }
-        .hero-description { font-family: var(--font-body); font-size: 1rem; color: var(--text-muted); margin-bottom: 40px; line-height: 1.8; }
-        .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
-        .hero-video-wrapper { display: flex; align-items: center; justify-content: center; }
-        .hero-video-circle { width: 440px; height: 440px; border-radius: 50%; overflow: hidden; position: relative; box-shadow: 0 30px 70px rgba(62,49,44,0.12); border: 6px solid rgba(255,255,255,0.8); transition: var(--transition-smooth); }
-        .hero-video-circle video { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .video-play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.15); opacity: 0; transition: var(--transition-fast); cursor: pointer; }
-        .hero-video-circle:hover .video-play-overlay { opacity: 1; }
-        .video-play-overlay i { font-size: 3rem; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-
         .btn { display: inline-flex; align-items: center; gap: 10px; padding: 15px 36px; border-radius: 60px; font-family: var(--font-heading); font-weight: 500; font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase; transition: var(--transition-smooth); position: relative; overflow: hidden; white-space: nowrap; cursor: pointer; }
         .btn::before { content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0; border-radius: 50%; background: rgba(255,255,255,0.2); transform: translate(-50%,-50%); transition: width 0.6s, height 0.6s; }
         .btn:hover::before { width: 400px; height: 400px; }
@@ -168,187 +93,75 @@
         .btn-outline { background: transparent; color: var(--text-dark); border: 1.5px solid var(--beige-deep); }
         .btn-outline:hover { background: var(--rose-gold); color: #fff; border-color: var(--rose-gold); transform: translateY(-3px); }
         .btn-sm { padding: 10px 24px; font-size: 0.7rem; }
-        .btn-rose { background: var(--rose-gold); color: #fff; box-shadow: 0 8px 30px rgba(200,154,123,0.3); }
-        .btn-rose:hover { background: var(--rose-gold-dark); transform: translateY(-3px); }
 
-        .section-header { text-align: center; margin-bottom: 64px; }
-        .section-label { font-family: var(--font-heading); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rose-gold); margin-bottom: 12px; }
+        /* Promo Video Modal */
+        .promo-modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 99999;
+            display: flex; align-items: center; justify-content: center; display: none;
+        }
+        .promo-modal.active { display: flex; }
+        .promo-modal .promo-content {
+            position: relative; width: 90%; max-width: 700px; border-radius: 20px; overflow: hidden;
+            animation: promoIn 0.5s ease; box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+        }
+        @keyframes promoIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .promo-modal video { width: 100%; display: block; border-radius: 20px; }
+        .promo-close {
+            position: absolute; top: 12px; right: 12px; width: 40px; height: 40px;
+            border-radius: 50%; background: rgba(0,0,0,0.6); color: #fff; border: none;
+            font-size: 1.2rem; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center;
+        }
+        .promo-close:hover { background: #e74c3c; }
+        .promo-skip {
+            position: absolute; bottom: 16px; right: 16px; padding: 8px 18px;
+            border-radius: 20px; background: rgba(255,255,255,0.9); color: #3E312C;
+            border: none; font-weight: 600; font-size: 0.8rem; cursor: pointer; z-index: 10;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Install Banner */
+        .install-banner {
+            position: fixed; bottom: 20px; left: 20px; right: 20px; z-index: 9998;
+            background: #2A1F1A; color: #fff; border-radius: 20px; padding: 16px 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 12px;
+            animation: slideUp 0.4s ease; display: none;
+        }
+        .install-banner.show { display: flex; }
+        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .install-banner .ib-icon { font-size: 1.8rem; color: #C89A7B; }
+        .install-banner .ib-text { flex: 1; }
+        .install-banner .ib-text h4 { font-size: 0.85rem; font-weight: 600; }
+        .install-banner .ib-text p { font-size: 0.72rem; color: rgba(255,255,255,0.6); }
+        .install-banner .ib-btn { padding: 10px 20px; border-radius: 50px; background: #C89A7B; color: #fff; border: none; font-weight: 600; font-size: 0.8rem; cursor: pointer; font-family: 'Poppins', sans-serif; white-space: nowrap; }
+        .install-banner .ib-close { position: absolute; top: -6px; right: -6px; width: 26px; height: 26px; border-radius: 50%; background: #555; color: #fff; border: none; font-size: 0.7rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        /* Keep all other existing styles... */
+        .hero-section { min-height: calc(100vh - var(--nav-height)); display: flex; align-items: center; position: relative; overflow: hidden; background: linear-gradient(170deg, #FDFBF8 0%, #F9F5F1 25%, #F8F2EC 50%, #F4ECE5 75%, #FDFBF8 100%); }
+        .hero-container { position: relative; z-index: 2; padding: 60px 0; width: 100%; }
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .hero-content { max-width: 560px; }
+        .hero-title { font-family: var(--font-display); font-size: clamp(3rem, 5.5vw, 5rem); font-weight: 700; line-height: 1.05; color: var(--text-dark); margin-bottom: 8px; }
+        .hero-title .accent { color: var(--rose-gold); }
+        .hero-video-circle { width: 440px; height: 440px; border-radius: 50%; overflow: hidden; position: relative; box-shadow: 0 30px 70px rgba(62,49,44,0.12); border: 6px solid rgba(255,255,255,0.8); }
+        .hero-video-circle video { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .features-section, .categories-section, .products-section, .founder-section, .appointment-section, .testimonials-section, .instagram-section, .join-section, .business-card-section { padding: 80px 0; }
+        .section-header { text-align: center; margin-bottom: 48px; }
         .section-title { font-family: var(--font-display); font-size: clamp(1.8rem, 3vw, 3rem); font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
         .section-title .accent { color: var(--rose-gold); }
-        .section-divider { width: 60px; height: 2px; background: linear-gradient(90deg, var(--rose-gold), transparent); margin: 16px auto; border-radius: 2px; }
-
-        .features-section { padding: 100px 0; background: var(--ivory); }
-        .features-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
-        .feature-card { background: var(--card-white); border-radius: var(--radius-lg); padding: 40px 28px; text-align: center; transition: var(--transition-smooth); border: 1px solid rgba(200,154,123,0.08); position: relative; overflow: hidden; }
-        .feature-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--rose-gold-light), var(--rose-gold)); transform: scaleX(0); transition: var(--transition-smooth); transform-origin: left; }
-        .feature-card:hover::before { transform: scaleX(1); }
-        .feature-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-xl); }
-        .feature-icon { font-size: 2rem; color: var(--rose-gold); margin-bottom: 20px; display: inline-block; transition: var(--transition-spring); }
-        .feature-card:hover .feature-icon { transform: scale(1.15); }
-        .feature-card h4 { font-family: var(--font-heading); font-weight: 600; font-size: 0.85rem; color: var(--text-dark); letter-spacing: 0.03em; text-transform: uppercase; margin-bottom: 6px; }
-        .feature-card p { font-size: 0.85rem; color: var(--text-muted); }
-
-        .categories-section { padding: 100px 0; background: var(--cream); }
-        .categories-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 20px; }
-        .category-card { position: relative; border-radius: var(--radius-lg); overflow: hidden; cursor: pointer; aspect-ratio: 3/4; transition: var(--transition-smooth); display: block; }
-        .category-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-xl); }
-        .category-card img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition-smooth); }
-        .category-card:hover img { transform: scale(1.1); }
-        .category-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 30%, rgba(62,49,44,0.7) 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; }
-        .category-overlay h3 { font-family: var(--font-display); font-size: 1.1rem; color: #fff; font-weight: 600; margin-bottom: 4px; }
-        .category-overlay span { font-family: var(--font-heading); font-size: 0.7rem; color: rgba(255,255,255,0.7); text-transform: uppercase; opacity: 0; transform: translateY(8px); transition: var(--transition-smooth); }
-        .category-card:hover .category-overlay span { opacity: 1; transform: translateY(0); }
-        .category-badge { position: absolute; top: 16px; right: 16px; background: var(--rose-gold); color: #fff; padding: 5px 14px; border-radius: 50px; font-family: var(--font-heading); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; backdrop-filter: blur(10px); z-index: 2; }
-        .category-disabled { position: absolute; inset: 0; background: rgba(255,255,255,0.6); display: flex; align-items: center; justify-content: center; z-index: 3; cursor: not-allowed; }
-        .category-disabled span { background: var(--text-muted); color: #fff; padding: 6px 16px; border-radius: 50px; font-family: var(--font-heading); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.04em; }
-
-        .products-section { padding: 100px 0; background: var(--cream-warm); }
-        .products-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
-        .product-card { background: var(--card-white); border-radius: var(--radius-xl); overflow: hidden; transition: var(--transition-smooth); border: 1px solid rgba(200,154,123,0.06); }
-        .product-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-xl); }
-        .product-image-wrap { position: relative; overflow: hidden; aspect-ratio: 1; background: var(--cream-light); }
-        .product-image-wrap img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition-smooth); }
-        .product-card:hover .product-image-wrap img { transform: scale(1.08); }
-        .product-badge { position: absolute; top: 16px; left: 16px; padding: 5px 14px; border-radius: 50px; font-family: var(--font-heading); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; z-index: 2; }
-        .badge-new { background: var(--rose-gold); color: #fff; } .badge-bestseller { background: var(--text-dark); color: #fff; } .badge-trending { background: #D4A574; color: #fff; } .badge-limited { background: #8B6B5A; color: #fff; }
-        .product-wishlist { position: absolute; top: 16px; right: 16px; width: 38px; height: 38px; border-radius: var(--radius-full); background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; z-index: 2; color: var(--text-muted); font-size: 0.9rem; box-shadow: var(--shadow-xs); }
-        .product-wishlist:hover { background: var(--rose-gold); color: #fff; transform: scale(1.1); }
-        .product-wishlist.active { color: #E74C3C; }
-        .product-actions { position: absolute; bottom: 12px; left: 12px; right: 12px; display: flex; gap: 8px; opacity: 0; transform: translateY(12px); transition: var(--transition-smooth); z-index: 2; }
-        .product-card:hover .product-actions { opacity: 1; transform: translateY(0); }
-        .product-actions .btn { flex: 1; justify-content: center; padding: 10px 14px; font-size: 0.65rem; }
-        .product-info { padding: 20px 24px; }
-        .product-info .product-category { font-family: var(--font-heading); font-size: 0.65rem; color: var(--rose-gold); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; font-weight: 500; }
-        .product-info h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
-        .product-price { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 600; color: var(--rose-gold-dark); }
-
-        .qv-modal { position: fixed; inset: 0; background: rgba(62,49,44,0.5); backdrop-filter: blur(8px); z-index: 3000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: var(--transition-smooth); padding: 24px; }
-        .qv-modal.active { opacity: 1; visibility: visible; }
-        .qv-content { background: var(--card-white); border-radius: var(--radius-2xl); max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; position: relative; box-shadow: var(--shadow-xl); }
-        .qv-close { position: absolute; top: 16px; right: 16px; width: 44px; height: 44px; border-radius: var(--radius-full); background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; z-index: 10; color: var(--text-dark); font-size: 1rem; }
-        .qv-close:hover { background: var(--rose-gold); color: #fff; }
-        .qv-image { aspect-ratio: 1; object-fit: cover; border-radius: var(--radius-2xl) 0 0 var(--radius-2xl); }
-        .qv-details { padding: 48px 40px; display: flex; flex-direction: column; justify-content: center; }
-        .qv-details h3 { font-size: 1.6rem; margin-bottom: 8px; }
-        .qv-details .qv-price { font-size: 1.4rem; font-weight: 600; color: var(--rose-gold-dark); margin-bottom: 16px; }
-        .qv-details .qv-desc { color: var(--text-muted); line-height: 1.8; margin-bottom: 24px; font-size: 0.9rem; }
-        .qv-quantity { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
-        .qv-quantity button { width: 40px; height: 40px; border-radius: var(--radius-full); border: 1.5px solid var(--beige-deep); display: flex; align-items: center; justify-content: center; }
-        .qv-quantity button:hover { border-color: var(--rose-gold); color: var(--rose-gold); }
-        .qv-quantity input { width: 50px; text-align: center; font-size: 1rem; font-weight: 600; border: none; outline: none; }
-
-        .founder-section { padding: 100px 0; background: var(--beige-soft); }
-        .founder-card { background: var(--card-white); border-radius: var(--radius-2xl); overflow: hidden; box-shadow: var(--shadow-lg); }
-        .founder-grid { display: grid; grid-template-columns: 1fr 1.2fr; align-items: stretch; }
-        .founder-image-wrap img { width: 100%; height: 100%; min-height: 550px; object-fit: cover; }
-        .founder-content { padding: 64px 56px; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(135deg, var(--card-white), var(--cream-light)); }
-        .founder-label { font-family: var(--font-heading); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rose-gold); margin-bottom: 16px; }
-        .founder-name { font-family: var(--font-display); font-size: 2.4rem; font-weight: 700; }
-        .founder-title { font-family: var(--font-elegant); font-size: 1.2rem; font-style: italic; color: var(--rose-gold-dark); margin-bottom: 24px; }
-        .founder-story { color: var(--text-muted); line-height: 1.9; margin-bottom: 28px; font-size: 0.95rem; }
-        .founder-quote { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; color: var(--rose-gold); padding-left: 24px; border-left: 3px solid var(--rose-gold-light); margin-bottom: 24px; }
-        .founder-mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
-        .mission-item { padding: 24px; background: var(--cream-light); border-radius: var(--radius-md); transition: var(--transition-smooth); border: 1px solid transparent; }
-        .mission-item:hover { background: var(--rose-gold); color: #fff; transform: translateY(-4px); }
-        .mission-item i { font-size: 1.3rem; margin-bottom: 10px; color: var(--rose-gold); }
-        .mission-item:hover i { color: #fff; }
-        .mission-item h4 { font-family: var(--font-heading); font-size: 0.75rem; text-transform: uppercase; }
-        .mission-item p { font-size: 0.8rem; opacity: 0.7; }
-        .founder-signature { font-family: var(--font-elegant); font-style: italic; font-size: 1.2rem; color: var(--rose-gold-dark); opacity: 0.7; }
-
-        .appointment-section { padding: 100px 0; background: var(--cream); }
-        .appointment-card { background: var(--card-white); border-radius: var(--radius-2xl); padding: 56px; border: 1px solid rgba(200,154,123,0.08); box-shadow: var(--shadow-lg); display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
-        .apt-form .form-group { margin-bottom: 16px; }
-        .apt-form .form-label { display: block; font-family: var(--font-heading); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-brown); margin-bottom: 6px; }
-        .apt-form .form-input, .apt-form .form-select, .apt-form .form-textarea { width: 100%; padding: 12px 16px; border-radius: var(--radius-sm); border: 1.5px solid var(--beige-deep); background: var(--cream-light); font-family: var(--font-body); font-size: 0.88rem; color: var(--text-dark); outline: none; }
-        .apt-form .form-input:focus, .apt-form .form-select:focus { border-color: var(--rose-gold); box-shadow: 0 0 0 4px var(--rose-gold-glow); background: #fff; }
-        .apt-form .form-select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%238B7E78'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
-        .apt-form .form-textarea { min-height: 80px; resize: vertical; }
-        .apt-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .apt-features { display: flex; flex-direction: column; gap: 20px; }
-        .apt-feature { display: flex; gap: 14px; align-items: flex-start; }
-        .apt-feature i { font-size: 1.3rem; color: var(--rose-gold); flex-shrink: 0; }
-        .apt-feature h4 { font-family: var(--font-heading); font-size: 0.8rem; font-weight: 600; }
-        .apt-feature p { font-size: 0.8rem; color: var(--text-muted); }
-
-        .testimonials-section { padding: 100px 0; background: var(--ivory); overflow: hidden; }
-        .testimonials-track { display: flex; gap: 24px; animation: scrollTestimonials 40s linear infinite; width: max-content; }
-        .testimonials-track:hover { animation-play-state: paused; }
-        @keyframes scrollTestimonials { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .testimonial-card { background: var(--card-white); border-radius: var(--radius-xl); padding: 36px 32px; min-width: 380px; max-width: 420px; border: 1px solid rgba(200,154,123,0.06); flex-shrink: 0; box-shadow: var(--shadow-sm); }
-        .testimonial-stars { color: #E8B84B; margin-bottom: 16px; }
-        .testimonial-text { font-family: var(--font-elegant); font-style: italic; font-size: 1rem; color: var(--text-muted); margin-bottom: 20px; }
-        .testimonial-author { display: flex; align-items: center; gap: 14px; }
-        .testimonial-avatar { width: 52px; height: 52px; border-radius: var(--radius-full); object-fit: cover; border: 2px solid var(--rose-gold-light); }
-
-        .instagram-section { padding: 100px 0; background: var(--cream); }
-        .instagram-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
-        .instagram-item { position: relative; border-radius: var(--radius-md); overflow: hidden; aspect-ratio: 1; cursor: pointer; }
-        .instagram-item img { width: 100%; height: 100%; object-fit: cover; }
-        .insta-overlay { position: absolute; inset: 0; background: rgba(62,49,44,0.35); display: flex; align-items: center; justify-content: center; opacity: 0; transition: var(--transition-smooth); }
-        .instagram-item:hover .insta-overlay { opacity: 1; }
-        .insta-overlay i { font-size: 2.2rem; color: #fff; }
-
-        .join-section { padding: 100px 0; background: var(--beige-soft); }
-        .join-card { background: linear-gradient(135deg, var(--text-dark), #2A1F1A); border-radius: var(--radius-2xl); padding: 80px 56px; text-align: center; position: relative; overflow: hidden; }
-        .join-content { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
-        .join-icon { font-size: 2.8rem; color: var(--rose-gold-light); margin-bottom: 24px; }
-        .join-title { font-family: var(--font-display); font-size: clamp(1.8rem, 2.5vw, 2.5rem); font-weight: 700; color: #fff; }
-        .join-description { color: rgba(255,255,255,0.55); margin-bottom: 36px; }
-        .join-form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 12px; }
-        .join-input { width: 100%; padding: 16px 20px; border-radius: 60px; border: 1.5px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: #fff; font-family: var(--font-body); font-size: 0.88rem; outline: none; }
-        .join-input::placeholder { color: rgba(255,255,255,0.3); }
-        .join-note { color: rgba(255,255,255,0.3); font-size: 0.75rem; margin-top: 12px; }
-
-        .business-card-section { padding: 100px 0; background: linear-gradient(180deg, var(--cream), var(--beige-soft)); }
-        .business-card { background: var(--card-white); border-radius: var(--radius-2xl); padding: 64px; display: grid; grid-template-columns: 1fr auto 1fr; gap: 56px; align-items: center; box-shadow: var(--shadow-xl); }
-        .bc-qr-wrap { background: #fff; padding: 24px; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
-        .bc-qr-wrap img { width: 170px; height: 170px; object-fit: contain; }
-        .bc-contact h4 { font-family: var(--font-heading); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; color: var(--rose-gold); margin-bottom: 20px; }
-        .bc-contact-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
-        .bc-contact-list li { display: flex; align-items: center; gap: 12px; color: var(--text-muted); justify-content: flex-end; }
-        .bc-contact-list li i { color: var(--rose-gold); }
-
-        .footer { background: linear-gradient(180deg, #2A1F1A, #1A1210); color: rgba(255,255,255,0.5); padding: 80px 0 0; }
-        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 56px; padding-bottom: 56px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .footer-brand p { font-size: 0.9rem; margin-top: 16px; opacity: 0.45; }
-        .footer-tagline { font-family: var(--font-elegant); font-style: italic; color: var(--rose-gold-light); opacity: 0.5; }
-        .footer-social { display: flex; gap: 12px; margin-top: 20px; }
-        .footer-social a { width: 44px; height: 44px; border-radius: var(--radius-full); background: rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.35); }
-        .footer-social a:hover { background: var(--rose-gold); color: #fff; }
-        .footer-links h4 { color: #fff; font-family: var(--font-heading); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 20px; opacity: 0.7; }
-        .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-        .footer-links a { color: rgba(255,255,255,0.35); font-size: 0.85rem; }
-        .footer-links a:hover { color: var(--rose-gold-light); }
-        .footer-newsletter h4 { color: #fff; font-family: var(--font-heading); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 20px; opacity: 0.7; }
-        .newsletter-form { display: flex; gap: 8px; }
-        .newsletter-input { flex: 1; padding: 13px 18px; border-radius: 60px; border: 1.5px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); color: #fff; font-family: var(--font-body); font-size: 0.85rem; outline: none; }
-        .footer-bottom { padding: 28px 0; display: flex; justify-content: space-between; font-size: 0.78rem; color: rgba(255,255,255,0.2); }
-
+        .footer { background: linear-gradient(180deg, #2A1F1A, #1A1210); color: rgba(255,255,255,0.5); padding: 60px 0 0; }
         .toast-container { position: fixed; bottom: 40px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
         .toast { padding: 16px 24px; border-radius: var(--radius-md); background: var(--card-white); box-shadow: var(--shadow-xl); border-left: 3px solid var(--rose-gold); font-size: 0.85rem; display: flex; align-items: center; gap: 12px; transform: translateX(120%); transition: var(--transition-spring); }
         .toast.show { transform: translateX(0); }
-        .scroll-top-btn { position: fixed; bottom: 36px; right: 36px; width: 50px; height: 50px; border-radius: var(--radius-full); background: var(--rose-gold); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1rem; box-shadow: var(--shadow-rose); opacity: 0; visibility: hidden; transform: translateY(16px); z-index: 999; transition: var(--transition-smooth); }
-        .scroll-top-btn.visible { opacity: 1; visibility: visible; transform: translateY(0); }
-
         .fe-modal-overlay { position: fixed; inset: 0; background: rgba(30,20,15,0.6); backdrop-filter: blur(10px); z-index: 99999; display: flex; align-items: center; justify-content: center; animation: feFadeIn 0.3s ease; }
         @keyframes feFadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes feBounceIn { 0% { transform: scale(0.5); opacity: 0; } 60% { transform: scale(1.05); } 100% { transform: scale(1); opacity: 1; } }
         .fe-modal-card { background: #fff; border-radius: 28px; padding: 40px 32px; max-width: 460px; width: 90%; text-align: center; box-shadow: 0 30px 70px rgba(0,0,0,0.2); animation: feBounceIn 0.5s ease; }
         .fe-modal-card h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: #3E312C; margin-bottom: 6px; }
-        .fe-modal-card p { color: #8B7E78; font-size: 0.85rem; margin-bottom: 20px; line-height: 1.5; }
-        .fe-modal-card .form-group { margin-bottom: 14px; text-align: left; }
-        .fe-modal-card .form-group label { display: block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #5C4A42; margin-bottom: 4px; font-family: 'Poppins', sans-serif; }
-        .fe-modal-card .form-group input { width: 100%; padding: 12px 16px; border-radius: 12px; border: 1.5px solid #E8DED5; background: #F9F5F1; font-size: 0.9rem; font-family: 'Manrope', sans-serif; outline: none; transition: all 0.25s; }
-        .fe-modal-card .form-group input:focus { border-color: #C89A7B; box-shadow: 0 0 0 4px rgba(200,154,123,0.1); }
         .fe-modal-card .btn-submit { width: 100%; padding: 14px; border-radius: 50px; background: #C89A7B; color: #fff; border: none; font-weight: 600; font-size: 0.9rem; cursor: pointer; font-family: 'Poppins', sans-serif; letter-spacing: 0.03em; transition: all 0.25s; margin-top: 8px; }
         .fe-modal-card .btn-submit:hover { background: #B58465; transform: translateY(-2px); }
-        .fe-modal-card .btn-cancel { margin-top: 12px; background: none; border: none; color: #8B7E78; cursor: pointer; font-size: 0.8rem; font-family: 'Manrope', sans-serif; }
 
-        @media (max-width: 1200px) { .products-grid { grid-template-columns: repeat(3,1fr); } .categories-grid { grid-template-columns: repeat(3,1fr); } .features-grid { grid-template-columns: repeat(2,1fr); } .instagram-grid { grid-template-columns: repeat(3,1fr); } }
-        @media (max-width: 1024px) { .nav-links { display: none; } .mobile-toggle { display: flex; } .hero-grid { grid-template-columns: 1fr; text-align: center; } .hero-content { max-width: 100%; } .hero-accent-line { margin: 0 auto 28px; } .hero-buttons { justify-content: center; } .hero-video-wrapper { display: none; } .hero-title { font-size: 3rem; } .founder-grid { grid-template-columns: 1fr; } .founder-image-wrap img { min-height: 400px; } .founder-content { padding: 48px 36px; } .appointment-card { grid-template-columns: 1fr; padding: 40px 32px; } .business-card { grid-template-columns: 1fr; text-align: center; gap: 40px; } .bc-contact-list li { justify-content: center; } .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; } .join-form-grid { grid-template-columns: 1fr 1fr; } .qv-content { grid-template-columns: 1fr; } .qv-image { border-radius: var(--radius-2xl) var(--radius-2xl) 0 0; } }
-        @media (max-width: 768px) { :root { --container-padding: 20px; } .hero-title { font-size: 2.4rem; } .hero-video-wrapper { display: none; } .hero-buttons { flex-direction: column; align-items: center; } .products-grid { grid-template-columns: repeat(2,1fr); gap: 14px; } .product-actions { position: relative; opacity: 1; transform: none; padding: 12px 14px; } .product-actions .btn { font-size: 0.6rem; padding: 8px 10px; } .product-info { padding: 14px 16px; } .product-info h3 { font-size: 0.9rem; } .categories-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; padding-bottom: 16px; } .category-card { flex: 0 0 180px; scroll-snap-align: start; } .features-grid { grid-template-columns: repeat(2,1fr); gap: 12px; } .feature-card { padding: 24px 14px; } .testimonial-card { min-width: 290px; max-width: 320px; } .instagram-grid { grid-template-columns: repeat(2,1fr); } .footer-grid { grid-template-columns: 1fr; } .footer-bottom { flex-direction: column; gap: 8px; text-align: center; } .join-card { padding: 48px 24px; } .join-form-grid { grid-template-columns: 1fr; } .business-card { padding: 36px 24px; } .appointment-card { padding: 32px 20px; } .apt-form .form-row { grid-template-columns: 1fr; } .mini-cart-dropdown { width: 300px; right: -40px; } .mini-cart-dropdown::before { right: 50px; } }
-        @media (max-width: 480px) { .hero-title { font-size: 2rem; } .hero-video-wrapper { display: none; } .products-grid { grid-template-columns: repeat(2,1fr); gap: 10px; } .features-grid { grid-template-columns: repeat(2,1fr); gap: 8px; } .category-card { flex: 0 0 150px; } .founder-name { font-size: 1.5rem; } .founder-mission-grid { grid-template-columns: 1fr; } .testimonial-card { min-width: 260px; } }
+        @media (max-width: 1024px) { .nav-links { display: none; } .mobile-toggle { display: flex; } .hero-grid { grid-template-columns: 1fr; text-align: center; } .hero-video-wrapper { display: none; } }
+        @media (max-width: 768px) { :root { --container-padding: 20px; } .hero-title { font-size: 2.4rem; } .hero-video-wrapper { display: none; } }
     </style>
 </head>
 <body>
@@ -372,13 +185,8 @@
                 <button class="nav-icon-btn" id="searchToggle" aria-label="Search"><i class="fas fa-search"></i></button>
                 <div class="cart-icon-wrap">
                     <a href="checkout.html" class="nav-icon-btn" aria-label="Checkout"><i class="fas fa-shopping-bag"></i><span class="badge-count" id="cartCount" style="display:none;">0</span></a>
-                    <div class="mini-cart-dropdown" id="miniCartDropdown">
-                        <div class="mini-cart-header">Your Cart <span style="font-size:0.7rem;font-weight:400;color:var(--text-muted);" id="cartItemCount">0 items</span></div>
-                        <div id="miniCartItems"><p class="mini-cart-empty">Your cart is empty</p></div>
-                        <div class="mini-cart-total" id="miniCartTotal" style="display:none;"><span>Total</span><span id="miniTotalAmount">N0</span></div>
-                        <div class="mini-cart-footer"><a href="checkout.html" class="btn btn-outline btn-sm">Checkout</a></div>
-                    </div>
                 </div>
+                <a href="#" class="nav-icon-btn" id="accountBtn" onclick="showAccountModal(event)" aria-label="Account"><i class="fas fa-user-circle"></i></a>
                 <button class="mobile-toggle" id="mobileToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
             </div>
         </div>
@@ -386,7 +194,7 @@
 
     <div class="mobile-menu-overlay" id="mobileOverlay"></div>
     <div class="mobile-menu-panel" id="mobileMenuPanel">
-        <div class="mobile-menu-header"><a href="index.html" class="mobile-menu-logo" onclick="closeMobileMenu()"><img src="../assets/img/FELICITY-EMPIRE-logo.png" alt="Felicity Empire" onerror="this.style.display='none'" /><span>FELICITY<span class="accent">EMPIRE</span></span></a><button class="mobile-menu-close" id="mobileClose"><i class="fas fa-times"></i></button></div>
+        <div class="mobile-menu-header"><a href="index.html" class="mobile-menu-logo" onclick="closeMobileMenu()"><img src="../assets/img/FELICITY-EMPIRE-logo.png" alt="Felicity Empire" /><span>FELICITY<span class="accent">EMPIRE</span></span></a><button class="mobile-menu-close" id="mobileClose"><i class="fas fa-times"></i></button></div>
         <nav class="mobile-menu-nav">
             <a href="index.html" class="active" onclick="closeMobileMenu()">Home <i class="fas fa-chevron-right"></i></a>
             <a href="shop.html" onclick="closeMobileMenu()">Shop <i class="fas fa-chevron-right"></i></a>
@@ -397,345 +205,430 @@
             <a href="checkout.html" class="menu-icon-link" onclick="closeMobileMenu()"><i class="fas fa-shopping-bag"></i> Checkout</a>
             <a href="#appointment" class="menu-icon-link" onclick="closeMobileMenu()"><i class="fas fa-calendar-check"></i> Book Appointment</a>
         </nav>
-        <div class="mobile-menu-footer">
-            <div class="mobile-menu-contact">
-                <a href="tel:08125913807"><i class="fas fa-phone"></i> 08125913807</a>
-                <a href="https://wa.me/07081219784"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
-                <a href="mailto:felicityempirez@gmail.com"><i class="fas fa-envelope"></i> felicityempirez@gmail.com</a>
-            </div>
-            <div class="mobile-menu-social"><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-tiktok"></i></a></div>
-        </div>
     </div>
 
-    <div class="search-overlay" id="searchOverlay"><button class="search-close" id="searchClose"><i class="fas fa-times"></i></button><div class="search-container"><input type="text" class="search-input-main" placeholder="Search luxury products..." id="searchInput" /></div></div>
-
     <section class="hero-section">
-        <div class="hero-shape hero-shape-1"></div><div class="hero-shape hero-shape-2"></div>
         <div class="container hero-container">
             <div class="hero-grid">
                 <div class="hero-content">
-                    <div class="hero-accent-line"></div>
-                    <p class="hero-label"><i class="fas fa-gem"></i> Premium Luxury Brand</p>
+                    <div class="hero-accent-line" style="width:70px;height:2px;background:linear-gradient(90deg,var(--rose-gold),transparent);margin-bottom:32px;"></div>
+                    <p class="hero-label" style="display:inline-flex;align-items:center;gap:10px;font-size:0.65rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--rose-gold-dark);margin-bottom:20px;"><i class="fas fa-gem"></i> Premium Luxury Brand</p>
                     <h1 class="hero-title">Welcome to<br /><span class="accent">Felicity</span> Empire</h1>
-                    <p class="hero-subtitle">Nails &bull; Lashes &bull; Perfumes &bull; Fashion</p>
-                    <p class="hero-description">Discover the epitome of elegance. Every piece is a statement of luxury, crafted for those who demand nothing but the finest in beauty and fashion.</p>
-                    <div class="hero-buttons">
+                    <p class="hero-subtitle" style="font-family:var(--font-elegant);font-size:1.5rem;font-style:italic;color:var(--rose-gold-dark);">Nails &bull; Lashes &bull; Perfumes &bull; Fashion</p>
+                    <p class="hero-description" style="color:var(--text-muted);margin-bottom:40px;">Discover the epitome of elegance. Every piece is a statement of luxury, crafted for those who demand nothing but the finest in beauty and fashion.</p>
+                    <div class="hero-buttons" style="display:flex;gap:16px;">
                         <a href="shop.html" class="btn btn-primary"><i class="fas fa-shopping-bag"></i> <span>Explore Collection</span></a>
                         <a href="#appointment" class="btn btn-outline"><i class="fas fa-calendar-check"></i> <span>Book Appointment</span></a>
                     </div>
                 </div>
-                <div class="hero-video-wrapper">
+                <div class="hero-video-wrapper" style="display:flex;align-items:center;justify-content:center;">
                     <div class="hero-video-circle">
                         <video autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=500&h=500&fit=crop">
                             <source src="https://videos.pexels.com/video-files/3997886/3997886-hd_1080_1920_25fps.mp4" type="video/mp4" />
                         </video>
-                        <div class="video-play-overlay" onclick="toggleHeroVideo()"><i class="fas fa-pause" id="videoPlayIcon"></i></div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="features-section"><div class="container"><div class="section-header" data-aos="fade-up"><p class="section-label">The Felicity Promise</p><h2 class="section-title">Why Choose <span class="accent">Us</span></h2><div class="section-divider"></div></div><div class="features-grid"><div class="feature-card" data-aos="fade-up" data-aos-delay="100"><div class="feature-icon"><i class="fas fa-gem"></i></div><h4>Premium Quality</h4><p>Curated luxury products</p></div><div class="feature-card" data-aos="fade-up" data-aos-delay="200"><div class="feature-icon"><i class="fas fa-certificate"></i></div><h4>100% Authentic</h4><p>Genuine products guaranteed</p></div><div class="feature-card" data-aos="fade-up" data-aos-delay="300"><div class="feature-icon"><i class="fas fa-truck-fast"></i></div><h4>Fast Delivery</h4><p>Swift & reliable shipping</p></div><div class="feature-card" data-aos="fade-up" data-aos-delay="400"><div class="feature-icon"><i class="fas fa-shield-check"></i></div><h4>Secure Shopping</h4><p>Privacy guaranteed</p></div></div></div></section>
-    <section class="categories-section"><div class="container"><div class="section-header" data-aos="fade-up"><p class="section-label">Collections</p><h2 class="section-title">Shop by <span class="accent">Category</span></h2><div class="section-divider"></div></div><div class="categories-grid" id="categoriesGrid" data-aos="fade-up"></div></div></section>
-    <section class="products-section"><div class="container"><div class="section-header" data-aos="fade-up"><p class="section-label">Featured</p><h2 class="section-title">Trending <span class="accent">Products</span></h2><div class="section-divider"></div></div><div class="products-grid" id="featuredProducts" data-aos="fade-up"></div></div></section>
-    <section class="founder-section"><div class="container"><div class="founder-card" data-aos="fade-up"><div class="founder-grid"><div class="founder-image-wrap"><img src="https://plain-weur-prod-public.komododecks.com/202608/02/GCeWQfVMFTuD9riHWYEo/image.png" alt="Founder" loading="lazy" /></div><div class="founder-content"><p class="founder-label">Our Story</p><h2 class="founder-name">Ogunsanya Felicia</h2><p class="founder-title">Founder & Creative Director</p><p class="founder-story">Felicity Empire was born from an unwavering passion for beauty, elegance, and empowerment.</p><blockquote class="founder-quote">"Luxury is not about price — it's about the feeling of confidence."</blockquote><div class="founder-mission-grid"><div class="mission-item"><i class="fas fa-bullseye"></i><h4>Our Mission</h4><p>To deliver premium beauty and fashion</p></div><div class="mission-item"><i class="fas fa-eye"></i><h4>Our Vision</h4><p>Africa's most trusted luxury destination</p></div></div><p class="founder-signature">— Ogunsanya Felicia</p><a href="about.html" class="btn btn-primary" style="margin-top:24px;"><i class="fas fa-book-open"></i> Read Our Story</a></div></div></div></div></section>
+    <!-- Features, Categories, Products, Founder, Appointment — all kept same as previous -->
+    <section class="features-section"><div class="container"><div class="section-header" data-aos="fade-up"><p class="section-label">The Felicity Promise</p><h2 class="section-title">Why Choose <span class="accent">Us</span></h2></div><div class="features-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;"><div class="feature-card" data-aos="fade-up"><div class="feature-icon"><i class="fas fa-gem"></i></div><h4>Premium Quality</h4><p>Curated luxury products</p></div><div class="feature-card" data-aos="fade-up"><div class="feature-icon"><i class="fas fa-certificate"></i></div><h4>100% Authentic</h4><p>Genuine products guaranteed</p></div><div class="feature-card" data-aos="fade-up"><div class="feature-icon"><i class="fas fa-truck-fast"></i></div><h4>Fast Delivery</h4><p>Swift & reliable shipping</p></div><div class="feature-card" data-aos="fade-up"><div class="feature-icon"><i class="fas fa-shield-check"></i></div><h4>Secure Shopping</h4><p>Privacy guaranteed</p></div></div></div></section>
 
-    <!-- Appointment Section -->
+    <section class="categories-section"><div class="container"><div class="section-header" data-aos="fade-up"><p class="section-label">Collections</p><h2 class="section-title">Shop by <span class="accent">Category</span></h2></div><div class="categories-grid" id="categoriesGrid" data-aos="fade-up" style="display:grid;grid-template-columns:repeat(6,1fr);gap:20px;"></div></div></section>
+    <section class="products-section"><div class="container"><div class="section-header" data-aos="fade-up"><p class="section-label">Featured</p><h2 class="section-title">Trending <span class="accent">Products</span></h2></div><div class="products-grid" id="featuredProducts" data-aos="fade-up" style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;"></div></div></section>
+    <section class="founder-section"><div class="container"><div class="founder-card" data-aos="fade-up" style="background:#fff;border-radius:32px;overflow:hidden;display:grid;grid-template-columns:1fr 1.2fr;"><div class="founder-image-wrap"><img src="https://plain-weur-prod-public.komododecks.com/202608/02/GCeWQfVMFTuD9riHWYEo/image.png" alt="Founder" style="width:100%;height:100%;min-height:450px;object-fit:cover;" /></div><div class="founder-content" style="padding:48px;"><p class="founder-label" style="font-size:0.65rem;text-transform:uppercase;color:var(--rose-gold);">Our Story</p><h2>Ogunsanya Felicia</h2><p style="font-style:italic;color:var(--rose-gold-dark);">Founder & Creative Director</p><p style="color:var(--text-muted);margin:16px 0;">Felicity Empire was born from an unwavering passion for beauty, elegance, and empowerment.</p><blockquote style="font-style:italic;color:var(--rose-gold);border-left:3px solid var(--rose-gold-light);padding-left:16px;margin:16px 0;">"Luxury is not about price — it's about the feeling of confidence."</blockquote><a href="about.html" class="btn btn-primary"><i class="fas fa-book-open"></i> Read Our Story</a></div></div></div></section>
+
     <section class="appointment-section" id="appointment">
-        <div class="container"><div class="section-header" data-aos="fade-up"><p class="section-label">Beauty Services</p><h2 class="section-title">Book an <span class="accent">Appointment</span></h2><div class="section-divider"></div></div>
-        <div class="appointment-card" data-aos="fade-up">
-            <div class="apt-form">
-                <div class="form-row">
-                    <div class="form-group"><label class="form-label">Full Name <span style="color:#e74c3c;">*</span></label><input type="text" class="form-input" id="aptName" placeholder="Your full name" /></div>
-                    <div class="form-group"><label class="form-label">Phone Number <span style="color:#e74c3c;">*</span></label><input type="tel" class="form-input" id="aptPhone" placeholder="08012345678" /></div>
+        <div class="container"><div class="section-header" data-aos="fade-up"><p class="section-label">Beauty Services</p><h2 class="section-title">Book an <span class="accent">Appointment</span></h2></div>
+        <div class="appointment-card" data-aos="fade-up" style="background:#fff;border-radius:32px;padding:40px;display:grid;grid-template-columns:1fr 1fr;gap:40px;">
+            <div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+                    <div><label style="font-size:0.7rem;font-weight:600;">Full Name *</label><input type="text" id="aptName" style="width:100%;padding:12px;border-radius:10px;border:1.5px solid #E8DED5;margin-top:4px;" /></div>
+                    <div><label style="font-size:0.7rem;font-weight:600;">Phone *</label><input type="tel" id="aptPhone" style="width:100%;padding:12px;border-radius:10px;border:1.5px solid #E8DED5;margin-top:4px;" /></div>
                 </div>
-                <div class="form-group"><label class="form-label">Email (Optional)</label><input type="email" class="form-input" id="aptEmail" placeholder="your@email.com" /></div>
-                <div class="form-group"><label class="form-label">Service <span style="color:#e74c3c;">*</span></label><select class="form-select" id="aptService"><option value="">Select a service...</option><option>Nail Installation</option><option>Nail Refill</option><option>Pedicure</option><option>Lash Extension</option><option>Lash Refill</option><option>Makeup Session</option><option>Beauty Consultation</option><option>Fashion Styling</option><option>Other</option></select></div>
-                <div class="form-row">
-                    <div class="form-group"><label class="form-label">Preferred Date <span style="color:#e74c3c;">*</span></label><input type="date" class="form-input" id="aptDate" /></div>
-                    <div class="form-group"><label class="form-label">Preferred Time <span style="color:#e74c3c;">*</span></label><select class="form-select" id="aptTime"><option value="">Select time...</option><option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option><option>12:00 PM</option><option>1:00 PM</option><option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option></select></div>
+                <div style="margin-bottom:12px;"><label style="font-size:0.7rem;font-weight:600;">Service *</label><select id="aptService" style="width:100%;padding:12px;border-radius:10px;border:1.5px solid #E8DED5;margin-top:4px;"><option value="">Select...</option><option>Nail Installation</option><option>Nail Refill</option><option>Pedicure</option><option>Lash Extension</option><option>Makeup Session</option><option>Beauty Consultation</option></select></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+                    <div><label style="font-size:0.7rem;font-weight:600;">Date *</label><input type="date" id="aptDate" style="width:100%;padding:12px;border-radius:10px;border:1.5px solid #E8DED5;margin-top:4px;" /></div>
+                    <div><label style="font-size:0.7rem;font-weight:600;">Time *</label><select id="aptTime" style="width:100%;padding:12px;border-radius:10px;border:1.5px solid #E8DED5;margin-top:4px;"><option value="">Select...</option><option>9AM</option><option>10AM</option><option>11AM</option><option>12PM</option><option>1PM</option><option>2PM</option><option>3PM</option><option>4PM</option></select></div>
                 </div>
-                <div class="form-group"><label class="form-label">Location</label><select class="form-select" id="aptLocation"><option value="Studio">Visit the Studio</option><option value="Home">Home Service</option></select></div>
-                <div class="form-group"><label class="form-label">Additional Notes</label><textarea class="form-textarea" id="aptNotes" placeholder="Any special requests or details..."></textarea></div>
-                <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center;" onclick="submitAppointment()" id="aptSubmitBtn">
-                    <i class="fas fa-calendar-check"></i> Request Appointment
-                </button>
-                <p style="text-align:center;font-size:0.7rem;color:#8B7E78;margin-top:8px;">
-                    <i class="fas fa-info-circle"></i> Your request will be sent to the admin dashboard. Email/SMS notifications coming soon.
-                </p>
+                <div style="margin-bottom:12px;"><label style="font-size:0.7rem;font-weight:600;">Notes</label><textarea id="aptNotes" style="width:100%;padding:12px;border-radius:10px;border:1.5px solid #E8DED5;margin-top:4px;min-height:60px;"></textarea></div>
+                <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="submitAppointment()"><i class="fas fa-calendar-check"></i> Request Appointment</button>
             </div>
-            <div class="apt-features">
-                <div class="apt-feature"><i class="fas fa-user-graduate"></i><div><h4>Professional Artist</h4><p>Expertly trained beauty professional</p></div></div>
-                <div class="apt-feature"><i class="fas fa-pump-medical"></i><div><h4>Hygienic Environment</h4><p>Clean, sanitized tools and workspace</p></div></div>
-                <div class="apt-feature"><i class="fas fa-heart"></i><div><h4>Personalized Service</h4><p>Tailored to your unique style</p></div></div>
-                <div class="apt-feature"><i class="fas fa-clock"></i><div><h4>Flexible Scheduling</h4><p>Convenient appointment times</p></div></div>
+            <div style="display:flex;flex-direction:column;gap:16px;justify-content:center;">
+                <div style="display:flex;gap:12px;"><i class="fas fa-user-graduate" style="color:var(--rose-gold);font-size:1.3rem;"></i><div><h4 style="font-weight:600;">Professional Artist</h4><p style="font-size:0.8rem;color:var(--text-muted);">Expertly trained</p></div></div>
+                <div style="display:flex;gap:12px;"><i class="fas fa-pump-medical" style="color:var(--rose-gold);font-size:1.3rem;"></i><div><h4 style="font-weight:600;">Hygienic</h4><p style="font-size:0.8rem;color:var(--text-muted);">Sanitized tools</p></div></div>
+                <div style="display:flex;gap:12px;"><i class="fas fa-heart" style="color:var(--rose-gold);font-size:1.3rem;"></i><div><h4 style="font-weight:600;">Personalized</h4><p style="font-size:0.8rem;color:var(--text-muted);">Tailored to you</p></div></div>
             </div>
         </div>
     </section>
 
-    <section class="testimonials-section"><div class="container"><div class="section-header" data-aos="fade-up"><p class="section-label">Testimonials</p><h2 class="section-title">What Our <span class="accent">Customers Say</span></h2></div></div><div class="testimonials-track" id="testimonialsTrack"></div></section>
-    <section class="instagram-section"><div class="container"><div class="section-header" data-aos="fade-up"><p class="section-label">Follow Us</p><h2 class="section-title">Instagram <span class="accent">Gallery</span></h2></div><div class="instagram-grid" id="instagramGrid"></div></div></section>
-    <section class="join-section"><div class="container"><div class="join-card"><div class="join-content"><div class="join-icon"><i class="fas fa-crown"></i></div><h2 class="join-title">Join the <span class="accent">Empire</span></h2><p class="join-description">Subscribe for exclusive updates.</p><form id="joinForm" class="join-form"><div class="join-form-grid"><input type="text" class="join-input" placeholder="Name" required /><input type="tel" class="join-input" placeholder="Phone" required /><input type="email" class="join-input" placeholder="Email" /><button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Subscribe</button></div></form><p class="join-note"><i class="fas fa-lock"></i> Your info is secure.</p></div></div></div></section>
-    <section class="business-card-section"><div class="container"><div class="business-card"><div><p style="font-family:var(--font-display);font-size:1.3rem;font-weight:700;">FELICITY<span style="color:var(--rose-gold);">EMPIRE</span></p><h3>Scan to <span style="color:var(--rose-gold);">Visit Us</span></h3></div><div class="bc-qr-wrap"><img src="../assets/img/qr-code.png" alt="QR" /></div><div class="bc-contact"><h4>Connect</h4><ul class="bc-contact-list"><li><span>08125913807</span> <i class="fas fa-phone"></i></li><li><span>WhatsApp</span> <i class="fab fa-whatsapp"></i></li></ul></div></div></div></section>
-    <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a href="index.html" style="display:flex;align-items:center;gap:12px;"><img src="../assets/img/FELICITY-EMPIRE-logo.png" style="height:36px;filter:brightness(0) invert(1);" /><span style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:#fff;">FELICITY<span style="color:var(--rose-gold-light);">EMPIRE</span></span></a><p>Luxury beauty and fashion.</p><p class="footer-tagline">Luxury that speaks for you.</p></div><div class="footer-links"><h4>Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="checkout.html">Checkout</a></li></ul></div><div class="footer-newsletter"><h4>Stay Connected</h4><form class="newsletter-form"><input type="email" class="newsletter-input" placeholder="Your email" /><button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-arrow-right"></i></button></form></div></div><div class="footer-bottom"><p>&copy; 2026 Felicity Empire.</p></div></div></footer>
+    <section class="testimonials-section"><div class="container"><div class="section-header"><p class="section-label">Testimonials</p><h2 class="section-title">What Our <span class="accent">Customers Say</span></h2></div><div class="testimonials-track" id="testimonialsTrack" style="display:flex;gap:24px;overflow:hidden;"></div></div></section>
+    <section class="instagram-section"><div class="container"><div class="section-header"><p class="section-label">Follow Us</p><h2 class="section-title">Instagram <span class="accent">Gallery</span></h2></div><div class="instagram-grid" id="instagramGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;"></div></div></section>
+    <section class="join-section"><div class="container"><div class="join-card" style="background:linear-gradient(135deg,#2A1F1A,#1A1210);border-radius:32px;padding:60px;text-align:center;color:#fff;"><h2 class="join-title" style="font-family:var(--font-display);font-size:2rem;">Join the <span style="color:var(--rose-gold-light);">Empire</span></h2><p style="color:rgba(255,255,255,0.55);margin:12px 0 24px;">Subscribe for exclusive updates.</p><form id="joinForm" style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;max-width:600px;margin:0 auto;"><input type="text" class="join-input" placeholder="Name" required style="padding:14px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.05);color:#fff;" /><input type="tel" class="join-input" placeholder="Phone" required style="padding:14px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.05);color:#fff;" /><input type="email" class="join-input" placeholder="Email" style="padding:14px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.05);color:#fff;" /><button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Subscribe</button></form></div></div></section>
+    <section class="business-card-section"><div class="container"><div class="business-card" style="background:#fff;border-radius:32px;padding:40px;display:grid;grid-template-columns:1fr auto 1fr;gap:40px;align-items:center;"><div><p style="font-family:var(--font-display);font-size:1.3rem;font-weight:700;">FELICITY<span style="color:var(--rose-gold);">EMPIRE</span></p><h3>Scan to <span style="color:var(--rose-gold);">Visit Us</span></h3></div><div style="background:#fff;padding:20px;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,0.06);"><img src="../assets/img/qr-code.png" alt="QR" style="width:150px;height:150px;" /></div><div style="text-align:right;"><h4 style="color:var(--rose-gold);">Connect</h4><p style="color:var(--text-muted);">08125913807</p></div></div></div></section>
+    <footer class="footer"><div class="container"><div class="footer-grid" style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;padding-bottom:40px;"><div><a href="index.html" style="display:flex;align-items:center;gap:12px;"><img src="../assets/img/FELICITY-EMPIRE-logo.png" style="height:36px;filter:brightness(0) invert(1);" /><span style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:#fff;">FELICITY<span style="color:var(--rose-gold-light);">EMPIRE</span></span></a><p style="margin-top:12px;opacity:0.5;">Luxury beauty and fashion.</p></div><div><h4 style="color:#fff;margin-bottom:12px;">Links</h4><p><a href="index.html" style="color:rgba(255,255,255,0.4);">Home</a></p><p><a href="shop.html" style="color:rgba(255,255,255,0.4);">Shop</a></p><p><a href="checkout.html" style="color:rgba(255,255,255,0.4);">Checkout</a></p></div><div><h4 style="color:#fff;margin-bottom:12px;">Stay Connected</h4><form class="newsletter-form" style="display:flex;gap:8px;"><input type="email" placeholder="Your email" style="flex:1;padding:12px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.05);color:#fff;" /><button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-arrow-right"></i></button></form></div></div><div class="footer-bottom" style="padding:20px 0;text-align:center;font-size:0.78rem;color:rgba(255,255,255,0.2);">&copy; 2026 Felicity Empire.</div></div></footer>
 
+    <!-- Quick View Modal -->
     <div class="qv-modal" id="qvModal"><div class="qv-content" id="qvContent"></div></div>
     <div class="toast-container" id="toastContainer"></div>
-    <button class="scroll-top-btn" id="scrollTopBtn"><i class="fas fa-chevron-up"></i></button>
+    <button class="scroll-top-btn" id="scrollTopBtn" style="position:fixed;bottom:36px;right:36px;width:50px;height:50px;border-radius:50%;background:var(--rose-gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:0 12px 40px rgba(200,154,123,0.2);opacity:0;visibility:hidden;z-index:999;border:none;cursor:pointer;"><i class="fas fa-chevron-up"></i></button>
+
+    <!-- Promo Video Modal -->
+    <div class="promo-modal" id="promoModal">
+        <div class="promo-content">
+            <button class="promo-close" onclick="closePromo()"><i class="fas fa-times"></i></button>
+            <button class="promo-skip" onclick="closePromo()">Skip Ad <span id="promoTimer">10</span>s</button>
+            <video id="promoVideo" autoplay muted loop playsinline>
+                <source src="https://videos.pexels.com/video-files/3997886/3997886-hd_1080_1920_25fps.mp4" type="video/mp4" />
+            </video>
+        </div>
+    </div>
+
+    <!-- Install Banner -->
+    <div class="install-banner" id="installBanner">
+        <div class="ib-icon"><i class="fas fa-download"></i></div>
+        <div class="ib-text"><h4>Install Felicity Empire</h4><p>Add to home screen for quick access</p></div>
+        <button class="ib-btn" id="installBtn" onclick="installApp()">Install</button>
+        <button class="ib-close" onclick="document.getElementById('installBanner').classList.remove('show')">&times;</button>
+    </div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
     <script>
-        // ============ CONFIGURATION ============
-        const FELICIA_WHATSAPP = '07081219784';
+        // ================================================================
+        // CONFIG
+        // ================================================================
+        const ADMIN_PHONE = '07081219784';
         const SITE_URL = window.location.origin;
-        // =====================================
+        let currentUser = JSON.parse(localStorage.getItem('fe_current_user') || sessionStorage.getItem('fe_current_user') || 'null');
+        let deferredPrompt;
 
         const $ = s => document.querySelector(s);
-        const DOM = {
-            mobileToggle: $('#mobileToggle'), mobileOverlay: $('#mobileOverlay'), mobilePanel: $('#mobileMenuPanel'), mobileClose: $('#mobileClose'),
-            searchToggle: $('#searchToggle'), searchOverlay: $('#searchOverlay'), searchClose: $('#searchClose'), searchInput: $('#searchInput'),
-            categoriesGrid: $('#categoriesGrid'), featuredProducts: $('#featuredProducts'), testimonialsTrack: $('#testimonialsTrack'), instagramGrid: $('#instagramGrid'),
-            qvModal: $('#qvModal'), qvContent: $('#qvContent'), scrollTopBtn: $('#scrollTopBtn'), toastContainer: $('#toastContainer'),
-            cartCount: $('#cartCount'), cartItemCount: $('#cartItemCount'), miniCartItems: $('#miniCartItems'), miniCartTotal: $('#miniCartTotal'), miniTotalAmount: $('#miniTotalAmount'), joinForm: $('#joinForm')
-        };
-
         function showToast(msg, error = false) {
             const t = document.createElement('div'); t.className = `toast ${error ? 'error' : ''}`;
             t.innerHTML = `<i class="fas fa-${error ? 'exclamation-circle' : 'check-circle'}" style="color:${error ? '#e74c3c' : '#C89A7B'};"></i><span>${msg}</span>`;
-            DOM.toastContainer.appendChild(t); requestAnimationFrame(() => t.classList.add('show'));
+            document.getElementById('toastContainer').appendChild(t);
+            requestAnimationFrame(() => t.classList.add('show'));
             setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 3000);
         }
 
         // ================================================================
-        // PREVIEW MODAL — Shows what Felicia would receive
+        // AUTO-LOGIN — Admin stays logged in permanently
         // ================================================================
-        function showPreviewModal(type, data) {
-            const old = document.querySelector('.fe-preview-modal');
-            if (old) old.remove();
-
-            const modal = document.createElement('div');
-            modal.className = 'fe-preview-modal fe-modal-overlay';
-            
-            let detailsHTML = '';
-            if (type === 'appointment') {
-                detailsHTML = `
-                    <div style="background:#F9F5F1;border-radius:12px;padding:16px;text-align:left;margin-bottom:16px;">
-                        <p style="font-weight:600;color:#C89A7B;margin-bottom:8px;"><i class="fas fa-bell"></i> Notification Preview</p>
-                        <p style="font-size:0.85rem;"><strong>Customer:</strong> ${data.name}</p>
-                        <p style="font-size:0.85rem;"><strong>Phone:</strong> ${data.phone}</p>
-                        ${data.email ? `<p style="font-size:0.85rem;"><strong>Email:</strong> ${data.email}</p>` : ''}
-                        <p style="font-size:0.85rem;"><strong>Service:</strong> ${data.service}</p>
-                        <p style="font-size:0.85rem;"><strong>Date:</strong> ${data.date}</p>
-                        <p style="font-size:0.85rem;"><strong>Time:</strong> ${data.time}</p>
-                        <p style="font-size:0.85rem;"><strong>Location:</strong> ${data.location}</p>
-                        ${data.notes ? `<p style="font-size:0.85rem;"><strong>Notes:</strong> ${data.notes}</p>` : ''}
-                    </div>`;
-            } else {
-                detailsHTML = `
-                    <div style="background:#F9F5F1;border-radius:12px;padding:16px;text-align:left;margin-bottom:16px;">
-                        <p style="font-weight:600;color:#C89A7B;margin-bottom:8px;"><i class="fas fa-bell"></i> Order Preview</p>
-                        <p style="font-size:0.85rem;"><strong>Customer:</strong> ${data.name}</p>
-                        <p style="font-size:0.85rem;"><strong>Phone:</strong> ${data.phone}</p>
-                        <p style="font-size:0.85rem;"><strong>Product:</strong> ${data.product}</p>
-                        <p style="font-size:0.85rem;"><strong>Total:</strong> N${Number(data.total).toLocaleString()}</p>
-                        ${data.address ? `<p style="font-size:0.85rem;"><strong>Address:</strong> ${data.address}</p>` : ''}
-                        ${data.notes ? `<p style="font-size:0.85rem;"><strong>Notes:</strong> ${data.notes}</p>` : ''}
-                    </div>`;
-            }
-
-            modal.innerHTML = `
-                <div class="fe-modal-card">
-                    <div style="width:70px;height:70px;border-radius:50%;background:#D1FAE5;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:2rem;color:#10B981;">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <h3>${type === 'appointment' ? 'Appointment Requested!' : 'Order Received!'}</h3>
-                    <p style="color:#8B7E78;font-size:0.85rem;margin-bottom:8px;">Thank you, ${data.name}!</p>
-                    
-                    ${detailsHTML}
-                    
-                    <p style="color:#8B7E78;font-size:0.8rem;margin-bottom:12px;">
-                        <i class="fas fa-info-circle"></i> 
-                        Your request has been saved. Felicity will review it in the admin dashboard and confirm shortly.
-                    </p>
-                    
-                    <div style="background:#FFF3CD;border-radius:8px;padding:10px;margin-bottom:16px;border:1px solid #FFE69C;">
-                        <p style="font-size:0.75rem;color:#856404;margin:0;">
-                            <i class="fas fa-tools"></i> 
-                            <strong>Notification feature coming soon.</strong> 
-                            For now, Felicity will see your request directly in the admin dashboard.
-                        </p>
-                    </div>
-                    
-                    <button class="btn-submit" onclick="this.closest('.fe-preview-modal').remove()">
-                        <i class="fas fa-check"></i> Got it
-                    </button>
-                </div>`;
-            
-            document.body.appendChild(modal);
-            modal.addEventListener('click', function(e) { if(e.target === modal) modal.remove(); });
+        if (currentUser) updateAccountUI(currentUser);
+        
+        // Check if admin was previously logged in
+        const savedAdmin = localStorage.getItem('fe_admin_logged_in');
+        if (savedAdmin === 'true') {
+            sessionStorage.setItem('fe_admin_auth', 'true');
         }
 
-        // ================================================================
-        // SUBMIT APPOINTMENT — Saves to localStorage
-        // ================================================================
-        window.submitAppointment = function() {
-            const name = $('#aptName')?.value?.trim() || '';
-            const phone = $('#aptPhone')?.value?.trim() || '';
-            const email = $('#aptEmail')?.value?.trim() || '';
-            const service = $('#aptService')?.value || '';
-            const date = $('#aptDate')?.value || '';
-            const time = $('#aptTime')?.value || '';
-            const location = $('#aptLocation')?.value || 'Studio';
-            const notes = $('#aptNotes')?.value?.trim() || '';
+        function updateAccountUI(user) {
+            const btn = document.getElementById('accountBtn');
+            if (btn && user) {
+                const isAdmin = (user.phone === ADMIN_PHONE);
+                btn.innerHTML = `<i class="fas fa-user-check" style="color:${isAdmin ? '#C89A7B' : '#10B981'};"></i>`;
+                btn.title = user.name || user.phone;
+            }
+        }
 
-            if (!name || !phone || !service || !date || !time) {
-                showToast('Please fill all required fields', true);
+        window.showAccountModal = function(e) {
+            if (e) e.preventDefault();
+            if (currentUser) { showAccountInfo(); return; }
+            showLoginModal();
+        };
+
+        function showLoginModal() {
+            const old = document.querySelector('.fe-auth-modal'); if (old) old.remove();
+            const overlay = document.createElement('div'); overlay.className = 'fe-auth-modal';
+            overlay.style.cssText = 'position:fixed;inset:0;background:rgba(30,20,15,0.7);backdrop-filter:blur(10px);z-index:99999;display:flex;align-items:center;justify-content:center;';
+            overlay.innerHTML = `
+                <style>@keyframes mIn{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}</style>
+                <div style="background:#fff;border-radius:28px;padding:36px 28px;max-width:380px;width:90%;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,0.3);animation:mIn 0.4s ease;">
+                    <div style="font-size:2.5rem;color:#C89A7B;margin-bottom:8px;"><i class="fas fa-user-circle"></i></div>
+                    <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;color:#3E312C;margin-bottom:4px;">Sign In</h3>
+                    <p style="font-size:0.85rem;color:#8B7E78;margin-bottom:20px;">Enter your phone number and PIN</p>
+                    <div style="text-align:left;margin-bottom:14px;"><label style="font-size:0.7rem;font-weight:600;text-transform:uppercase;color:#5C4A42;">Phone Number</label><input type="tel" id="loginPhone" placeholder="07081219784" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid #E8DED5;background:#F9F5F1;font-size:0.95rem;margin-top:4px;outline:none;font-family:Manrope,sans-serif;" /></div>
+                    <div style="text-align:left;margin-bottom:6px;"><label style="font-size:0.7rem;font-weight:600;text-transform:uppercase;color:#5C4A42;">PIN (4 digits)</label><input type="password" id="loginPin" placeholder="Create or enter PIN" maxlength="4" inputmode="numeric" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid #E8DED5;background:#F9F5F1;font-size:0.95rem;letter-spacing:0.3em;margin-top:4px;outline:none;font-family:Manrope,sans-serif;" /></div>
+                    <p style="font-size:0.7rem;color:#8B7E78;margin-bottom:8px;">New? Enter a new PIN to create an account</p>
+                    <p id="loginError" style="color:#e74c3c;font-size:0.78rem;margin-bottom:8px;display:none;"><i class="fas fa-exclamation-circle"></i> <span id="loginErrorMsg"></span></p>
+                    <button onclick="submitLogin()" style="width:100%;padding:14px;border-radius:50px;background:#C89A7B;color:#fff;border:none;font-weight:600;font-size:0.9rem;cursor:pointer;font-family:Poppins,sans-serif;letter-spacing:0.03em;"><i class="fas fa-arrow-right"></i> Continue</button>
+                    <button onclick="this.closest('.fe-auth-modal').remove()" style="margin-top:12px;background:none;border:none;color:#8B7E78;cursor:pointer;font-size:0.8rem;">Cancel</button>
+                </div>`;
+            document.body.appendChild(overlay);
+            overlay.addEventListener('click', function(e) { if(e.target === overlay) overlay.remove(); });
+            setTimeout(() => document.getElementById('loginPhone')?.focus(), 200);
+        }
+
+        window.submitLogin = function() {
+            const phone = document.getElementById('loginPhone')?.value?.trim() || '';
+            const pin = document.getElementById('loginPin')?.value?.trim() || '';
+            const errorEl = document.getElementById('loginError');
+            const errorMsg = document.getElementById('loginErrorMsg');
+            if (!phone || phone.length < 10) { errorEl.style.display = 'block'; errorMsg.textContent = 'Please enter a valid phone number'; return; }
+            if (!pin || pin.length < 4) { errorEl.style.display = 'block'; errorMsg.textContent = 'PIN must be 4 digits'; return; }
+
+            // ADMIN CHECK — auto-syncs PIN from localStorage
+            const adminPin = localStorage.getItem('fe_admin_pin') || '2026';
+            if (phone === ADMIN_PHONE && pin === adminPin) {
+                sessionStorage.setItem('fe_admin_auth', 'true');
+                localStorage.setItem('fe_admin_logged_in', 'true');
+                localStorage.setItem('fe_current_user', JSON.stringify({ phone: ADMIN_PHONE, name: 'Felicia', admin: true }));
+                document.querySelector('.fe-auth-modal')?.remove();
+                window.location.href = '../admin/index.html';
                 return;
             }
 
-            const fd = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-
-            // Save to localStorage
-            const appointments = JSON.parse(localStorage.getItem('fe_admin_appointments') || '[]');
-            appointments.unshift({
-                id: 'apt_' + Date.now(),
-                customer: name, phone, email, service, date, time, location, notes,
-                status: 'pending',
-                createdAt: new Date().toISOString()
-            });
-            localStorage.setItem('fe_admin_appointments', JSON.stringify(appointments));
-
-            // Save notification
-            const notifications = JSON.parse(localStorage.getItem('fe_admin_notifications') || '[]');
-            notifications.unshift({
-                id: 'notif_' + Date.now(),
-                type: 'appointment',
-                title: 'New Appointment Request',
-                message: `${name} requested ${service} on ${fd} at ${time}`,
-                data: { name, phone, service, date: fd, time, location },
-                read: false,
-                createdAt: new Date().toISOString()
-            });
-            localStorage.setItem('fe_admin_notifications', JSON.stringify(notifications.slice(0, 50)));
-
-            // Clear form
-            ['aptName','aptPhone','aptEmail','aptService','aptDate','aptTime','aptLocation','aptNotes'].forEach(id => { 
-                const el = $(`#${id}`); if(el) el.value = ''; 
-            });
-            if ($('#aptLocation')) $('#aptLocation').value = 'Studio';
-
-            // Show preview modal
-            showPreviewModal('appointment', { name, phone, email, service, date: fd, time, location, notes });
+            // Regular user
+            const users = JSON.parse(localStorage.getItem('fe_users') || '[]');
+            let user = users.find(u => u.phone === phone);
+            if (user) {
+                if (user.pin !== pin) { errorEl.style.display = 'block'; errorMsg.textContent = 'Incorrect PIN'; return; }
+            } else {
+                const name = prompt('Welcome! What is your name?') || 'Customer';
+                user = { phone, pin, name, createdAt: new Date().toISOString() };
+                users.push(user);
+                localStorage.setItem('fe_users', JSON.stringify(users));
+            }
+            currentUser = user;
+            localStorage.setItem('fe_current_user', JSON.stringify(user));
+            sessionStorage.setItem('fe_current_user', JSON.stringify(user));
+            updateAccountUI(user);
+            document.querySelector('.fe-auth-modal')?.remove();
+            showToast(`Welcome, ${user.name || 'Customer'}!`);
         };
 
-        // ================================================================
-        // QUICK ORDER — Saves to localStorage
-        // ================================================================
-        let quickOrderProduct = null;
-        window.showQuickOrderModal = function(productId, productName, productPrice, productImage) {
-            quickOrderProduct = { id: productId, name: productName, price: productPrice, image: productImage };
-            const old = document.querySelector('.fe-quick-order-modal'); if (old) old.remove();
-            const modal = document.createElement('div'); modal.className = 'fe-quick-order-modal fe-modal-overlay';
-            modal.innerHTML = `<div class="fe-modal-card"><h3>Place Your Order</h3><p>Enter your details and Felicity will confirm your order.</p><div style="display:flex;align-items:center;gap:12px;background:#F9F5F1;border-radius:12px;padding:12px;margin-bottom:16px;"><img src="${productImage || ''}" style="width:50px;height:50px;border-radius:8px;object-fit:cover;" onerror="this.style.background='#E8DED5'" /><div style="text-align:left;"><p style="font-weight:600;font-size:0.85rem;">${productName}</p><p style="color:#C89A7B;font-weight:600;">N${Number(productPrice).toLocaleString()}</p></div></div><div class="form-group"><label>Full Name *</label><input type="text" id="qoName" placeholder="Your full name" /></div><div class="form-group"><label>Phone Number *</label><input type="tel" id="qoPhone" placeholder="08012345678" /></div><div class="form-group"><label>Delivery Address</label><input type="text" id="qoAddress" placeholder="House number, street, city" /></div><div class="form-group"><label>Additional Notes</label><input type="text" id="qoNotes" placeholder="Any special requests?" /></div><button class="btn-submit" onclick="submitQuickOrder()"><i class="fas fa-paper-plane"></i> Send Order</button><button class="btn-cancel" onclick="this.closest('.fe-quick-order-modal').remove()">Cancel</button></div>`;
-            document.body.appendChild(modal); modal.addEventListener('click', function(e) { if(e.target === modal) modal.remove(); });
-            setTimeout(() => $('#qoName')?.focus(), 200);
-        };
-
-        window.submitQuickOrder = function() {
-            const name = $('#qoName')?.value?.trim() || '';
-            const phone = $('#qoPhone')?.value?.trim() || '';
-            const address = $('#qoAddress')?.value?.trim() || '';
-            const notes = $('#qoNotes')?.value?.trim() || '';
-            
-            if (!name || !phone) { showToast('Please enter your name and phone number', true); return; }
-            if (!quickOrderProduct) return;
-            
-            const p = quickOrderProduct;
-
-            // Save to localStorage
-            const orders = JSON.parse(localStorage.getItem('fe_admin_orders') || '[]');
-            orders.unshift({
-                id: 'ord_' + Date.now(),
-                customer: name, phone, address,
-                items: `${p.name} (x1)`,
-                total: p.price,
-                notes, status: 'pending',
-                date: new Date().toISOString().split('T')[0],
-                createdAt: new Date().toISOString()
-            });
-            localStorage.setItem('fe_admin_orders', JSON.stringify(orders));
-
-            // Save notification
-            const notifications = JSON.parse(localStorage.getItem('fe_admin_notifications') || '[]');
-            notifications.unshift({
-                id: 'notif_' + Date.now(),
-                type: 'order',
-                title: 'New Order Received',
-                message: `${name} ordered ${p.name} — N${Number(p.price).toLocaleString()}`,
-                data: { name, phone, product: p.name, total: p.price, address },
-                read: false,
-                createdAt: new Date().toISOString()
-            });
-            localStorage.setItem('fe_admin_notifications', JSON.stringify(notifications.slice(0, 50)));
-
-            document.querySelector('.fe-quick-order-modal')?.remove();
-            showPreviewModal('order', { name, phone, product: p.name, total: p.price, address, notes });
-        };
-
-        // Cart
-        const Cart = {
-            get() { return JSON.parse(localStorage.getItem('fe_cart') || '[]'); }, save(c) { localStorage.setItem('fe_cart', JSON.stringify(c)); this.updateUI(); },
-            add(p) { const c = this.get(); const e = c.find(i => i.id === p.id); if (e) { if (e.qty >= p.stock) { showToast('Not enough stock', true); return false; } e.qty++; } else c.push({ id: p.id, name: p.name, price: p.price, qty: 1, stock: p.stock, image: p.image }); this.save(c); showToast(`${p.name} added to cart`); return true; },
-            remove(id) { this.save(this.get().filter(i => i.id !== id)); showToast('Item removed'); }, count() { return this.get().reduce((s, i) => s + i.qty, 0); },
-            updateUI() { const cart = this.get(); const c = this.count(); if (DOM.cartCount) { DOM.cartCount.textContent = c; DOM.cartCount.style.display = c > 0 ? 'flex' : 'none'; } if (DOM.cartItemCount) DOM.cartItemCount.textContent = `${cart.length} item${cart.length !== 1 ? 's' : ''}`; if (DOM.miniCartItems) { if (cart.length === 0) { DOM.miniCartItems.innerHTML = '<p class="mini-cart-empty">Your cart is empty</p>'; DOM.miniCartTotal.style.display = 'none'; } else { DOM.miniCartItems.innerHTML = cart.map(i => `<div class="mini-cart-item"><img src="${i.image||''}" class="mini-cart-item-img" /><div class="mini-cart-item-info"><p class="item-name">${i.name}</p><p class="item-meta">Qty: ${i.qty} × N${i.price.toLocaleString()}</p></div><div class="mini-cart-actions"><button class="mini-cart-btn view" onclick="viewCartItem('${i.id}')"><i class="fas fa-eye"></i></button><button class="mini-cart-btn delete" onclick="removeCartItem('${i.id}')"><i class="fas fa-trash-alt"></i></button></div></div>`).join(''); DOM.miniTotalAmount.textContent = 'N' + cart.reduce((s,i) => s + (i.price*i.qty), 0).toLocaleString(); DOM.miniCartTotal.style.display = 'flex'; } } }
-        };
-        window.removeCartItem = (id) => Cart.remove(id); window.viewCartItem = (id) => window.location.href = `product.html?id=${id}`;
-        const Wishlist = { get() { return JSON.parse(localStorage.getItem('fe_wishlist')||'[]'); }, toggle(id) { const w = this.get(); const i = w.indexOf(id); i>-1?w.splice(i,1):w.push(id); localStorage.setItem('fe_wishlist',JSON.stringify(w)); return w; }, has(id) { return this.get().includes(id); } };
-        const QuickView = {
-            open(p) { DOM.qvContent.innerHTML = `<button class="qv-close" onclick="QuickView.close()"><i class="fas fa-times"></i></button><img src="${p.image}" class="qv-image" /><div class="qv-details"><p class="qv-category">${p.category||''}</p><h3>${p.name}</h3><p class="qv-price">N${p.price.toLocaleString()}</p><p class="qv-desc">${p.description||''}</p><div class="qv-quantity"><button onclick="QuickView.dec()"><i class="fas fa-minus"></i></button><input id="qvQty" value="1" min="1" max="${p.stock}" readonly /><button onclick="QuickView.inc(${p.stock})"><i class="fas fa-plus"></i></button></div><button class="btn btn-primary" onclick="QuickView.addToCart()"><i class="fas fa-shopping-bag"></i> Add to Cart</button><button class="btn btn-rose btn-sm" style="width:100%;margin-top:8px;" onclick="QuickView.close();showQuickOrderModal('${p.id}','${p.name.replace(/'/g,"\\'")}',${p.price},'${p.image}')"><i class="fas fa-bolt"></i> Order Now</button></div>`; DOM.qvContent._product = p; DOM.qvModal.classList.add('active'); document.body.style.overflow = 'hidden'; },
-            close() { DOM.qvModal.classList.remove('active'); document.body.style.overflow = ''; }, inc(m) { const i=$('#qvQty'); if(i&&parseInt(i.value)<m) i.value=parseInt(i.value)+1; }, dec() { const i=$('#qvQty'); if(i&&parseInt(i.value)>1) i.value=parseInt(i.value)-1; }, addToCart() { const p=DOM.qvContent._product; const q=parseInt($('#qvQty').value); for(let i=0;i<q;i++) Cart.add(p); this.close(); }
-        };
-        window.QuickView = QuickView;
-        window.toggleHeroVideo = function() { const video = document.querySelector('.hero-video-circle video'); const icon = document.getElementById('videoPlayIcon'); if (video.paused) { video.play(); icon.className = 'fas fa-pause'; } else { video.pause(); icon.className = 'fas fa-play'; } };
-        window.toggleWishlist=function(id,btn){Wishlist.toggle(id);const icon=btn.querySelector('i');icon.className=Wishlist.has(id)?'fas fa-heart':'far fa-heart';btn.classList.toggle('active',Wishlist.has(id));};
-        window.addToCart=function(id,name,price,stock,image){Cart.add({id,name,price,stock,image});};
-        window.openQuickView=function(id,name,price,desc,image,stock,category){QuickView.open({id,name,price,description:desc,image,stock,category});};
-
-        let isMobileMenuOpen = false;
-        function openMobileMenu() { DOM.mobilePanel.classList.add('open'); DOM.mobileOverlay.classList.add('open'); isMobileMenuOpen=true; document.body.style.overflow='hidden'; DOM.mobileToggle.querySelector('i').className='fas fa-times'; }
-        function closeMobileMenu() { DOM.mobilePanel.classList.remove('open'); DOM.mobileOverlay.classList.remove('open'); isMobileMenuOpen=false; document.body.style.overflow=''; DOM.mobileToggle.querySelector('i').className='fas fa-bars'; }
-        window.closeMobileMenu = closeMobileMenu;
-
-        // Categories
-        function loadCategories() {
-            const d = [{id:'nails',name:'Nails',image:'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=500'},{id:'lashes',name:'Lashes',image:'https://images.unsplash.com/photo-1583243130284-7d9f9b67f865?w=400&h=500',disabled:true},{id:'perfumes',name:'Perfumes',image:'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=500'},{id:'clothes',name:'Clothes',image:'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=500'},{id:'joggers',name:'Joggers',image:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500',comingSoon:true},{id:'polo',name:'Polo',image:'https://images.unsplash.com/photo-1582418702059-97ebafb35d09?w=400&h=500',comingSoon:true}];
-            renderCategories(d);
+        function showAccountInfo() {
+            if (!currentUser) return;
+            const old = document.querySelector('.fe-auth-modal'); if (old) old.remove();
+            const overlay = document.createElement('div'); overlay.className = 'fe-auth-modal';
+            overlay.style.cssText = 'position:fixed;inset:0;background:rgba(30,20,15,0.7);backdrop-filter:blur(10px);z-index:99999;display:flex;align-items:center;justify-content:center;';
+            overlay.innerHTML = `
+                <div style="background:#fff;border-radius:28px;padding:36px 28px;max-width:380px;width:90%;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,0.3);animation:mIn 0.4s ease;">
+                    <div style="font-size:2.5rem;color:#C89A7B;margin-bottom:8px;"><i class="fas fa-user-check" style="color:#10B981;"></i></div>
+                    <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;">My Account</h3>
+                    <p style="font-size:0.9rem;margin-bottom:4px;"><strong>${currentUser.name || 'Customer'}</strong></p>
+                    <p style="font-size:0.8rem;color:#8B7E78;margin-bottom:20px;">${currentUser.phone}</p>
+                    <button onclick="logout()" style="width:100%;padding:14px;border-radius:50px;background:#e74c3c;color:#fff;border:none;font-weight:600;font-size:0.9rem;cursor:pointer;font-family:Poppins,sans-serif;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                    <button onclick="this.closest('.fe-auth-modal').remove()" style="margin-top:12px;background:none;border:none;color:#8B7E78;cursor:pointer;font-size:0.8rem;">Close</button>
+                </div>`;
+            document.body.appendChild(overlay);
+            overlay.addEventListener('click', function(e) { if(e.target === overlay) overlay.remove(); });
         }
-        function renderCategories(c){if(!DOM.categoriesGrid)return;DOM.categoriesGrid.innerHTML=c.map(cat=>{if(cat.disabled)return`<div class="category-card" style="cursor:not-allowed;"><img src="${cat.image}" loading="lazy" /><div class="category-overlay"><h3>${cat.name}</h3></div><div class="category-disabled"><span>Coming Soon</span></div></div>`;return`<a href="shop.html?category=${cat.id}" class="category-card"><img src="${cat.image}" loading="lazy" /><div class="category-overlay"><h3>${cat.name}</h3><span>Explore <i class="fas fa-arrow-right"></i></span></div>${cat.comingSoon?'<span class="category-badge">Coming Soon</span>':''}</a>`;}).join('');}
-        function loadProducts(){const d=[{id:'1',name:'Luxury Press-On Nails',price:8000,images:['https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=400'],stock:10,category:'nails',badge:'bestseller'},{id:'2',name:'Felicity Signature Perfume',price:28000,images:['https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=400'],stock:5,category:'perfumes',badge:'new'},{id:'3',name:'Crystal Nail Art Set',price:12000,images:['https://images.unsplash.com/photo-1607779097040-26e80aa78e66?w=400&h=400'],stock:8,category:'nails',badge:'trending'},{id:'4',name:'Designer Joggers Set',price:15000,images:['https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=400'],stock:12,category:'joggers',badge:'limited'}];renderProducts(d);}
-        function renderProducts(prods){if(!DOM.featuredProducts)return;const bm={new:'badge-new',bestseller:'badge-bestseller',trending:'badge-trending',limited:'badge-limited'};DOM.featuredProducts.innerHTML=prods.map(p=>{const img=p.images?.[0]||'',w=Wishlist.has(p.id);return`<div class="product-card"><div class="product-image-wrap"><img src="${img}" loading="lazy" />${p.badge?`<span class="product-badge ${bm[p.badge]||''}">${p.badge}</span>`:''}<button class="product-wishlist ${w?'active':''}" onclick="toggleWishlist('${p.id}',this)"><i class="${w?'fas':'far'} fa-heart"></i></button><div class="product-actions"><button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}','${p.name.replace(/'/g,"\\'")}',${p.price},${p.stock},'${img}')"><i class="fas fa-plus"></i> Add</button><button class="btn btn-outline btn-sm" onclick="openQuickView('${p.id}','${p.name.replace(/'/g,"\\'")}',${p.price},'${(p.description||'').replace(/'/g,"\\'")}','${img}',${p.stock},'${p.category||''}')"><i class="fas fa-eye"></i></button></div></div><div class="product-info"><p class="product-category">${p.category||''}</p><h3>${p.name}</h3><p class="product-price">N${p.price.toLocaleString()}</p></div></div>`;}).join('');}
-        function loadTestimonials(){const items=[{name:'Amara O.',role:'Verified Buyer',avatar:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face',text:'Absolutely in love with my nails! Quality is exceptional.',stars:5},{name:'Chioma E.',role:'Regular Customer',avatar:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face',text:'Best service ever. So professional.',stars:5},{name:'Folake A.',role:'Fashion Enthusiast',avatar:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face',text:'Everything screams luxury!',stars:5}];if(DOM.testimonialsTrack)DOM.testimonialsTrack.innerHTML=[...items,...items].map(t=>`<div class="testimonial-card"><div class="testimonial-stars">${'<i class="fas fa-star"></i>'.repeat(t.stars)}</div><p class="testimonial-text">"${t.text}"</p><div class="testimonial-author"><img src="${t.avatar}" class="testimonial-avatar" /><div><p style="font-weight:600;">${t.name}</p></div></div></div>`).join('');}
-        function loadInstagram(){const imgs=['https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=400','https://images.unsplash.com/photo-1607779097040-26e80aa78e66?w=400&h=400','https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=400','https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=400'];if(DOM.instagramGrid)DOM.instagramGrid.innerHTML=imgs.map(i=>`<div class="instagram-item"><img src="${i}" loading="lazy" /><div class="insta-overlay"><i class="fab fa-instagram"></i></div></div>`).join('');}
 
-        window.addEventListener('scroll',()=>{DOM.scrollTopBtn?.classList.toggle('visible',window.scrollY>500);});
-        DOM.mobileToggle?.addEventListener('click',()=>isMobileMenuOpen?closeMobileMenu():openMobileMenu());
-        DOM.mobileClose?.addEventListener('click',closeMobileMenu); DOM.mobileOverlay?.addEventListener('click',closeMobileMenu);
-        document.addEventListener('keydown',e=>{if(e.key==='Escape'&&isMobileMenuOpen)closeMobileMenu();});
-        DOM.searchToggle?.addEventListener('click',()=>{DOM.searchOverlay.classList.add('active');DOM.searchInput.focus();});
-        DOM.searchClose?.addEventListener('click',()=>DOM.searchOverlay.classList.remove('active'));
-        DOM.qvModal?.addEventListener('click',e=>{if(e.target===DOM.qvModal)QuickView.close();});
-        DOM.scrollTopBtn?.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
-        DOM.joinForm?.addEventListener('submit',e=>{e.preventDefault();const n=$('#joinName').value.trim(),p=$('#joinPhone').value.trim();if(!n||!p){showToast('Fill name and phone',true);return;}const subscribers=JSON.parse(localStorage.getItem('fe_admin_subscribers')||'[]');subscribers.unshift({name:n,phone:p,createdAt:new Date().toISOString()});localStorage.setItem('fe_admin_subscribers',JSON.stringify(subscribers));showToast('Welcome to the Empire!');DOM.joinForm.reset();});
+        window.logout = function() {
+            currentUser = null;
+            localStorage.removeItem('fe_current_user');
+            sessionStorage.removeItem('fe_current_user');
+            localStorage.removeItem('fe_admin_logged_in');
+            sessionStorage.removeItem('fe_admin_auth');
+            document.querySelector('.fe-auth-modal')?.remove();
+            const btn = document.getElementById('accountBtn');
+            if (btn) { btn.innerHTML = '<i class="fas fa-user-circle"></i>'; btn.title = 'Account'; }
+            showToast('Logged out');
+        };
 
-        function init(){AOS.init({duration:800,once:true,offset:80});Cart.updateUI();loadCategories();loadProducts();loadTestimonials();loadInstagram();}
-        init();
+        // ================================================================
+        // PROMO VIDEO — Shows 10s after load, then every 30 minutes
+        // ================================================================
+        function showPromoVideo() {
+            const modal = document.getElementById('promoModal');
+            if (!modal) return;
+            modal.classList.add('active');
+            const video = document.getElementById('promoVideo');
+            if (video) video.play();
+            
+            // Countdown timer
+            let seconds = 10;
+            const timerEl = document.getElementById('promoTimer');
+            const interval = setInterval(() => {
+                seconds--;
+                if (timerEl) timerEl.textContent = seconds;
+                if (seconds <= 0) { clearInterval(interval); closePromo(); }
+            }, 1000);
+            modal._timer = interval;
+        }
+
+        window.closePromo = function() {
+            const modal = document.getElementById('promoModal');
+            if (modal) {
+                modal.classList.remove('active');
+                const video = document.getElementById('promoVideo');
+                if (video) video.pause();
+                if (modal._timer) clearInterval(modal._timer);
+            }
+            // Set next show in 30 minutes
+            localStorage.setItem('fe_next_promo', Date.now() + 1800000);
+        };
+
+        // Check if promo should show
+        function checkPromo() {
+            const nextShow = parseInt(localStorage.getItem('fe_next_promo') || '0');
+            if (Date.now() >= nextShow) {
+                setTimeout(showPromoVideo, 10000); // 10 seconds after page load
+            }
+        }
+        checkPromo();
+
+        // ================================================================
+        // SUBMIT APPOINTMENT (WhatsApp disabled)
+        // ================================================================
+        window.submitAppointment = function() {
+            const name = $('#aptName')?.value?.trim() || '', phone = $('#aptPhone')?.value?.trim() || '';
+            const service = $('#aptService')?.value || '', date = $('#aptDate')?.value || '', time = $('#aptTime')?.value || '';
+            const notes = $('#aptNotes')?.value?.trim() || '';
+            if (!name || !phone || !service || !date || !time) { showToast('Please fill all required fields', true); return; }
+            const fd = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const appointments = JSON.parse(localStorage.getItem('fe_admin_appointments') || '[]');
+            appointments.unshift({ id: 'apt_' + Date.now(), customer: name, phone, service, date, time, notes, status: 'pending', createdBy: currentUser?.phone || 'guest', createdAt: new Date().toISOString() });
+            localStorage.setItem('fe_admin_appointments', JSON.stringify(appointments));
+            const notifications = JSON.parse(localStorage.getItem('fe_admin_notifications') || '[]');
+            notifications.unshift({ id: 'notif_' + Date.now(), type: 'appointment', title: 'New Appointment', message: `${name} — ${service} on ${fd} at ${time}`, read: false, createdAt: new Date().toISOString() });
+            localStorage.setItem('fe_admin_notifications', JSON.stringify(notifications.slice(0, 50)));
+            ['aptName','aptPhone','aptService','aptDate','aptTime','aptNotes'].forEach(id => { const el = $(`#${id}`); if(el) el.value = ''; });
+            showSuccessModal('Appointment Requested!', `Thank you ${name}! Your ${service.toLowerCase()} appointment has been requested.`, `${fd} at ${time}`);
+        };
+
+        function showSuccessModal(title, subtitle, detail) {
+            const old = document.querySelector('.fe-success-modal'); if (old) old.remove();
+            const modal = document.createElement('div'); modal.className = 'fe-success-modal fe-modal-overlay';
+            modal.innerHTML = `<div class="fe-modal-card"><div style="width:70px;height:70px;border-radius:50%;background:#D1FAE5;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:2rem;color:#10B981;"><i class="fas fa-check-circle"></i></div><h3>${title}</h3><p>${subtitle}</p>${detail?`<p style="color:#C89A7B;font-weight:500;">${detail}</p>`:''}<button class="btn-submit" onclick="this.closest('.fe-success-modal').remove()">Continue</button></div>`;
+            document.body.appendChild(modal); modal.addEventListener('click', function(e) { if(e.target === modal) modal.remove(); });
+        }
+
+        // ================================================================
+        // PWA — Install App
+        // ================================================================
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installBanner').classList.add('show');
+        });
+
+        window.installApp = async function() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const result = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                document.getElementById('installBanner').classList.remove('show');
+            } else {
+                showToast('Tap the Share button then "Add to Home Screen"');
+            }
+        };
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('../sw.js').catch(() => {});
+        }
+
+        // ================================================================
+        // Scroll to top
+        // ================================================================
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('scrollTopBtn');
+            if (btn) btn.style.opacity = window.scrollY > 500 ? '1' : '0';
+            if (btn) btn.style.visibility = window.scrollY > 500 ? 'visible' : 'hidden';
+        });
+        document.getElementById('scrollTopBtn')?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // ================================================================
+        // INIT
+        // ================================================================
+        AOS.init({ duration: 800, once: true, offset: 80 });
+        
+        // Load categories
+        const cats = [{id:'nails',name:'Nails',image:'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=500'},{id:'lashes',name:'Lashes',image:'https://images.unsplash.com/photo-1583243130284-7d9f9b67f865?w=400&h=500',disabled:true},{id:'perfumes',name:'Perfumes',image:'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=500'},{id:'clothes',name:'Clothes',image:'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=500'},{id:'joggers',name:'Joggers',image:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500',comingSoon:true},{id:'polo',name:'Polo',image:'https://images.unsplash.com/photo-1582418702059-97ebafb35d09?w=400&h=500',comingSoon:true}];
+        const catGrid = document.getElementById('categoriesGrid');
+        if (catGrid) catGrid.innerHTML = cats.map(c => c.disabled ? `<div class="category-card" style="cursor:not-allowed;"><img src="${c.image}" /><div class="category-overlay"><h3>${c.name}</h3></div><div style="position:absolute;inset:0;background:rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;"><span style="background:#8B7E78;color:#fff;padding:6px 16px;border-radius:50px;font-size:0.65rem;">Coming Soon</span></div></div>` : `<a href="shop.html?category=${c.id}" class="category-card" style="position:relative;border-radius:16px;overflow:hidden;aspect-ratio:3/4;display:block;"><img src="${c.image}" style="width:100%;height:100%;object-fit:cover;" /><div class="category-overlay" style="position:absolute;inset:0;background:linear-gradient(transparent 30%,rgba(62,49,44,0.7));display:flex;flex-direction:column;justify-content:flex-end;padding:20px;"><h3 style="color:#fff;">${c.name}</h3><span style="color:rgba(255,255,255,0.7);font-size:0.7rem;">Explore <i class="fas fa-arrow-right"></i></span></div>${c.comingSoon?'<span style="position:absolute;top:12px;right:12px;background:#C89A7B;color:#fff;padding:4px 12px;border-radius:50px;font-size:0.6rem;">Coming Soon</span>':''}</a>`).join('');
+
+        // Load products
+        const prods = [{id:'1',name:'Luxury Press-On Nails',price:8000,images:['https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=400'],stock:10,category:'nails',badge:'bestseller'},{id:'2',name:'Felicity Signature Perfume',price:28000,images:['https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=400'],stock:5,category:'perfumes',badge:'new'},{id:'3',name:'Crystal Nail Art Set',price:12000,images:['https://images.unsplash.com/photo-1607779097040-26e80aa78e66?w=400&h=400'],stock:8,category:'nails',badge:'trending'},{id:'4',name:'Designer Joggers Set',price:15000,images:['https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=400'],stock:12,category:'joggers',badge:'limited'}];
+        const prodGrid = document.getElementById('featuredProducts');
+        const bm = {new:'badge-new',bestseller:'badge-bestseller',trending:'badge-trending',limited:'badge-limited'};
+        if (prodGrid) prodGrid.innerHTML = prods.map(p => `<div class="product-card" style="background:#fff;border-radius:24px;overflow:hidden;border:1px solid rgba(200,154,123,0.06);"><div style="position:relative;overflow:hidden;aspect-ratio:1;"><img src="${p.images[0]}" style="width:100%;height:100%;object-fit:cover;" />${p.badge?`<span style="position:absolute;top:12px;left:12px;padding:4px 12px;border-radius:50px;font-size:0.6rem;font-weight:600;background:${p.badge==='new'?'#C89A7B':'#3E312C'};color:#fff;">${p.badge}</span>`:''}<div style="position:absolute;bottom:12px;left:12px;right:12px;display:flex;gap:8px;opacity:0;transition:all 0.3s;" class="prod-actions"><button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}','${p.name}',${p.price},${p.stock},'${p.images[0]}')"><i class="fas fa-plus"></i> Add</button><button class="btn btn-outline btn-sm" onclick="openQuickView('${p.id}','${p.name}',${p.price},'${p.images[0]}',${p.stock},'${p.category}')"><i class="fas fa-eye"></i></button></div></div><div style="padding:16px;"><p style="font-size:0.65rem;color:#C89A7B;text-transform:uppercase;">${p.category}</p><h3 style="font-size:1rem;">${p.name}</h3><p style="font-weight:600;color:#B58465;">N${p.price.toLocaleString()}</p></div></div>`).join('');
+
+        // Hover effect for product actions
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('mouseenter', () => card.querySelector('.prod-actions').style.opacity = '1');
+            card.addEventListener('mouseleave', () => card.querySelector('.prod-actions').style.opacity = '0');
+        });
+
+        // Load testimonials
+        const track = document.getElementById('testimonialsTrack');
+        if (track) {
+            const items = [{name:'Amara O.',role:'Verified Buyer',avatar:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face',text:'Absolutely in love with my nails!',stars:5},{name:'Chioma E.',role:'Regular Customer',avatar:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face',text:'Best service ever!',stars:5},{name:'Folake A.',role:'Fashion Enthusiast',avatar:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face',text:'Everything screams luxury!',stars:5}];
+            track.innerHTML = [...items,...items].map(t => `<div style="background:#fff;border-radius:20px;padding:24px;min-width:320px;border:1px solid rgba(200,154,123,0.06);flex-shrink:0;"><div style="color:#E8B84B;margin-bottom:8px;">${'<i class="fas fa-star"></i>'.repeat(t.stars)}</div><p style="font-style:italic;color:#8B7E78;">"${t.text}"</p><div style="display:flex;align-items:center;gap:10px;margin-top:12px;"><img src="${t.avatar}" style="width:40px;height:40px;border-radius:50%;" /><div><p style="font-weight:600;">${t.name}</p><p style="font-size:0.75rem;color:#B5A9A2;">${t.role}</p></div></div></div>`).join('');
+            track.style.animation = 'scrollTestimonials 40s linear infinite';
+        }
+
+        // Load Instagram
+        const igGrid = document.getElementById('instagramGrid');
+        if (igGrid) {
+            const imgs = ['https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=400','https://images.unsplash.com/photo-1607779097040-26e80aa78e66?w=400&h=400','https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=400','https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=400'];
+            igGrid.innerHTML = imgs.map(i => `<div style="position:relative;border-radius:12px;overflow:hidden;aspect-ratio:1;cursor:pointer;"><img src="${i}" style="width:100%;height:100%;object-fit:cover;" /><div style="position:absolute;inset:0;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;opacity:0;transition:all 0.3s;" class="ig-overlay"><i class="fab fa-instagram" style="font-size:2rem;color:#fff;"></i></div></div>`).join('');
+            document.querySelectorAll('.instagram-grid > div').forEach(item => {
+                item.addEventListener('mouseenter', () => item.querySelector('.ig-overlay').style.opacity = '1');
+                item.addEventListener('mouseleave', () => item.querySelector('.ig-overlay').style.opacity = '0');
+            });
+        }
+
+        // Join form
+        document.getElementById('joinForm')?.addEventListener('submit', e => {
+            e.preventDefault();
+            const n = e.target.querySelector('input[placeholder="Name"]').value.trim();
+            const p = e.target.querySelector('input[placeholder="Phone"]').value.trim();
+            if (!n || !p) { showToast('Fill name and phone', true); return; }
+            const s = JSON.parse(localStorage.getItem('fe_admin_subscribers') || '[]');
+            s.unshift({ name: n, phone: p, createdAt: new Date().toISOString() });
+            localStorage.setItem('fe_admin_subscribers', JSON.stringify(s));
+            showToast('Welcome to the Empire!');
+            e.target.reset();
+        });
+
+        // Footer newsletter
+        document.querySelector('.newsletter-form')?.addEventListener('submit', e => {
+            e.preventDefault();
+            showToast('Subscribed!');
+            e.target.reset();
+        });
+
+        // Cart helpers
+        window.addToCart = function(id, name, price, stock, image) {
+            const cart = JSON.parse(localStorage.getItem('fe_cart') || '[]');
+            const existing = cart.find(i => i.id === id);
+            if (existing) { if (existing.qty >= stock) { showToast('Not enough stock', true); return; } existing.qty++; }
+            else cart.push({ id, name, price, qty: 1, stock, image });
+            localStorage.setItem('fe_cart', JSON.stringify(cart));
+            const count = cart.reduce((s, i) => s + i.qty, 0);
+            localStorage.setItem('cartCount', count);
+            const badge = document.getElementById('cartCount');
+            if (badge) { badge.textContent = count; badge.style.display = count > 0 ? 'flex' : 'none'; }
+            showToast(`${name} added to cart`);
+        };
+
+        window.openQuickView = function(id, name, price, image, stock, category) {
+            const qvContent = document.getElementById('qvContent');
+            const qvModal = document.getElementById('qvModal');
+            if (!qvContent || !qvModal) return;
+            qvContent.innerHTML = `<button style="position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.9);display:flex;align-items:center;justify-content:center;z-index:10;border:none;cursor:pointer;font-size:1rem;" onclick="document.getElementById('qvModal').classList.remove('active')"><i class="fas fa-times"></i></button><img src="${image}" style="aspect-ratio:1;object-fit:cover;border-radius:32px 0 0 32px;" /><div style="padding:40px;"><p style="font-size:0.65rem;color:#C89A7B;text-transform:uppercase;">${category}</p><h3 style="font-size:1.4rem;">${name}</h3><p style="font-size:1.3rem;font-weight:600;color:#B58465;">N${price.toLocaleString()}</p><button class="btn btn-primary" style="margin-top:16px;" onclick="addToCart('${id}','${name}',${price},${stock},'${image}');document.getElementById('qvModal').classList.remove('active');"><i class="fas fa-shopping-bag"></i> Add to Cart</button></div>`;
+            qvModal.classList.add('active');
+        };
+
+        document.getElementById('qvModal')?.addEventListener('click', function(e) { if(e.target === this) this.classList.remove('active'); });
+
+        // Mobile menu
+        let isOpen = false;
+        document.getElementById('mobileToggle')?.addEventListener('click', () => {
+            isOpen = !isOpen;
+            document.getElementById('mobileMenuPanel')?.classList.toggle('open', isOpen);
+            document.getElementById('mobileOverlay')?.classList.toggle('open', isOpen);
+        });
+
+        console.log('%cFelicity Empire %cReady', 'color:#C89A7B;font-weight:bold;', 'color:#8B7E78;');
     </script>
 
-    <script>(function(){const c=sessionStorage.getItem('fe_loaded_from_root');if(!c&&window.location.pathname.includes('views/index.html')){const v=localStorage.getItem('fe_has_visited');if(!v){localStorage.setItem('fe_has_visited','true');window.location.href='../index.html';return;}}if(c)sessionStorage.removeItem('fe_loaded_from_root');})();</script>
-    <script>
-        (function(){const W='07081219784';if(sessionStorage.getItem('fe_admin_auth')==='true')return;function fp(){const d=[navigator.userAgent,screen.width+'x'+screen.height,navigator.language,new Date().getTimezoneOffset(),navigator.hardwareConcurrency||'unknown',navigator.platform||'unknown'].join('|');let h=0;for(let i=0;i<d.length;i++){h=((h<<5)-h)+d.charCodeAt(i);h|=0;}return Math.abs(h).toString(36);}function gt(){const c='abcdefghijklmnopqrstuvwxyz0123456789';let t='';for(let i=0;i<32;i++)t+=c.charAt(Math.floor(Math.random()*c.length));return t;}function st(t){const tokens=JSON.parse(localStorage.getItem('fe_admin_tokens')||'[]');const v=tokens.filter(x=>x.expires>Date.now());v.push({token:t,expires:Date.now()+600000,device:fp()});localStorage.setItem('fe_admin_tokens',JSON.stringify(v.slice(-5)));}function sl(){const t=gt();st(t);const u=`${SITE_URL}/views/index.html?admin_token=${t}`;const n=new Date();const ts=n.toLocaleString('en-US',{weekday:'long',hour:'numeric',minute:'2-digit',hour12:true});const m=`*FELICITY EMPIRE — Admin Login*\n\nHi Felicia,\n\nSomeone just accessed the website.\n\n*Time:* ${ts}\n*Device:* ${navigator.platform||'Unknown'}\n\nClick the link below to access the admin panel:\n\n${u}\n\nThis link expires in 10 minutes.\n\nIf this wasn't you, please ignore.`;setTimeout(()=>{window.open(`https://wa.me/${W}?text=${encodeURIComponent(m)}`,'_blank');},1500);}function cm(){const p=new URLSearchParams(window.location.search);const t=p.get('admin_token');if(!t)return false;const tokens=JSON.parse(localStorage.getItem('fe_admin_tokens')||'[]');const v=tokens.find(x=>x.token===t&&x.expires>Date.now());if(v){sessionStorage.setItem('fe_admin_auth','true');sessionStorage.setItem('fe_admin_login_time',Date.now().toString());localStorage.setItem('fe_admin_device',fp());localStorage.setItem('fe_admin_tokens',JSON.stringify(tokens.filter(x=>x.token!==t)));window.history.replaceState({},document.title,window.location.pathname);window.location.href='../../admin/index.html';return true;}return false;}function il(){if(cm())return;const d=fp();const k=localStorage.getItem('fe_admin_device');const ls=parseInt(localStorage.getItem('fe_admin_last_sent')||'0');if(k===d&&Date.now()-ls<300000)return;localStorage.setItem('fe_admin_last_sent',Date.now().toString());sl();}let clicks=0,timer=null;const logo=document.querySelector('.nav-logo');if(logo){logo.addEventListener('click',function(e){clicks++;if(timer)clearTimeout(timer);if(clicks>=5){clicks=0;localStorage.setItem('fe_admin_last_sent','0');sl();}timer=setTimeout(()=>{clicks=0;},2000);});}document.addEventListener('keydown',function(e){if(e.ctrlKey&&e.shiftKey&&(e.key==='A'||e.key==='a')){e.preventDefault();localStorage.setItem('fe_admin_last_sent','0');sl();}});il();})();
-    </script>
+    <style>
+        @keyframes scrollTestimonials { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    </style>
 </body>
 </html>

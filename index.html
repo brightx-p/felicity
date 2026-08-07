@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Felicity Empire — Luxury Beauty & Fashion</title>
+    <meta name="description" content="Felicity Empire — Discover luxury nails, lashes, perfumes, and fashion. Premium beauty brand for the modern queen." />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="icon" href="assets/img/favicon.ico" />
+    
+    <style>
+        :root {
+            --cream-light: #FDFBF8;
+            --rose-gold: #C89A7B;
+            --rose-gold-dark: #B58465;
+            --text-dark: #3E312C;
+            --text-muted: #8B7E78;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: linear-gradient(170deg, #FDFBF8 0%, #F9F5F1 25%, #F8F2EC 50%, #F4ECE5 75%, #FDFBF8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .bg-shape {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+        .bg-shape-1 {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(200,154,123,0.06) 0%, transparent 70%);
+            top: -20%; right: -15%;
+            animation: floatSlow 20s infinite ease-in-out;
+        }
+        .bg-shape-2 {
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, rgba(180,140,110,0.04) 0%, transparent 70%);
+            bottom: -10%; left: -8%;
+            animation: floatSlow 18s infinite ease-in-out reverse;
+        }
+        @keyframes floatSlow {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -20px) scale(1.04); }
+            66% { transform: translate(-15px, 15px) scale(0.97); }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: var(--rose-gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 4s infinite ease-in-out;
+        }
+        .particle:nth-child(1) { top: 15%; left: 20%; animation-delay: 0s; }
+        .particle:nth-child(2) { top: 25%; right: 25%; animation-delay: 0.8s; width: 3px; height: 3px; }
+        .particle:nth-child(3) { bottom: 30%; left: 15%; animation-delay: 1.6s; width: 5px; height: 5px; }
+        .particle:nth-child(4) { bottom: 20%; right: 20%; animation-delay: 2.4s; }
+        .particle:nth-child(5) { top: 40%; left: 50%; animation-delay: 3.2s; width: 3px; height: 3px; }
+        .particle:nth-child(6) { top: 60%; right: 30%; animation-delay: 0.4s; }
+        .particle:nth-child(7) { bottom: 40%; left: 35%; animation-delay: 1.2s; width: 5px; height: 5px; }
+        .particle:nth-child(8) { top: 70%; right: 15%; animation-delay: 2.0s; }
+        @keyframes particleFloat {
+            0%, 100% { opacity: 0; transform: translateY(0) scale(0); }
+            20% { opacity: 0.6; }
+            50% { opacity: 0.3; transform: translateY(-30px) scale(1); }
+            80% { opacity: 0.6; }
+        }
+
+        .loader-container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            animation: containerEntrance 0.6s ease-out;
+        }
+        @keyframes containerEntrance {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .loader-crown {
+            font-size: 2.5rem;
+            color: var(--rose-gold);
+            margin-bottom: 16px;
+            animation: crownBounce 2s infinite ease-in-out;
+            display: inline-block;
+        }
+        @keyframes crownBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .typing-text {
+            font-family: 'Cormorant Garamond', Garamond, serif;
+            font-size: 2rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--rose-gold-dark);
+            min-height: 3rem;
+            margin-bottom: 8px;
+            letter-spacing: 0.02em;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.8rem;
+            background: var(--rose-gold);
+            margin-left: 2px;
+            animation: cursorBlink 0.8s infinite;
+            vertical-align: text-bottom;
+        }
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .brand-reveal {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+            letter-spacing: 0.04em;
+        }
+        .brand-reveal.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .brand-reveal span { color: var(--rose-gold); }
+
+        .loader-subtitle {
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+        .loader-subtitle.show { opacity: 0.7; transform: translateY(0); }
+
+        .accent-line {
+            width: 0;
+            height: 1.5px;
+            background: linear-gradient(90deg, var(--rose-gold), transparent);
+            margin: 12px auto;
+            transition: width 1s cubic-bezier(0.19, 1, 0.22, 1);
+            border-radius: 1px;
+        }
+        .accent-line.show { width: 80px; }
+
+        .mini-spinner {
+            width: 24px; height: 24px;
+            border: 2px solid rgba(200,154,123,0.15);
+            border-top-color: var(--rose-gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 16px auto 0;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .mini-spinner.show { opacity: 0.6; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .fade-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--cream-light);
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .fade-overlay.active { opacity: 1; pointer-events: all; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-shape bg-shape-1"></div>
+    <div class="bg-shape bg-shape-2"></div>
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div>
+
+    <div class="fade-overlay" id="fadeOverlay"></div>
+
+    <div class="loader-container" id="loaderContainer">
+        <div class="loader-crown"><i class="fas fa-crown"></i></div>
+        <div class="typing-text" id="typingText"></div>
+        <div class="brand-reveal" id="brandReveal">FELICITY<span>EMPIRE</span></div>
+        <div class="accent-line" id="accentLine"></div>
+        <div class="loader-subtitle" id="loaderSubtitle">Luxury that speaks for you</div>
+        <div class="mini-spinner" id="miniSpinner"></div>
+    </div>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <script>
+        (function() {
+            const typingEl = document.getElementById('typingText');
+            const brandEl = document.getElementById('brandReveal');
+            const accentEl = document.getElementById('accentLine');
+            const subtitleEl = document.getElementById('loaderSubtitle');
+            const spinnerEl = document.getElementById('miniSpinner');
+            const fadeOverlay = document.getElementById('fadeOverlay');
+
+            const phrases = ['Welcome...', 'to'];
+            let phraseIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+
+            function typeAnimation() {
+                const currentPhrase = phrases[phraseIndex];
+                if (!isDeleting) {
+                    typingEl.textContent = currentPhrase.substring(0, charIndex + 1);
+                    charIndex++;
+                    if (charIndex === currentPhrase.length) {
+                        if (phraseIndex === phrases.length - 1) {
+                            setTimeout(revealBrand, 400);
+                            return;
+                        }
+                        isDeleting = true;
+                        setTimeout(typeAnimation, 800);
+                        return;
+                    }
+                    setTimeout(typeAnimation, 100);
+                } else {
+                    typingEl.textContent = currentPhrase.substring(0, charIndex - 1);
+                    charIndex--;
+                    if (charIndex === 0) {
+                        isDeleting = false;
+                        phraseIndex++;
+                        setTimeout(typeAnimation, 300);
+                        return;
+                    }
+                    setTimeout(typeAnimation, 50);
+                }
+            }
+
+            function revealBrand() {
+                setTimeout(() => { typingEl.style.opacity = '0'; typingEl.style.transition = 'opacity 0.5s'; }, 200);
+                setTimeout(() => { brandEl.classList.add('show'); }, 400);
+                setTimeout(() => { accentEl.classList.add('show'); }, 700);
+                setTimeout(() => { subtitleEl.classList.add('show'); }, 900);
+                setTimeout(() => { spinnerEl.classList.add('show'); }, 1100);
+                setTimeout(() => { fadeOutAndRedirect(); }, 2500);
+            }
+
+            function fadeOutAndRedirect() {
+                fadeOverlay.classList.add('active');
+                setTimeout(() => {
+                    window.location.href = 'views/index.html';
+                }, 1000);
+            }
+
+            setTimeout(typeAnimation, 600);
+        })();
+    </script>
+</body>
+</html>

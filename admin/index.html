@@ -2,162 +2,515 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Dashboard — Felicity Empire Admin</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="FE Admin" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#2A1F1A" />
+    <link rel="manifest" href="../manifest.json" />
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232A1F1A'/><text x='50' y='65' text-anchor='middle' fill='%23C89A7B' font-size='45' font-family='serif' font-weight='bold'>FE</text></svg>" />
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../assets/css/admin.css" />
+    
     <style>
-        .admin-content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-        .admin-list-item { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--admin-border-light); }
-        .admin-list-item:last-child { border-bottom: none; }
-        .admin-avatar-sm { width: 42px; height: 42px; border-radius: 50%; background: var(--admin-bg-secondary); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; color: var(--admin-rose); flex-shrink: 0; }
-        .admin-list-info { flex: 1; min-width: 0; }
-        .admin-list-info h4 { font-size: 0.85rem; font-weight: 600; }
-        .admin-list-info p { font-size: 0.75rem; color: var(--admin-text-muted); }
-        .admin-list-value { font-weight: 600; font-size: 0.85rem; text-align: right; white-space: nowrap; }
-        @media (max-width: 1024px) { .admin-content-grid { grid-template-columns: 1fr; } }
+        :root {
+            --bg: #F8F4EF; --bg2: #F3EDE6; --card: #FFFFFF;
+            --rose: #C89A7B; --rose-dark: #B58465; --rose-light: #D4B09A;
+            --rose-glow: rgba(200,154,123,0.12); --rose-shimmer: rgba(200,154,123,0.06);
+            --text: #3E312C; --text2: #5C4A42; --text-muted: #8B7E78; --text-light: #B5A9A2;
+            --border: #E8DED5; --border-light: #F0E8DD;
+            --success: #10B981; --success-bg: #D1FAE5;
+            --warning: #F59E0B; --warning-bg: #FEF3C7;
+            --danger: #EF4444; --danger-bg: #FEE2E2;
+            --info: #3B82F6; --info-bg: #DBEAFE;
+            --shadow-xs: 0 1px 2px rgba(62,49,44,0.04); --shadow-sm: 0 2px 8px rgba(62,49,44,0.06);
+            --shadow-md: 0 8px 24px rgba(62,49,44,0.08); --shadow-lg: 0 16px 40px rgba(62,49,44,0.10);
+            --radius-lg: 20px; --radius-md: 16px; --radius-sm: 10px; --radius-full: 50%;
+            --font-display: 'Playfair Display', serif; --font-heading: 'Poppins', sans-serif; --font-body: 'Manrope', sans-serif;
+            --sidebar-w: 260px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; display: flex; min-height: 100vh; }
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; border: none; font-family: inherit; }
+
+        /* Sidebar */
+        .sidebar { width: var(--sidebar-w); background: #2A1F1A; color: rgba(255,255,255,0.65); position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; display: flex; flex-direction: column; overflow-y: auto; }
+        .sidebar-brand { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .brand-name { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: #fff; }
+        .brand-accent { color: var(--rose); }
+        .brand-subtitle { font-size: 0.62rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+        .sidebar-nav { flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
+        .nav-section { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.25); padding: 16px 14px 6px; font-weight: 600; }
+        .nav-link { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; font-size: 0.8rem; color: rgba(255,255,255,0.5); transition: all 0.2s; }
+        .nav-link:hover, .nav-link.active { background: rgba(200,154,123,0.15); color: var(--rose-light); }
+        .nav-link.active { font-weight: 600; }
+        .nav-link i { width: 20px; text-align: center; font-size: 0.9rem; }
+        .nav-badge { margin-left: auto; background: var(--rose); color: #fff; font-size: 0.6rem; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+        .sidebar-footer { padding: 14px; border-top: 1px solid rgba(255,255,255,0.06); }
+        .sidebar-footer a { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px; font-size: 0.78rem; color: rgba(255,255,255,0.4); }
+        .sidebar-footer a:hover { background: rgba(255,255,255,0.04); color: #fff; }
+
+        /* Main */
+        .main { margin-left: var(--sidebar-w); flex: 1; min-height: 100vh; }
+        .topbar { background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-light); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 50; gap: 12px; flex-wrap: wrap; }
+        .topbar-left h1 { font-family: var(--font-display); font-size: 1.4rem; }
+        .topbar-breadcrumb { font-size: 0.72rem; color: var(--text-muted); }
+        .topbar-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .page-content { padding: 24px; }
+
+        /* Live Indicator */
+        .live-dot-wrap { display: inline-flex; align-items: center; gap: 6px; font-size: 0.7rem; color: var(--success); font-weight: 500; }
+        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* Buttons */
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 50px; font-weight: 500; font-size: 0.78rem; transition: all 0.25s; white-space: nowrap; font-family: var(--font-heading); }
+        .btn i { font-size: 0.85rem; }
+        .btn-primary { background: var(--rose); color: #fff; box-shadow: 0 4px 14px rgba(200,154,123,0.3); }
+        .btn-primary:hover { background: var(--rose-dark); transform: translateY(-2px); }
+        .btn-outline { background: #fff; color: var(--text); border: 1.5px solid var(--border); }
+        .btn-outline:hover { border-color: var(--rose); color: var(--rose); }
+        .btn-sm { padding: 7px 14px; font-size: 0.7rem; }
+        .btn-install {
+            background: linear-gradient(135deg, #2A1F1A, #3D2B26); color: #fff;
+            box-shadow: 0 8px 30px rgba(42,31,26,0.3); padding: 14px 28px; font-size: 0.85rem;
+        }
+        .btn-install:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(42,31,26,0.4); }
+        .btn-install i { font-size: 1.1rem; }
+
+        /* Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: var(--card); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-xs); border: 1px solid var(--border-light); display: flex; gap: 14px; align-items: center; transition: all 0.25s; }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .stat-icon { width: 48px; height: 48px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+        .stat-icon.rose { background: var(--rose-glow); color: var(--rose); }
+        .stat-icon.green { background: var(--success-bg); color: var(--success); }
+        .stat-icon.blue { background: var(--info-bg); color: var(--info); }
+        .stat-icon.amber { background: var(--warning-bg); color: var(--warning); }
+        .stat-info h4 { font-size: 0.7rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px; }
+        .stat-value { font-size: 1.5rem; font-weight: 700; }
+
+        /* Download App Banner */
+        .download-banner {
+            background: linear-gradient(135deg, #2A1F1A 0%, #3D2B26 100%);
+            border-radius: var(--radius-lg); padding: 28px 32px;
+            display: flex; align-items: center; gap: 24px; margin-bottom: 24px;
+            color: #fff; box-shadow: var(--shadow-md);
+        }
+        .download-banner-icon { font-size: 3rem; color: var(--rose-light); flex-shrink: 0; }
+        .download-banner-text { flex: 1; }
+        .download-banner-text h3 { font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 4px; }
+        .download-banner-text p { font-size: 0.82rem; color: rgba(255,255,255,0.6); line-height: 1.5; }
+        .download-banner .btn-install { flex-shrink: 0; }
+
+        /* Cards */
+        .card { background: var(--card); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-xs); border: 1px solid var(--border-light); margin-bottom: 16px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .card-header h3 { font-size: 0.9rem; font-weight: 600; }
+
+        /* Badges */
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.65rem; font-weight: 600; display: inline-block; }
+        .badge-warning { background: var(--warning-bg); color: #92400E; }
+        .badge-success { background: var(--success-bg); color: #065F46; }
+        .badge-danger { background: var(--danger-bg); color: #991B1B; }
+        .badge-info { background: var(--info-bg); color: #1E40AF; }
+
+        /* Lists */
+        .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+        .list-item { display: flex; align-items: center; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--border-light); }
+        .list-item:last-child { border-bottom: none; }
+        .avatar-sm { width: 38px; height: 38px; border-radius: 50%; background: var(--bg2); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.8rem; color: var(--rose); flex-shrink: 0; }
+        .list-info { flex: 1; min-width: 0; }
+        .list-info h4 { font-size: 0.82rem; font-weight: 600; }
+        .list-info p { font-size: 0.72rem; color: var(--text-muted); }
+        .list-value { font-weight: 600; font-size: 0.82rem; text-align: right; white-space: nowrap; }
+
+        /* Notification Items */
+        .notif-item {
+            display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border-light);
+            cursor: pointer; transition: all 0.2s;
+        }
+        .notif-item:hover { background: var(--rose-shimmer); margin: 0 -12px; padding: 10px 12px; border-radius: 8px; }
+        .notif-item:last-child { border-bottom: none; }
+        .notif-item.unread { position: relative; }
+        .notif-item.unread::before { content: ''; position: absolute; left: -8px; top: 50%; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 50%; background: var(--rose); }
+        .notif-icon { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; }
+        .notif-icon.order { background: var(--rose-glow); color: var(--rose); }
+        .notif-icon.appointment { background: var(--info-bg); color: var(--info); }
+        .notif-info { flex: 1; min-width: 0; }
+        .notif-info h4 { font-size: 0.78rem; font-weight: 600; }
+        .notif-info p { font-size: 0.7rem; color: var(--text-muted); }
+        .notif-time { font-size: 0.65rem; color: var(--text-light); white-space: nowrap; }
+
+        /* Empty State */
+        .empty-state { text-align: center; padding: 30px 20px; }
+        .empty-state i { font-size: 2rem; color: var(--text-light); margin-bottom: 8px; }
+        .empty-state p { color: var(--text-muted); font-size: 0.82rem; }
+
+        /* PIN Screen */
+        .pin-screen { position: fixed; inset: 0; z-index: 99999; background: linear-gradient(170deg, #FDFBF8 0%, #F9F5F1 50%, #F8F2EC 100%); display: flex; align-items: center; justify-content: center; }
+        .pin-box { text-align: center; max-width: 320px; padding: 20px; width: 90%; }
+        .pin-logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: #3E312C; margin-bottom: 4px; }
+        .pin-logo span { color: #C89A7B; }
+        .pin-sub { font-size: 0.75rem; color: #8B7E78; margin-bottom: 24px; }
+        .pin-dots { display: flex; gap: 12px; justify-content: center; margin-bottom: 24px; }
+        .pin-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #E8DED5; transition: all 0.25s; }
+        .pin-dot.filled { background: #C89A7B; border-color: #C89A7B; }
+        .pin-dot.error { background: #e74c3c; border-color: #e74c3c; animation: shake 0.4s ease; }
+        @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+        .pin-err { color: #e74c3c; font-size: 0.8rem; margin-bottom: 12px; display: none; font-weight: 500; }
+        .pin-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 260px; margin: 0 auto; }
+        .pin-btn { padding: 18px; border-radius: 16px; border: 1.5px solid #E8DED5; background: #fff; font-size: 1.4rem; font-weight: 600; color: #3E312C; cursor: pointer; font-family: 'Manrope', sans-serif; transition: all 0.15s; -webkit-tap-highlight-color: transparent; user-select: none; }
+        .pin-btn:active { background: #C89A7B; color: #fff; border-color: #C89A7B; transform: scale(0.95); }
+        .pin-act { padding: 18px; border-radius: 16px; border: none; background: transparent; font-size: 0.85rem; color: #8B7E78; cursor: pointer; font-family: 'Manrope', sans-serif; }
+
+        /* Change PIN Modal */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(30,20,15,0.5); backdrop-filter: blur(6px); z-index: 9999; display: none; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal-card { background: #fff; border-radius: 20px; padding: 28px; max-width: 380px; width: 90%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.2); animation: modalIn 0.3s ease; }
+        @keyframes modalIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-card h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 16px; }
+        .modal-card input { width: 100%; padding: 12px 16px; border-radius: 12px; border: 1.5px solid #E8DED5; background: #F9F5F1; font-size: 1.1rem; text-align: center; letter-spacing: 0.2em; font-family: 'Manrope', sans-serif; outline: none; margin-bottom: 12px; }
+        .modal-card input:focus { border-color: #C89A7B; box-shadow: 0 0 0 4px rgba(200,154,123,0.1); }
+        .modal-err { color: #e74c3c; font-size: 0.78rem; margin-bottom: 8px; display: none; }
+        .modal-ok { color: #10B981; font-size: 0.78rem; margin-bottom: 8px; display: none; }
+
+        /* Toast */
+        .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast { padding: 12px 18px; border-radius: 12px; background: #fff; box-shadow: 0 8px 30px rgba(0,0,0,0.12); border-left: 3px solid #C89A7B; font-size: 0.82rem; display: flex; align-items: center; gap: 8px; animation: toastIn 0.4s ease; }
+        .toast.success { border-left-color: #10B981; }
+        .toast.error { border-left-color: #e74c3c; }
+        @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Mobile */
+        .mobile-toggle { display: none; position: fixed; top: 14px; left: 14px; z-index: 200; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: var(--shadow-md); align-items: center; justify-content: center; font-size: 1.1rem; color: var(--text); }
+        .mobile-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 99; }
+
+        /* Show install banner for non-installed */
+        .install-float { position: fixed; bottom: 24px; right: 24px; z-index: 200; display: none; }
+        .install-float.show { display: block; }
+        .install-float-btn {
+            width: 56px; height: 56px; border-radius: 50%; background: #2A1F1A; color: #fff;
+            display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+            box-shadow: 0 8px 30px rgba(42,31,26,0.4); cursor: pointer; transition: all 0.25s;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .install-float-btn:hover { transform: scale(1.1); }
+
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); transition: transform 0.35s; }
+            .sidebar.open { transform: translateX(0); }
+            .main { margin-left: 0; }
+            .mobile-toggle { display: flex; }
+            .mobile-overlay.active { display: block; }
+            .stats-grid { grid-template-columns: repeat(2,1fr); gap: 12px; }
+            .content-grid { grid-template-columns: 1fr; }
+            .page-content { padding: 16px; }
+            .topbar { padding: 12px 14px; margin-top: 50px; }
+            .download-banner { flex-direction: column; text-align: center; padding: 24px 20px; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .stat-card { padding: 14px; }
+            .stat-icon { width: 38px; height: 38px; font-size: 1rem; }
+            .stat-value { font-size: 1.1rem; }
+        }
     </style>
 </head>
-<body class="admin-body">
+<body>
 
-    <button class="admin-mobile-toggle" onclick="adminToggleSidebar()"><i class="fas fa-bars"></i></button>
-    <div class="admin-mobile-overlay" onclick="adminToggleSidebar()"></div>
-
-    <aside class="admin-sidebar" id="adminSidebar">
-        <div class="admin-sidebar-brand">
-            <div class="admin-brand-name">FELICITY<span class="admin-brand-accent">EMPIRE</span></div>
-            <div class="admin-brand-subtitle">Administration</div>
+    <!-- PIN CODE SCREEN -->
+    <div class="pin-screen" id="pinScreen">
+        <div class="pin-box">
+            <div style="font-size: 2.5rem; color: #C89A7B; margin-bottom: 8px;"><i class="fas fa-crown"></i></div>
+            <div class="pin-logo">FELICITY<span>EMPIRE</span></div>
+            <p class="pin-sub">Enter PIN to access admin panel</p>
+            <div class="pin-dots" id="pinDots">
+                <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+            </div>
+            <p class="pin-err" id="pinError"><i class="fas fa-exclamation-circle"></i> Incorrect PIN</p>
+            <div class="pin-pad">
+                <button class="pin-btn" onclick="addPin('1')">1</button><button class="pin-btn" onclick="addPin('2')">2</button><button class="pin-btn" onclick="addPin('3')">3</button>
+                <button class="pin-btn" onclick="addPin('4')">4</button><button class="pin-btn" onclick="addPin('5')">5</button><button class="pin-btn" onclick="addPin('6')">6</button>
+                <button class="pin-btn" onclick="addPin('7')">7</button><button class="pin-btn" onclick="addPin('8')">8</button><button class="pin-btn" onclick="addPin('9')">9</button>
+                <button class="pin-act" onclick="clearPin()">Clear</button><button class="pin-btn" onclick="addPin('0')">0</button>
+                <button class="pin-act" onclick="deletePin()" style="font-size:1.2rem;"><i class="fas fa-delete-left"></i></button>
+            </div>
         </div>
-        <nav class="admin-sidebar-nav">
-            <div class="admin-sidebar-section">Main</div>
-            <a href="index.html" class="admin-sidebar-link active"><i class="fas fa-th-large"></i> Dashboard</a>
-            <a href="products.html" class="admin-sidebar-link"><i class="fas fa-box"></i> Products <span class="admin-sidebar-badge" id="productCount">0</span></a>
-            <a href="orders.html" class="admin-sidebar-link"><i class="fas fa-shopping-bag"></i> Orders <span class="admin-sidebar-badge" id="orderCount">0</span></a>
-            <a href="appointments.html" class="admin-sidebar-link"><i class="fas fa-calendar-check"></i> Appointments <span class="admin-sidebar-badge" id="aptCount">0</span></a>
-            <a href="customers.html" class="admin-sidebar-link"><i class="fas fa-users"></i> Customers</a>
-            <div class="admin-sidebar-section">Content</div>
-            <a href="categories.html" class="admin-sidebar-link"><i class="fas fa-tags"></i> Categories</a>
-            <a href="gallery.html" class="admin-sidebar-link"><i class="fas fa-images"></i> Gallery</a>
-            <a href="videos.html" class="admin-sidebar-link"><i class="fas fa-video"></i> Videos</a>
-            <a href="reviews.html" class="admin-sidebar-link"><i class="fas fa-star"></i> Reviews</a>
-            <div class="admin-sidebar-section">Management</div>
-            <a href="analytics.html" class="admin-sidebar-link"><i class="fas fa-chart-bar"></i> Analytics</a>
-            <a href="notifications.html" class="admin-sidebar-link"><i class="fas fa-bell"></i> Notifications</a>
-            <a href="qr-code.html" class="admin-sidebar-link"><i class="fas fa-qrcode"></i> QR Code</a>
-            <a href="settings.html" class="admin-sidebar-link"><i class="fas fa-cog"></i> Settings</a>
+    </div>
+
+    <button class="mobile-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+    <div class="mobile-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand"><div class="brand-name">FELICITY<span class="brand-accent">EMPIRE</span></div><div class="brand-subtitle">Administration</div></div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">Main</div>
+            <a href="index.html" class="nav-link active"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="products.html" class="nav-link"><i class="fas fa-box"></i> Products <span class="nav-badge" id="productCount">0</span></a>
+            <a href="orders.html" class="nav-link"><i class="fas fa-shopping-bag"></i> Orders <span class="nav-badge" id="orderCount">0</span></a>
+            <a href="appointments.html" class="nav-link"><i class="fas fa-calendar-check"></i> Appointments <span class="nav-badge" id="aptCount">0</span></a>
+            <a href="customers.html" class="nav-link"><i class="fas fa-users"></i> Customers</a>
+            <div class="nav-section">Content</div>
+            <a href="categories.html" class="nav-link"><i class="fas fa-tags"></i> Categories</a>
+            <a href="gallery.html" class="nav-link"><i class="fas fa-images"></i> Gallery</a>
+            <a href="videos.html" class="nav-link"><i class="fas fa-video"></i> Videos</a>
+            <a href="reviews.html" class="nav-link"><i class="fas fa-star"></i> Reviews</a>
+            <div class="nav-section">Management</div>
+            <a href="analytics.html" class="nav-link"><i class="fas fa-chart-bar"></i> Analytics</a>
+            <a href="notifications.html" class="nav-link"><i class="fas fa-bell"></i> Notifications <span class="nav-badge" id="notifCount">0</span></a>
+            <a href="qr-code.html" class="nav-link"><i class="fas fa-qrcode"></i> QR Code</a>
+            <a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a>
         </nav>
-        <div class="admin-sidebar-footer">
+        <div class="sidebar-footer">
             <a href="profile.html"><i class="fas fa-user-circle"></i> Admin Profile</a>
-            <a href="../index.html"><i class="fas fa-external-link-alt"></i> View Website</a>
+            <a href="../views/index.html"><i class="fas fa-external-link-alt"></i> View Website</a>
         </div>
     </aside>
 
-    <main class="admin-main">
-        <div class="admin-topbar">
-            <div class="admin-topbar-left">
+    <!-- Main Content -->
+    <main class="main">
+        <div class="topbar">
+            <div class="topbar-left">
                 <h1>Dashboard</h1>
-                <span class="admin-topbar-breadcrumb">Welcome back, Felicia</span>
+                <span class="topbar-breadcrumb"><span class="live-dot-wrap"><span class="live-dot"></span> Live Updates</span></span>
             </div>
-            <div class="admin-topbar-right">
-                <div class="admin-topbar-search"><i class="fas fa-search"></i><input type="text" placeholder="Search..." /></div>
-                <a href="products.html" class="admin-btn admin-btn-primary"><i class="fas fa-plus"></i> Add Product</a>
+            <div class="topbar-right">
+                <button class="btn btn-outline btn-sm" onclick="showChangePinModal()"><i class="fas fa-key"></i> Change PIN</button>
+                <a href="products.html" class="btn btn-primary"><i class="fas fa-plus"></i> Add Product</a>
             </div>
         </div>
 
-        <div class="admin-page-content">
-            <!-- Stats -->
-            <div class="admin-stats-grid">
-                <div class="admin-stat-card">
-                    <div class="admin-stat-icon rose"><i class="fas fa-naira-sign"></i></div>
-                    <div class="admin-stat-info"><h4>Today's Revenue</h4><div class="admin-stat-value" id="todayRevenue">N0</div><div class="admin-stat-change up">+12% from yesterday</div></div>
+        <div class="page-content">
+            <!-- Download App Banner -->
+            <div class="download-banner" id="downloadBanner">
+                <div class="download-banner-icon"><i class="fas fa-mobile-screen-button"></i></div>
+                <div class="download-banner-text">
+                    <h3>Download the Admin App</h3>
+                    <p>Install on your phone or desktop for quick, secure access. Works offline, loads instantly, and sends you notifications.</p>
                 </div>
-                <div class="admin-stat-card">
-                    <div class="admin-stat-icon green"><i class="fas fa-shopping-bag"></i></div>
-                    <div class="admin-stat-info"><h4>Total Orders</h4><div class="admin-stat-value" id="totalOrders">0</div><div class="admin-stat-change up">+5 this week</div></div>
-                </div>
-                <div class="admin-stat-card">
-                    <div class="admin-stat-icon blue"><i class="fas fa-calendar-check"></i></div>
-                    <div class="admin-stat-info"><h4>Appointments Today</h4><div class="admin-stat-value" id="todayAppointments">0</div></div>
-                </div>
-                <div class="admin-stat-card">
-                    <div class="admin-stat-icon amber"><i class="fas fa-box"></i></div>
-                    <div class="admin-stat-info"><h4>Total Products</h4><div class="admin-stat-value" id="totalProducts">0</div></div>
-                </div>
+                <button class="btn btn-install" onclick="installApp()">
+                    <i class="fas fa-download"></i> Download App
+                </button>
             </div>
 
-            <!-- Quick Actions -->
-            <div class="admin-quick-actions">
-                <div class="admin-quick-action" onclick="location.href='products.html'"><i class="fas fa-plus-circle"></i><h4>Add Product</h4></div>
-                <div class="admin-quick-action" onclick="location.href='appointments.html'"><i class="fas fa-calendar-plus"></i><h4>New Appointment</h4></div>
-                <div class="admin-quick-action" onclick="location.href='gallery.html'"><i class="fas fa-upload"></i><h4>Upload Portfolio</h4></div>
-                <div class="admin-quick-action" onclick="location.href='videos.html'"><i class="fas fa-video"></i><h4>Upload Video</h4></div>
-                <div class="admin-quick-action" onclick="location.href='notifications.html'"><i class="fas fa-bullhorn"></i><h4>Send Announcement</h4></div>
-                <div class="admin-quick-action" onclick="location.href='qr-code.html'"><i class="fas fa-qrcode"></i><h4>QR Code</h4></div>
-                <div class="admin-quick-action" onclick="location.href='categories.html'"><i class="fas fa-tags"></i><h4>Categories</h4></div>
-                <div class="admin-quick-action" onclick="location.href='orders.html'"><i class="fas fa-clipboard-list"></i><h4>View Orders</h4></div>
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-icon rose"><i class="fas fa-naira-sign"></i></div><div class="stat-info"><h4>Today's Revenue</h4><div class="stat-value" id="todayRevenue">N0</div></div></div>
+                <div class="stat-card"><div class="stat-icon green"><i class="fas fa-shopping-bag"></i></div><div class="stat-info"><h4>Total Orders</h4><div class="stat-value" id="totalOrders">0</div></div></div>
+                <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-calendar-check"></i></div><div class="stat-info"><h4>Pending Appointments</h4><div class="stat-value" id="pendingAppointments">0</div></div></div>
+                <div class="stat-card"><div class="stat-icon amber"><i class="fas fa-bell"></i></div><div class="stat-info"><h4>Unread Alerts</h4><div class="stat-value" id="unreadNotifications">0</div></div></div>
             </div>
 
             <!-- Content Grid -->
-            <div class="admin-content-grid">
-                <div class="admin-card">
-                    <div class="admin-card-header"><h3>Recent Orders</h3><a href="orders.html" style="color:var(--admin-rose);font-size:0.8rem;">View All</a></div>
-                    <div id="recentOrders"><div class="admin-empty-state"><i class="fas fa-inbox"></i><p>No orders yet</p></div></div>
+            <div class="content-grid">
+                <!-- Orders + Appointments -->
+                <div>
+                    <div class="card">
+                        <div class="card-header"><h3>Recent Orders</h3><a href="orders.html" style="color:var(--rose);font-size:0.8rem;">View All</a></div>
+                        <div id="recentOrders"><div class="empty-state"><i class="fas fa-inbox"></i><p>No orders yet</p></div></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h3>Recent Appointments</h3><a href="appointments.html" style="color:var(--rose);font-size:0.8rem;">View All</a></div>
+                        <div id="recentAppointments"><div class="empty-state"><i class="fas fa-calendar"></i><p>No appointments yet</p></div></div>
+                    </div>
                 </div>
-                <div class="admin-card">
-                    <div class="admin-card-header"><h3>Upcoming Appointments</h3><a href="appointments.html" style="color:var(--admin-rose);font-size:0.8rem;">View All</a></div>
-                    <div id="upcomingAppointments"><div class="admin-empty-state"><i class="fas fa-calendar"></i><p>No appointments</p></div></div>
+                <!-- Notifications -->
+                <div class="card">
+                    <div class="card-header"><h3>Notifications</h3><a href="notifications.html" style="color:var(--rose);font-size:0.8rem;">View All</a></div>
+                    <div id="notificationList"><div class="empty-state"><i class="fas fa-bell"></i><p>No notifications yet</p></div></div>
                 </div>
             </div>
         </div>
     </main>
 
-    <div class="admin-toast-container"></div>
+    <!-- Change PIN Modal -->
+    <div class="modal-overlay" id="changePinModal">
+        <div class="modal-card">
+            <h3>Change Admin PIN</h3>
+            <p style="font-size:0.8rem;color:#8B7E78;margin-bottom:16px;">Enter current PIN and new 4-digit PIN</p>
+            <input type="password" id="currentPin" placeholder="Current PIN" maxlength="4" inputmode="numeric" />
+            <input type="password" id="newPin" placeholder="New PIN" maxlength="4" inputmode="numeric" />
+            <input type="password" id="confirmPin" placeholder="Confirm New PIN" maxlength="4" inputmode="numeric" />
+            <p class="modal-err" id="pinChangeError">PINs do not match</p>
+            <p class="modal-ok" id="pinChangeSuccess">PIN changed!</p>
+            <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="changePin()"><i class="fas fa-save"></i> Save New PIN</button>
+            <button class="btn btn-outline" style="width:100%;justify-content:center;margin-top:8px;" onclick="closeChangePinModal()">Cancel</button>
+        </div>
+    </div>
 
-    <script src="../assets/js/admin.js"></script>
+    <!-- Floating Install Button (mobile) -->
+    <div class="install-float" id="installFloat">
+        <button class="install-float-btn" onclick="installApp()" title="Install App"><i class="fas fa-download"></i></button>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <script>
-        function loadDashboard() {
-            const products = adminGetData('products');
-            const orders = adminGetData('orders');
-            const appointments = adminGetData('appointments');
-            
-            document.getElementById('totalProducts').textContent = products.length;
-            document.getElementById('totalOrders').textContent = orders.length;
-            document.getElementById('todayAppointments').textContent = appointments.filter(a => a.status === 'pending' || a.status === 'confirmed').length;
-            
-            const today = new Date().toISOString().split('T')[0];
-            const todayOrders = orders.filter(o => o.date === today);
-            const revenue = todayOrders.reduce((sum, o) => sum + (o.total || 0), 0);
-            document.getElementById('todayRevenue').textContent = adminFormatCurrency(revenue);
-            
-            // Recent Orders
-            const recentOrdersEl = document.getElementById('recentOrders');
-            const recent = orders.slice(-5).reverse();
-            if (recent.length > 0) {
-                recentOrdersEl.innerHTML = recent.map(o => `
-                    <div class="admin-list-item">
-                        <div class="admin-avatar-sm">${(o.customer || 'C').charAt(0)}</div>
-                        <div class="admin-list-info"><h4>${o.customer || 'Customer'}</h4><p>${o.items || 'Order'}</p></div>
-                        <div class="admin-list-value">${adminFormatCurrency(o.total)}</div>
-                    </div>`).join('');
-            }
-            
-            // Upcoming Appointments
-            const aptEl = document.getElementById('upcomingAppointments');
-            const upcoming = appointments.filter(a => a.status === 'pending' || a.status === 'confirmed').slice(0, 5);
-            if (upcoming.length > 0) {
-                aptEl.innerHTML = upcoming.map(a => `
-                    <div class="admin-list-item">
-                        <div class="admin-avatar-sm">${a.name.charAt(0)}</div>
-                        <div class="admin-list-info"><h4>${a.name}</h4><p>${a.service} — ${a.time}</p></div>
-                        <span class="admin-badge ${a.status === 'confirmed' ? 'admin-badge-info' : 'admin-badge-warning'}">${a.status}</span>
-                    </div>`).join('');
-            }
-            
-            updateSidebarBadges();
+        // ================================================================
+        // PIN SYSTEM
+        // ================================================================
+        let ADMIN_PIN = localStorage.getItem('fe_admin_pin') || '2026';
+        let pinCode = '';
+        if (sessionStorage.getItem('fe_admin_auth') === 'true') document.getElementById('pinScreen').style.display = 'none';
+
+        function addPin(d) { if (pinCode.length >= 4) return; pinCode += d; updateDots(); if (pinCode.length === 4) setTimeout(checkPin, 250); }
+        function deletePin() { pinCode = pinCode.slice(0, -1); updateDots(); document.getElementById('pinError').style.display = 'none'; }
+        function clearPin() { pinCode = ''; updateDots(); document.getElementById('pinError').style.display = 'none'; }
+        function updateDots() { document.querySelectorAll('#pinDots .pin-dot').forEach((d, i) => { d.classList.toggle('filled', i < pinCode.length); d.classList.remove('error'); }); }
+        function checkPin() {
+            if (pinCode === ADMIN_PIN) { sessionStorage.setItem('fe_admin_auth', 'true'); document.getElementById('pinScreen').style.display = 'none'; loadDashboard(); startLive(); }
+            else { document.getElementById('pinError').style.display = 'block'; document.querySelectorAll('#pinDots .pin-dot').forEach(d => d.classList.add('error')); setTimeout(clearPin, 800); }
         }
-        
-        loadDashboard();
+
+        // ================================================================
+        // CHANGE PIN
+        // ================================================================
+        function showChangePinModal() { document.getElementById('changePinModal').classList.add('active'); ['currentPin','newPin','confirmPin'].forEach(id => document.getElementById(id).value = ''); document.getElementById('pinChangeError').style.display = 'none'; document.getElementById('pinChangeSuccess').style.display = 'none'; }
+        function closeChangePinModal() { document.getElementById('changePinModal').classList.remove('active'); }
+        function changePin() {
+            const c = document.getElementById('currentPin').value, n = document.getElementById('newPin').value, cf = document.getElementById('confirmPin').value;
+            document.getElementById('pinChangeError').style.display = 'none'; document.getElementById('pinChangeSuccess').style.display = 'none';
+            if (c !== ADMIN_PIN) { document.getElementById('pinChangeError').textContent = 'Current PIN incorrect'; document.getElementById('pinChangeError').style.display = 'block'; return; }
+            if (!/^\d{4}$/.test(n)) { document.getElementById('pinChangeError').textContent = 'PIN must be 4 digits'; document.getElementById('pinChangeError').style.display = 'block'; return; }
+            if (n !== cf) { document.getElementById('pinChangeError').textContent = 'PINs do not match'; document.getElementById('pinChangeError').style.display = 'block'; return; }
+            ADMIN_PIN = n; localStorage.setItem('fe_admin_pin', n);
+            document.getElementById('pinChangeSuccess').style.display = 'block'; toast('PIN changed!'); setTimeout(closeChangePinModal, 1500);
+        }
+
+        // ================================================================
+        // TOAST
+        // ================================================================
+        function toast(msg, type = 'success') {
+            const t = document.createElement('div'); t.className = `toast ${type}`;
+            t.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${msg}`;
+            document.getElementById('toastContainer').appendChild(t);
+            setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 2500);
+        }
+
+        // ================================================================
+        // SIDEBAR
+        // ================================================================
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.querySelector('.mobile-overlay').classList.toggle('active'); }
+
+        // ================================================================
+        // LIVE DASHBOARD
+        // ================================================================
+        function loadDashboard() {
+            const orders = JSON.parse(localStorage.getItem('fe_admin_orders') || '[]');
+            const appointments = JSON.parse(localStorage.getItem('fe_admin_appointments') || '[]');
+            const notifications = JSON.parse(localStorage.getItem('fe_admin_notifications') || '[]');
+            const products = JSON.parse(localStorage.getItem('fe_admin_products') || '[]');
+
+            document.getElementById('totalOrders').textContent = orders.length;
+            document.getElementById('pendingAppointments').textContent = appointments.filter(a => a.status === 'pending').length;
+            document.getElementById('unreadNotifications').textContent = notifications.filter(n => !n.read).length;
+            document.getElementById('productCount').textContent = products.length;
+            document.getElementById('orderCount').textContent = orders.length;
+            document.getElementById('aptCount').textContent = appointments.filter(a => a.status === 'pending').length;
+            document.getElementById('notifCount').textContent = notifications.filter(n => !n.read).length;
+
+            const today = new Date().toISOString().split('T')[0];
+            const todayOrders = orders.filter(o => o.date === today || o.createdAt?.startsWith(today));
+            document.getElementById('todayRevenue').textContent = 'N' + todayOrders.reduce((s, o) => s + (o.total || 0), 0).toLocaleString();
+
+            // Recent Orders
+            const ro = document.getElementById('recentOrders');
+            const recent = orders.slice(-5).reverse();
+            ro.innerHTML = recent.length ? recent.map(o => `<div class="list-item"><div class="avatar-sm">${(o.customer||'C').charAt(0).toUpperCase()}</div><div class="list-info"><h4>${o.customer||'Customer'}</h4><p>${o.items||'Order'} — ${o.date||''}</p></div><div class="list-value">N${(o.total||0).toLocaleString()}</div><span class="badge badge-warning">${o.status||'pending'}</span></div>`).join('') : '<div class="empty-state"><i class="fas fa-inbox"></i><p>No orders yet</p></div>';
+
+            // Recent Appointments
+            const ra = document.getElementById('recentAppointments');
+            const recentApt = appointments.slice(-5).reverse();
+            ra.innerHTML = recentApt.length ? recentApt.map(a => `<div class="list-item"><div class="avatar-sm">${(a.customer||a.name||'C').charAt(0).toUpperCase()}</div><div class="list-info"><h4>${a.customer||a.name||'Customer'}</h4><p>${a.service||'Service'} — ${a.date||''} at ${a.time||''}</p></div><span class="badge ${a.status==='confirmed'?'badge-success':a.status==='cancelled'?'badge-danger':'badge-warning'}">${a.status||'pending'}</span></div>`).join('') : '<div class="empty-state"><i class="fas fa-calendar"></i><p>No appointments yet</p></div>';
+
+            // Notifications
+            const nl = document.getElementById('notificationList');
+            const unread = notifications.filter(n => !n.read).slice(0, 5);
+            nl.innerHTML = unread.length ? unread.map(n => `<div class="notif-item unread" onclick="markRead('${n.id}')"><div class="notif-icon ${n.type||'order'}"><i class="fas fa-${n.type==='appointment'?'calendar-check':'shopping-bag'}"></i></div><div class="notif-info"><h4>${n.title||'Notification'}</h4><p>${n.message||''}</p></div><span class="notif-time">${timeAgo(n.createdAt)}</span></div>`).join('') : '<div class="empty-state"><i class="fas fa-bell"></i><p>All caught up!</p></div>';
+        }
+
+        function markRead(id) {
+            const notifications = JSON.parse(localStorage.getItem('fe_admin_notifications') || '[]');
+            const updated = notifications.map(n => n.id === id ? { ...n, read: true } : n);
+            localStorage.setItem('fe_admin_notifications', JSON.stringify(updated));
+            loadDashboard();
+        }
+
+        function timeAgo(dateStr) {
+            if (!dateStr) return '';
+            const diff = Date.now() - new Date(dateStr).getTime();
+            const mins = Math.floor(diff / 60000);
+            if (mins < 1) return 'Just now';
+            if (mins < 60) return mins + 'm ago';
+            const hrs = Math.floor(mins / 60);
+            if (hrs < 24) return hrs + 'h ago';
+            return Math.floor(hrs / 24) + 'd ago';
+        }
+
+        function startLive() { setInterval(loadDashboard, 30000); }
+
+        // ================================================================
+        // PWA — INSTALL APP
+        // ================================================================
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installFloat').classList.add('show');
+        });
+
+        window.addEventListener('appinstalled', () => {
+            document.getElementById('downloadBanner').style.display = 'none';
+            document.getElementById('installFloat').classList.remove('show');
+            deferredPrompt = null;
+            toast('App installed successfully!');
+        });
+
+        // Check if already installed
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            document.getElementById('downloadBanner').style.display = 'none';
+        }
+
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((result) => {
+                    if (result.outcome === 'accepted') {
+                        document.getElementById('downloadBanner').style.display = 'none';
+                        document.getElementById('installFloat').classList.remove('show');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                // Show instructions based on device
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                const isAndroid = /Android/.test(navigator.userAgent);
+                if (isIOS) {
+                    toast('Tap the Share button then "Add to Home Screen"', 'success');
+                } else if (isAndroid) {
+                    toast('Tap the menu (3 dots) then "Add to Home Screen"', 'success');
+                } else {
+                    toast('Click the install icon in your browser address bar', 'success');
+                }
+            }
+        }
+
+        // Service Worker
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js').catch(() => {});
+
+        // Init
+        if (sessionStorage.getItem('fe_admin_auth') === 'true') { loadDashboard(); startLive(); }
     </script>
 </body>
 </html>

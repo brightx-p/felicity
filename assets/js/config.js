@@ -1,68 +1,53 @@
 // ================================================================
-// FELICITY EMPIRE — Configuration
+// FELICITY EMPIRE — Central Configuration
+// TEMPORARY TEST NUMBER: 07081219784 — REPLACE BEFORE PRODUCTION
 // ================================================================
 
-// Business WhatsApp Number (without + sign)
-// Change this number here and it updates everywhere
-export const BUSINESS_WHATSAPP = "2348125913807";
-
-// Site Configuration
-export const SITE_CONFIG = {
-    name: 'Felicity Empire',
-    tagline: 'Signature Beauty Destination',
-    currency: '₦',
-    freeShippingThreshold: 50000,
-    description: 'Luxury nails, lashes, clothes, and perfumes for the modern queen.',
-    keywords: 'luxury beauty, nails, lashes, clothes, perfumes, Nigeria, Felicity Empire'
-};
-
-// WhatsApp Message Templates
-export const WHATSAPP_TEMPLATES = {
-    order: (data) => {
-        const { name, phone, address, items, total, notes, orderNumber, date } = data;
-        let message = `FELICITY EMPIRE — NEW ORDER \n\n`;
-        message += `Order #: ${orderNumber}\n`;
-        message += `Date: ${date}\n\n`;
-        message += `Customer: ${name}\n`;
-        message += `Phone: ${phone}\n`;
-        message += `Address: ${address}\n\n`;
-        message += `ITEMS:\n`;
-        items.forEach((item, index) => {
-            message += `${index + 1}. ${item.name}\n`;
-            message += `   Qty: ${item.quantity}\n`;
-            message += `   Price: ${SITE_CONFIG.currency}${item.price.toLocaleString()}\n`;
-            message += `   Subtotal: ${SITE_CONFIG.currency}${(item.quantity * item.price).toLocaleString()}\n\n`;
-        });
-        message += `Total: ${SITE_CONFIG.currency}${total.toLocaleString()}\n\n`;
-        if (notes) {
-            message += ` Notes: ${notes}\n\n`;
-        }
-        message += `Thank you for choosing Felicity Empire!`;
-        return message;
+const FE_CONFIG = {
+    business: {
+        name: 'Felicity Empire',
+        tagline: 'Luxury that speaks for you.',
+        email: 'felicityempirez@gmail.com',
+        phone: '08125913807',
+        whatsapp: '07081219784', // TEMPORARY — REPLACE BEFORE PRODUCTION
+        address: 'Lagos, Nigeria',
+        hours: 'Mon - Sat, 9AM - 6PM',
+        currency: 'NGN',
+        currencySymbol: 'N',
     },
-    
-    quickOrder: (productName, price) => {
-        return `Hello Felicity Empire,\n\nI would like to order:\n\n ${productName}\n ${SITE_CONFIG.currency}${price.toLocaleString()}\n\nPlease provide payment details and delivery options.\n\nThank you! 👑`;
+    founder: {
+        name: 'Ogunsanya Felicia',
+        title: 'Founder & Creative Director',
     },
-    
-    joinEmpire: (name, phone, email) => {
-        let message = `FELICITY EMPIRE — NEW SUBSCRIBER \n\n`;
-        message += ` Name: ${name}\n`;
-        message += `Phone: ${phone}\n`;
-        if (email) message += ` Email: ${email}\n`;
-        message += `\nSubscribed to the Empire!\n`;
-        message += `Welcome to Felicity Empire!`;
-        return message;
-    }
-};
-
-// Firestore Collections
-export const COLLECTIONS = {
-    products: 'products',
-    orders: 'orders',
-    categories: 'categories',
-    subscribers: 'subscribers',
-    videos: 'videos',
-    banners: 'banners',
-    admins: 'admins'
+    firebase: {
+        apiKey: "AIzaSyDummyKeyForNow",
+        authDomain: "felicity-empire.firebaseapp.com",
+        projectId: "felicity-empire",
+        storageBucket: "felicity-empire.appspot.com",
+        messagingSenderId: "123456789",
+        appId: "1:123456789:web:abc123",
+    },
+    collections: {
+        products: 'products',
+        categories: 'categories',
+        orders: 'orders',
+        appointments: 'appointments',
+        customers: 'customers',
+        services: 'services',
+        reviews: 'reviews',
+        notifications: 'notifications',
+        subscribers: 'subscribers',
+        gallery: 'gallery',
+        videos: 'videos',
+        settings: 'settings',
+    },
+    admin: {
+        authorizedEmails: ['felicityempirez@gmail.com'],
+    },
+    site: {
+        publicHome: '/brand/views/index.html',
+        adminHome: '/admin/index.html',
+        shop: '/brand/views/shop.html',
+        checkout: '/brand/views/checkout.html',
+    },
 };

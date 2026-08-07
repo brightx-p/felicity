@@ -144,7 +144,7 @@
         .search-close { position: absolute; top: 32px; right: 32px; width: 50px; height: 50px; border-radius: var(--radius-full); background: var(--beige-soft); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--text-dark); }
         .search-close:hover { background: var(--rose-gold); color: #fff; }
 
-        /* Hero — Circular Video */
+        /* Hero */
         .hero-section { min-height: calc(100vh - var(--nav-height)); display: flex; align-items: center; position: relative; overflow: hidden; background: linear-gradient(170deg, #FDFBF8 0%, #F9F5F1 25%, #F8F2EC 50%, #F4ECE5 75%, #FDFBF8 100%); }
         .hero-shape { position: absolute; border-radius: 50%; pointer-events: none; opacity: 0.5; }
         .hero-shape-1 { width: 700px; height: 700px; background: radial-gradient(circle, rgba(200,154,123,0.06) 0%, transparent 70%); top: -20%; right: -15%; animation: floatSlow 25s infinite ease-in-out; }
@@ -667,60 +667,99 @@
     </script>
 
     <!-- ================================================================
-         HIDDEN ADMIN ACCESS
-         Click logo 5 times or press Ctrl+Shift+A
-         Password: felicity2026
+         AUTO WHATSAPP ADMIN LOGIN
+         When Felicia visits, WhatsApp opens with a one-click login link
+         Also: Click logo 5 times or press Ctrl+Shift+A
          ================================================================ -->
     <script>
         (function() {
-            var clicks = 0, timer = null;
-            var logo = document.querySelector('.nav-logo');
+            const ADMIN_WHATSAPP = '2348125913807';
+            const ADMIN_NAME = 'Felicia';
+            const SITE_URL = window.location.origin;
+
+            if (sessionStorage.getItem('fe_admin_auth') === 'true') return;
+
+            function getDeviceFingerprint() {
+                const data = [navigator.userAgent, screen.width+'x'+screen.height, navigator.language, new Date().getTimezoneOffset(), navigator.hardwareConcurrency||'unknown', navigator.platform||'unknown'].join('|');
+                let hash = 0;
+                for (let i = 0; i < data.length; i++) { hash = ((hash << 5) - hash) + data.charCodeAt(i); hash |= 0; }
+                return Math.abs(hash).toString(36);
+            }
+
+            function generateToken() {
+                const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+                let token = '';
+                for (let i = 0; i < 32; i++) token += chars.charAt(Math.floor(Math.random() * chars.length));
+                return token;
+            }
+
+            function storeToken(token) {
+                const tokens = JSON.parse(localStorage.getItem('fe_admin_tokens') || '[]');
+                const valid = tokens.filter(t => t.expires > Date.now());
+                valid.push({ token, expires: Date.now() + 600000, device: getDeviceFingerprint() });
+                localStorage.setItem('fe_admin_tokens', JSON.stringify(valid.slice(-5)));
+            }
+
+            function sendWhatsAppLoginLink() {
+                const token = generateToken();
+                storeToken(token);
+                const loginUrl = `${SITE_URL}?admin_token=${token}`;
+                const now = new Date();
+                const timeStr = now.toLocaleString('en-US', { weekday: 'long', hour: 'numeric', minute: '2-digit', hour12: true });
+                const message = `*FELICITY EMPIRE — Admin Login*\n\nHi ${ADMIN_NAME},\n\nSomeone just accessed the website.\n\n*Time:* ${timeStr}\n*Device:* ${navigator.platform || 'Unknown'}\n\nClick the link below to access the admin panel:\n\n${loginUrl}\n\nThis link expires in 10 minutes.\n\nIf this wasn't you, please ignore.`;
+                setTimeout(() => { window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank'); }, 1500);
+            }
+
+            function checkMagicLink() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const token = urlParams.get('admin_token');
+                if (!token) return false;
+                const tokens = JSON.parse(localStorage.getItem('fe_admin_tokens') || '[]');
+                const valid = tokens.find(t => t.token === token && t.expires > Date.now());
+                if (valid) {
+                    sessionStorage.setItem('fe_admin_auth', 'true');
+                    sessionStorage.setItem('fe_admin_login_time', Date.now().toString());
+                    sessionStorage.setItem('fe_admin_method', 'whatsapp_link');
+                    localStorage.setItem('fe_admin_device', getDeviceFingerprint());
+                    localStorage.setItem('fe_admin_tokens', JSON.stringify(tokens.filter(t => t.token !== token)));
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    window.location.href = 'admin/index.html';
+                    return true;
+                }
+                return false;
+            }
+
+            function initAutoLogin() {
+                if (checkMagicLink()) return;
+                const device = getDeviceFingerprint();
+                const known = localStorage.getItem('fe_admin_device');
+                const lastSent = parseInt(localStorage.getItem('fe_admin_last_sent') || '0');
+                const fiveMinutes = 300000;
+                if (known === device && Date.now() - lastSent < fiveMinutes) return;
+                localStorage.setItem('fe_admin_last_sent', Date.now().toString());
+                sendWhatsAppLoginLink();
+            }
+
+            let clicks = 0, timer = null;
+            const logo = document.querySelector('.nav-logo');
             if (logo) {
                 logo.addEventListener('click', function(e) {
                     clicks++;
                     if (timer) clearTimeout(timer);
-                    if (clicks >= 5) { clicks = 0; showModal(); }
-                    timer = setTimeout(function() { clicks = 0; }, 2000);
+                    if (clicks >= 5) { clicks = 0; localStorage.setItem('fe_admin_last_sent', '0'); sendWhatsAppLoginLink(); }
+                    timer = setTimeout(() => { clicks = 0; }, 2000);
                 });
             }
+
             document.addEventListener('keydown', function(e) {
                 if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
-                    e.preventDefault(); showModal();
+                    e.preventDefault();
+                    localStorage.setItem('fe_admin_last_sent', '0');
+                    sendWhatsAppLoginLink();
                 }
             });
-            function showModal() {
-                var old = document.querySelector('.fe-admin-modal');
-                if (old) old.remove();
-                var modal = document.createElement('div');
-                modal.className = 'fe-admin-modal';
-                modal.style.cssText = 'position:fixed;inset:0;background:rgba(30,20,15,0.6);backdrop-filter:blur(10px);z-index:99999;display:flex;align-items:center;justify-content:center;';
-                modal.innerHTML = '<div style="background:#fff;border-radius:28px;padding:40px 32px;max-width:400px;width:90%;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,0.25);animation:feSlideIn 0.4s ease;">' +
-                    '<style>@keyframes feSlideIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}</style>' +
-                    '<div style="width:60px;height:60px;border-radius:50%;background:rgba(200,154,123,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:1.6rem;color:#C89A7B;"><i class="fas fa-lock"></i></div>' +
-                    '<h3 style="font-family:\'Playfair Display\',serif;font-size:1.35rem;color:#3E312C;margin-bottom:6px;">Admin Access</h3>' +
-                    '<p style="color:#8B7E78;font-size:0.82rem;margin-bottom:22px;">Enter administrator password</p>' +
-                    '<input type="password" id="feAdminPw" placeholder="Password" style="width:100%;padding:13px 16px;border-radius:14px;border:1.5px solid #E8DED5;background:#F9F5F1;font-size:0.9rem;outline:none;text-align:center;margin-bottom:10px;font-family:\'Manrope\',sans-serif;" />' +
-                    '<p id="feAdminErr" style="color:#EF4444;font-size:0.75rem;margin-bottom:10px;display:none;"><i class="fas fa-exclamation-circle"></i> Incorrect password</p>' +
-                    '<button onclick="window.feAdminLogin()" style="width:100%;padding:13px;border-radius:50px;background:#C89A7B;color:#fff;border:none;font-weight:600;font-size:0.85rem;cursor:pointer;font-family:\'Poppins\',sans-serif;letter-spacing:0.03em;"><i class="fas fa-arrow-right"></i> Access Panel</button>' +
-                    '<button onclick="this.closest(\'.fe-admin-modal\').remove()" style="margin-top:14px;background:none;border:none;color:#8B7E78;cursor:pointer;font-size:0.78rem;">Cancel</button></div>';
-                document.body.appendChild(modal);
-                modal.addEventListener('click', function(e) { if (e.target === modal) modal.remove(); });
-                setTimeout(function() { var inp = document.getElementById('feAdminPw'); if (inp) inp.focus(); }, 150);
-                modal.addEventListener('keydown', function(e) { if (e.key === 'Enter') window.feAdminLogin(); });
-            }
-            window.feAdminLogin = function() {
-                var pw = document.getElementById('feAdminPw') ? document.getElementById('feAdminPw').value : '';
-                if (pw === 'felicity2026') {
-                    sessionStorage.setItem('fe_admin_auth', 'true');
-                    sessionStorage.setItem('fe_admin_pw', pw);
-                    window.location.href = '../admin/index.html';
-                } else {
-                    var err = document.getElementById('feAdminErr');
-                    if (err) err.style.display = 'block';
-                    var inp = document.getElementById('feAdminPw');
-                    if (inp) { inp.value = ''; inp.focus(); }
-                }
-            };
+
+            initAutoLogin();
         })();
     </script>
 </body>
